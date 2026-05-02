@@ -7,8 +7,10 @@ import { AuthorDetailComponent } from './components/author-detail/author-detail.
 export const routes: Routes = [
     // redirección a url /pasodobles y paso de componente a la ruta nueva
     {path: '', redirectTo: 'pasodobles', pathMatch: 'full'},
+
     { path: 'pasodobles', component: PasodoblesListComponent },
-    {path: 'pasodobles/:id',component: AuthorDetailComponent },
+    {path: 'pasodobles/:id',component: PasodobleDetailComponent},
+
     {path: 'authors/:id',component: AuthorDetailComponent },
     { path: 'authors', component: AuthorsListComponent },
 ];

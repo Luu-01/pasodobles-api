@@ -25,7 +25,7 @@
             <div>
               <p class="text-muted mb-0 small text-uppercase fw-bold letter-spacing-1">Compositor</p>
               <!-- Aquí está la magia: Enlace directo al perfil del autor -->
-              <a [routerLink]="['/autores', pasodoble.author_id]" class="text-decoration-none fs-5 fw-medium text-primary">
+              <a [routerLink]="['/authors', pasodoble.author_id]" class="text-decoration-none fs-5 fw-medium text-primary">
                 {{ pasodoble.author?.name || 'Autor Desconocido' }}
               </a>
             </div>

@@ -15,6 +15,7 @@ class PasodobleController extends Controller
         ], 200);
     }
     public function show(Pasodoble $pasodoble){
+        $pasodoble->load('author');
         return response()->json([
             "data" => $pasodoble
         ], 200);
