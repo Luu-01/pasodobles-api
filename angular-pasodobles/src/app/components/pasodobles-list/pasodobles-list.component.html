@@ -1,0 +1,61 @@
+<div class="mb-5 text-center">
+  <h2 class="display-6 fw-bold text-dark">Archivo de Pasodobles</h2>
+  <p class="text-muted">Explora, consulta y descubre nuestra colección musical</p>
+</div>
+
+<!--~ NavBar -->
+<div class="row g-3 mb-4 bg-light p-3 rounded-4 shadow-sm align-items-center">
+  <div class="col-md-6">
+    <div class="input-group">
+      <input type="text" class="form-control border-start-0" placeholder=" Buscar">
+    </div>
+  </div>
+  <div class="col-md-3">
+    <select class="form-select border-0 shadow-sm">
+      <option selected value="">Todas las categorías</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <select class="form-select border-0 shadow-sm">
+      <option selected value="">Todos los compositores</option>
+    </select>
+  </div>
+</div>
+
+<!--~ List -->
+<div class="list-group list-group-flush shadow-sm rounded-4 border">
+  @for (pasodoble of pasodobles; track pasodoble.id) {
+    <!-- router automático -->
+    <a [routerLink]="['/pasodobles', pasodoble.id]" 
+       class="list-group-item list-group-item-action py-2 px-3 border-light">
+      
+      <div class="row align-items-center">
+        <div class="col-12 col-md-5">
+          <span class="fw-bold text-dark fs-6">{{ pasodoble.title }}</span>
+        </div>
+
+        <div class="col-6 col-md-3 text-md-center">
+          <small class="text-muted">
+            {{ pasodoble.author?.name || 'Not known' }}
+          </small>
+        </div>
+
+        <div class="col-6 col-md-3 text-md-center text-end">
+          <span class="badge bg-light text-secondary border fw-normal" style="font-size: 0.7rem;">
+            {{ pasodoble.category.name }}
+          </span>
+        </div>
+
+        <!-- arrow -->
+        <div class="col-md-1 text-end d-none d-md-block">
+          <span class="text-muted small">&rsaquo;</span>
+        </div>
+      </div>
+      
+    </a>
+  } @empty {
+    <div class="text-center py-4 bg-white rounded-4">
+      <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+    </div>
+  }
+</div>
