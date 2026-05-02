@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthorService } from '../../author.service';
 import { Author } from '../../author.interface';
@@ -14,6 +14,7 @@ export class AuthorDetailComponent implements OnInit {
   
   private authorService = inject(AuthorService);
   private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -21,6 +22,7 @@ export class AuthorDetailComponent implements OnInit {
     this.authorService.getAuthor(id).subscribe({
       next: (respuesta) => {
         this.author = respuesta.data;
+        this.cdr.detectChanges();
       }
     });
   }
