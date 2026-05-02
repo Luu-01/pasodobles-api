@@ -6,8 +6,9 @@ export interface Pasodoble {
   title: string;
   author_id: number;
   category_id: number;
-  description: string; 
-
+  description: string;
+  pdf_url: string; 
+  year: Date;
   category: Category;
   author?: Author;
 }

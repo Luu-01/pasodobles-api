@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Pasodoble;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Date;
 
 class PasodobleController extends Controller
 {
@@ -17,7 +16,7 @@ class PasodobleController extends Controller
     }
     public function show(Pasodoble $pasodoble){
         return response()->json([
-            "data" => compact('pasodoble')
+            "data" => $pasodoble
         ], 200);
     }
     public function store(Request $request){

@@ -1,0 +1,53 @@
+@if (pasodoble) {
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0 rounded-4 mt-4">
+        <div class="card-body p-5">
+          
+          <div class="mb-4">
+            <span class="badge bg-secondary mb-2">{{ pasodoble.category}}</span>
+            <h2 class="display-5 fw-bold text-dark">{{ pasodoble.title }}</h2>
+            <p class="text-muted fs-5">Año de composición: {{ pasodoble.year || 'Desconocido' }}</p>
+          </div>
+
+          <!-- Mostramos la dedicatoria usando el campo description -->
+          <div class="mb-5 bg-light p-4 rounded-3 border-start border-4 border-secondary">
+            <h5 class="fw-bold text-dark">Dedicatoria e Historia</h5>
+            <p class="mb-0 text-secondary" style="font-style: italic;">
+              "{{ pasodoble.description }}"
+            </p>
+          </div>
+
+          <hr class="mb-4">
+
+          <!-- Enlace al Autor -->
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="text-muted mb-0 small text-uppercase fw-bold letter-spacing-1">Compositor</p>
+              <!-- Aquí está la magia: Enlace directo al perfil del autor -->
+              <a [routerLink]="['/autores', pasodoble.author_id]" class="text-decoration-none fs-5 fw-medium text-primary">
+                {{ pasodoble.author?.name || 'Autor Desconocido' }}
+              </a>
+            </div>
+
+            @if (pasodoble.pdf_url) {
+              <a [href]="pasodoble.pdf_url" target="_blank" class="btn btn-dark rounded-pill px-4">
+                📄 Ver Partitura
+              </a>
+            }
+          </div>
+
+        </div>
+      </div>
+      
+      <!-- Botón de volver -->
+      <div class="text-center mt-4">
+        <a routerLink="/pasodobles" class="text-muted text-decoration-none">&larr; Volver al archivo</a>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="text-center py-5">
+    <div class="spinner-border text-secondary" role="status"></div>
+  </div>
+}
