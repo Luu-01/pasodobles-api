@@ -20,11 +20,12 @@ Route::post('auth/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->group(function () {
     
     // admin features
-    Route::middleware([CheckAdminRole::class])->group(function () {
+    Route::middleware([CheckAdminRole::class])->prefix('admin')->group(function () {
         Route::post('pasodobles', [PasodobleController::class, 'store']);
         Route::put('pasodobles/{pasodoble}', [PasodobleController::class, 'update']);
         Route::delete('pasodobles/{pasodoble}', [PasodobleController::class, 'destroy']);
     });
 
+    Route::get('auth/user', [AuthController::class, 'currentUser']);
     Route::post('auth/logout', [AuthController::class, 'logout']);
 });

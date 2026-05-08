@@ -1,79 +1,86 @@
 <div class="mb-5 text-center">
   <h2 class="display-6 fw-bold text-dark">Archivo de Pasodobles</h2>
-  <p class="text-muted">Archivo de pasodobles</p>
+  <p class="text-muted">Explora la colección musical</p>
 </div>
-<!--~ NavBar -->
-<div class="row g-3 mb-4 bg-light p-3 rounded-4 shadow-sm align-items-center">
-  <div class="col-md-6">
-    <div class="input-group">
-      <!-- implemented ngModel -->
-      <input type="text" class="form-control border-start-0" placeholder="Buscar por título o dedicatoria..." [(ngModel)]="searchTerm">
+
+<!--~ Filters -->
+<div class="card card-minimal mb-5 p-2 border-0">
+  <div class="card-body">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-6">
+        <input type="text" class="form-control form-control-minimal" placeholder="Buscar por título o dedicatoria..." [(ngModel)]="searchTerm">
+      </div>
+      
+      <div class="col-md-3">
+        <select class="form-select form-select-minimal" [(ngModel)]="selectedCategory">
+          <option value="">Todas las categorías</option>
+          @for (cat of categories; track cat) {
+            <option [value]="cat">{{ cat }}</option>
+          }
+        </select>
+      </div>
+      
+      <div class="col-md-3">
+        <select class="form-select form-select-minimal" [(ngModel)]="selectedAuthor">
+          <option value="">Todos los compositores</option>
+          @for (author of authors; track author) {
+            <option [value]="author">{{ author }}</option>
+          }
+        </select>
+      </div>
     </div>
   </div>
-  
-  <div class="col-md-3">
-    <select class="form-select border-0 shadow-sm" [(ngModel)]="selectedCategory">
-      <option value="">Todas las categorías</option>
-      @for (cat of categories; track cat) {
-        <option [value]="cat">{{ cat }}</option>
-      }
-    </select>
-  </div>
-  
-  <div class="col-md-3">
-    <select class="form-select border-0 shadow-sm" [(ngModel)]="selectedAuthor">
-      <option value="">Todos los compositores</option>
-      @for (author of authors; track author) {
-        <option [value]="author">{{ author }}</option>
-      }
-    </select>
-  </div>
 </div>
 
-<!--~ List -->
-<div class="list-group list-group-flush shadow-sm rounded-4 border">
-  <!-- implemented ngModel -->
+<div class="row g-2"> <!-- Cambiado a g-2 para acercar las filas entre sí -->
   @for (pasodoble of filteredPasodobles; track pasodoble.id) {
-    <div class="list-group-item list-group-item-action py-3 px-3 border-light">
-      
-      <div class="row align-items-center">
-        <div class="col-12 col-md-5">
-          <a [routerLink]="['/pasodobles', pasodoble.id]" class="fw-bold text-dark fs-6 text-decoration-none d-block">
-            {{ pasodoble.title }}
-          </a>
-          <small class="text-muted fst-italic d-block mt-1" style="font-size: 0.75rem;">
-            {{ pasodoble.description || 'Sin dedicatoria registrada' }}
-          </small>
-        </div>
+    <div class="col-12">
+      <!-- Eliminado el p-2 extra que tenía el contenedor de la tarjeta -->
+      <div class="card card-minimal border-0">
+        <!-- Añadido py-2 px-3 para forzar un padding vertical mínimo -->
+        <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
+          
+          <div class="col-md-5">
+            <!-- Reducido de fs-5 a fs-6 y eliminado el mb-1 -->
+            <a [routerLink]="['/pasodobles', pasodoble.id]" class="fw-bold text-dark fs-6 text-decoration-none d-block">
+              {{ pasodoble.title }}
+            </a>
+            <!-- Reducido ligeramente el tamaño de la dedicatoria -->
+            <small class="text-muted fst-italic" style="font-size: 0.75rem; line-height: 1.2; display: block;">
+              {{ pasodoble.description || 'Sin dedicatoria registrada' }}
+            </small>
+          </div>
 
-        <div class="col-6 col-md-3 text-md-center mt-2 mt-md-0">
-          <small>
+          <div class="col-md-3 text-center d-none d-md-block">
             @if (pasodoble.author) {
-              <a [routerLink]="['/authors', pasodoble.author.id]" class="text-primary text-decoration-none fw-medium">
-                {{ pasodoble.author.name }}
+              <!-- Ajuste sutil del tamaño de fuente del autor -->
+              <a [routerLink]="['/authors', pasodoble.author.id]" class="text-dark text-decoration-none opacity-75 hover-text-blue" style="font-size: 0.85rem;">
+                <i class="bi bi-person me-1"></i> {{ pasodoble.author.name }}
               </a>
             } @else {
-              <span class="text-muted">Desconocido</span>
+              <span class="text-muted" style="font-size: 0.85rem;">Autor Desconocido</span>
             }
-          </small>
-        </div>
+          </div>
 
-        <div class="col-6 col-md-3 text-md-center text-end mt-2 mt-md-0">
-          <span class="badge bg-light text-secondary border fw-normal" style="font-size: 0.7rem;">
-            {{ pasodoble.category.name}}
-          </span>
-        </div>
+          <div class="col-md-3 text-end">
+            <!-- Reducido el padding vertical de la etiqueta (py-1) y peso normal -->
+            <span class="badge badge-purple px-3 py-1 rounded-pill fw-normal" style="font-size: 0.75rem;">
+              {{ pasodoble.category.name}}
+            </span>
+          </div>
 
-        <div class="col-md-1 text-end d-none d-md-block">
-          <a [routerLink]="['/pasodobles', pasodoble.id]" class="text-muted text-decoration-none fs-5">&rsaquo;</a>
+          <div class="col-md-1 text-end">
+            <!-- Reducido el tamaño de la flecha de fs-4 a fs-5 -->
+            <a [routerLink]="['/pasodobles', pasodoble.id]" class="text-purple text-decoration-none fs-5">&rsaquo;</a>
+          </div>
+
         </div>
       </div>
-
     </div>
   } @empty {
-    <div class="text-center py-5 bg-white rounded-4">
+    <div class="col-12 text-center py-5 mt-4">
       <h5 class="text-muted fw-normal">No se encontraron pasodobles con esos filtros.</h5>
-      <button class="btn btn-outline-secondary mt-3" (click)="searchTerm=''; selectedCategory=''; selectedAuthor=''">Limpiar filtros</button>
+      <button class="btn btn-outline-primary rounded-pill px-4 mt-3" (click)="searchTerm=''; selectedCategory=''; selectedAuthor=''">Limpiar filtros</button>
     </div>
   }
 </div>

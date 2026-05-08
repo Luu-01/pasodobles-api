@@ -1,53 +1,51 @@
 @if (pasodoble) {
-  <div class="row justify-content-center">
+  <div class="row justify-content-center mt-3">
     <div class="col-md-8">
-      <div class="card shadow-sm border-0 rounded-4 mt-4">
-        <div class="card-body p-5">
-          
-          <div class="mb-4">
-            <span class="badge bg-secondary mb-2">{{ pasodoble.category}}</span>
-            <h2 class="display-5 fw-bold text-dark">{{ pasodoble.title }}</h2>
-            <p class="text-muted fs-5">Año de composición: {{ pasodoble.year || 'Desconocido' }}</p>
+      
+      <div class="card card-minimal p-4 p-md-5">
+        <div class="d-flex justify-content-between align-items-start mb-4">
+          <div>
+            <span class="badge badge-purple mb-3 px-3 py-2 rounded-pill">{{ pasodoble.category}}</span>
+            <h2 class="display-5 fw-bold text-blue mb-0">{{ pasodoble.title }}</h2>
+          </div>
+          <span class="badge bg-light text-secondary border fs-6 mt-2">{{ pasodoble.year || 'Año N/D' }}</span>
+        </div>
+
+        <!-- Dedicatoria e Historia -->
+        <div class="bg-light p-4 rounded-4 border-start border-4 mb-5" style="border-color: var(--paso-purple) !important;">
+          <h6 class="fw-bold text-dark text-uppercase letter-spacing-1 small mb-3">Dedicatoria e Historia</h6>
+          <p class="mb-0 text-secondary fs-5" style="font-style: italic; line-height: 1.6;">
+            "{{ pasodoble.description }}"
+          </p>
+        </div>
+
+        <hr class="opacity-10 mb-4">
+
+        <!-- Footer: Autor y Acciones -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+          <div>
+            <p class="text-muted mb-1 small text-uppercase fw-bold letter-spacing-1">Compositor</p>
+            <a [routerLink]="['/authors', pasodoble.author_id]" class="text-decoration-none fs-4 fw-medium text-dark hover-text-purple d-flex align-items-center">
+              {{ pasodoble.author?.name || 'Autor Desconocido' }}
+            </a>
           </div>
 
-          <!-- Mostramos la dedicatoria usando el campo description -->
-          <div class="mb-5 bg-light p-4 rounded-3 border-start border-4 border-secondary">
-            <h5 class="fw-bold text-dark">Dedicatoria e Historia</h5>
-            <p class="mb-0 text-secondary" style="font-style: italic;">
-              "{{ pasodoble.description }}"
-            </p>
-          </div>
-
-          <hr class="mb-4">
-
-          <!-- Enlace al Autor -->
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <p class="text-muted mb-0 small text-uppercase fw-bold letter-spacing-1">Compositor</p>
-              <!-- Aquí está la magia: Enlace directo al perfil del autor -->
-              <a [routerLink]="['/authors', pasodoble.author_id]" class="text-decoration-none fs-5 fw-medium text-primary">
-                {{ pasodoble.author?.name || 'Autor Desconocido' }}
-              </a>
-            </div>
-
-            @if (pasodoble.pdf_url) {
-              <a [href]="pasodoble.pdf_url" target="_blank" class="btn btn-dark rounded-pill px-4">
-                Ver Partitura
-              </a>
-            }
-          </div>
-
+          @if (pasodoble.pdf_url) {
+            <a [href]="pasodoble.pdf_url" target="_blank" class="btn text-white rounded-pill px-4 py-2" style="background-color: var(--paso-blue);">
+              <i class="bi bi-file-earmark-pdf me-2"></i> Ver Partitura
+            </a>
+          }
         </div>
       </div>
       
-      <!-- Botón de volver -->
-      <div class="text-center mt-4">
-        <a routerLink="/pasodobles" class="text-muted text-decoration-none">&larr; Volver al archivo</a>
+      <div class="text-center mt-5 mb-5">
+        <a routerLink="/pasodobles" class="text-muted text-decoration-none hover-text-blue">&larr; Volver al archivo</a>
       </div>
+
     </div>
   </div>
 } @else {
-  <div class="text-center py-5">
-    <div class="spinner-border text-secondary" role="status"></div>
+  <div class="text-center py-5 mt-5">
+    <div class="spinner-border text-purple" role="status"></div>
   </div>
 }

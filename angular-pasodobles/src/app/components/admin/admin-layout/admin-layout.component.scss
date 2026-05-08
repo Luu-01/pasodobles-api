@@ -1,0 +1,82 @@
+.admin-wrapper {
+  // Con esto rompemos el contenedor de app.component y nos pegamos a las esquinas
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1050; // Nos ponemos por encima del NavBar público para ocultarlo
+  
+  background-color: var(--paso-bg); 
+  overflow: hidden; 
+}
+
+// -----------------------------------------
+// BARRA LATERAL (SIDEBAR)
+// -----------------------------------------
+.sidebar {
+  width: 280px;
+  background-color: var(--paso-nav-bg); // El negro pizarra elegante
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
+  z-index: 10;
+
+  .sidebar-link {
+    color: #9ca3af; // Gris claro
+    border-radius: 0.75rem;
+    padding: 0.8rem 1.2rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.05);
+      transform: translateX(4px);
+    }
+
+    // El estilo mágico cuando la ruta está activa
+    &.active-sidebar-link {
+      color: #ffffff !important;
+      background-color: var(--paso-purple);
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+    }
+  }
+
+  .btn-logout {
+    transition: all 0.3s ease;
+    &:hover {
+      background-color:rgba(0, 0, 0, 0.05);
+      color: #dc3545 !important;
+    }
+  }
+}
+
+// -----------------------------------------
+// ÁREA PRINCIPAL Y TOPBAR
+// -----------------------------------------
+.main-content {
+  height: 100vh;
+}
+
+.topbar {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  z-index: 5;
+}
+
+.content-area {
+  overflow-y: auto; // El scroll solo ocurre en el contenido
+  
+  // Customizamos un poco la barra de scroll para que se vea premium
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
+}

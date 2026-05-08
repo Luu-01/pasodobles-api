@@ -1,0 +1,84 @@
+<div class="admin-wrapper d-flex min-vh-100">
+  
+  <!-- Sidebar (Barra Lateral) -->
+  <aside class="sidebar d-flex flex-column p-4 d-none d-md-flex">
+    <!-- Logotipo Admin -->
+    <a routerLink="/admin" class="text-decoration-none fs-4 fw-bold mb-5 letter-spacing-tight text-center">
+      <span class="text-blue">Admin</span><span class="text-white">Panel</span>
+    </a>
+
+    <!-- Menú de Navegación -->
+    <ul class="nav nav-pills flex-column mb-auto gap-2">
+      <li class="nav-item">
+        <a routerLink="/admin/pasodobles" routerLinkActive="active-sidebar-link" class="nav-link sidebar-link d-flex align-items-center">
+          <i class="bi bi-music-note-list me-3 fs-5">Pasodobles</i> 
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/compositores" routerLinkActive="active-sidebar-link" class="nav-link sidebar-link d-flex align-items-center">
+          <i class="bi bi-person-lines-fill me-3 fs-5">Compositores</i> 
+        </a>
+      </li>
+    </ul>
+
+    <hr class="border-secondary opacity-25 my-4">
+
+    <!-- Acciones Inferiores -->
+    <div class="mt-auto">
+      <a routerLink="/pasodobles" class="btn btn-outline-light w-100 rounded-pill mb-3 py-2">
+        <i class="bi bi-box-arrow-up-right me-2">Ver Web</i>
+      </a>
+      @if(authService.currentUser$ | async; as user){
+        <button routerLink="/auth/logout" class="btn btn-danger bg-opacity-10 border-1 text-danger w-100 rounded-pill py-2 btn-logout text-white">
+          <i class="bi bi-power me-2">Cerrar Sesión</i> 
+        </button>
+      }
+      @else {
+       <a routerLink="/auth/login" class="btn rounded-pill px-4 py-2 fw-medium shadow-sm d-flex align-items-center" style="background-color: var(--paso-purple); color: white; transition: all 0.3s ease;">
+          <i class="bi bi-box-arrow-in-right me-2 fs-5">Iniciar Sesión</i>
+        </a>
+      }
+    </div>
+  </aside>
+
+  <!-- Área Principal (Topbar + Contenido) -->
+  <div class="main-content flex-grow-1 d-flex flex-column">
+    
+    <!-- Topbar (Barra Superior Blanca) -->
+    <header class="topbar bg-white px-4 py-3 d-flex justify-content-between align-items-center">
+      <div>
+        <h5 class="mb-0 text-dark fw-bold d-none d-md-block">Panel de Control</h5>
+        <!-- Botón menú móvil (Opcional para futuras mejoras) -->
+        <button class="btn d-md-none border-0 fs-4 text-dark p-0"><i class="bi bi-list"></i></button>
+      </div>
+
+      <div class="d-flex align-items-center gap-3">
+        @if( authService.currentUser$ | async; as user){
+          <div class="text-end d-none d-sm-block">
+            <p class="mb-0 text-dark fw-medium lh-1">{{ user.name }}</p>
+            <small class="text-muted" style="font-size: 0.75rem;">{{ user.email }}</small>
+          </div>
+          <!-- icon -->
+          <div class="bg-gradient-custom rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm" style="width: 42px; height: 42px;">
+            <i class="bi bi-person-fill fs-5"></i>
+          </div>
+          <a routerLink="/auth/logout" class="btn rounded-pill px-4 py-2 fw-medium shadow-sm d-flex align-items-center" style="background-color: var(--paso-purple); color: white; transition: all 0.3s ease;">
+            <i class="bi bi-box-arrow-in-right me-2 fs-5">Cerrar Sesión</i> 
+          </a>
+        }
+        @else {
+          <a routerLink="/auth/login" class="btn rounded-pill px-4 py-2 fw-medium shadow-sm d-flex align-items-center" style="background-color: var(--paso-purple); color: white; transition: all 0.3s ease;">
+            <i class="bi bi-box-arrow-in-right me-2 fs-5">Iniciar Sesión</i> 
+          </a>
+        }
+      </div>
+
+
+    </header>
+
+    <main class="content-area p-4 p-md-5 flex-grow-1">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+</div>
