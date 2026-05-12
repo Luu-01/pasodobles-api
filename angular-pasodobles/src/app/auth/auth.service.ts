@@ -93,15 +93,34 @@ export class AuthService {
     );
   }
 
-  logout() {
-    if(isPlatformBrowser(this.platformId)){ // SSR Protecting
+  logout() { 
+
+    let token = '';
+    if(isPlatformBrowser(this.platformId)){ 
+      token = localStorage.getItem('auth_token') || '';
+    }
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Accept': `application/json`
+    });
+
+    return this.http.post(`${this.apiUrl}/logout`, {}, { headers }).subscribe({
+      next: () => {
+        this.cleanSession();
+      },
+      error: () => {
+        alert("error loging out")
+        this.cleanSession(); // prevent user of keeping trapped in the session in case the token
+      }
+    });
+  }
+
+  cleanSession(){
+    if(isPlatformBrowser(this.platformId)){  // SSR Protecting
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user');
     }
     this.currentUserSubject.next(null);
-    this.router.navigate(['auth/login']).then(() => {
-      window.location.reload();
-    });
-    return this.http.post(`${this.apiUrl}/logout`, {}, {}).subscribe();
+    this.router.navigate(['/auth/login']);
   }
 }

@@ -74,4 +74,10 @@ class AuthController extends Controller
         $user = $request->user();
         return response()->json($user);
     }
+
+    public function logoutAllDevices(Request $request) {
+
+        $request->user()->tokens()->delete();
+        return response()->json(['message' => 'Sesión cerrada en todos los dispositivos']);
+    }
 }

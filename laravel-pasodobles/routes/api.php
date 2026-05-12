@@ -16,6 +16,7 @@ Route::get('authors/{author}', [AuthorController::class, 'show']);
 Route::post('auth/login', [AuthController::class, 'login']);
 Route::post('auth/register', [AuthController::class, 'register']);
 
+
 // --- protected API routes ---
 Route::middleware('auth:sanctum')->group(function () {
     
@@ -27,5 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('auth/user', [AuthController::class, 'currentUser']);
+    Route::post('auth/logout-all', [AuthController::class, 'logoutAllDevices']);
     Route::post('auth/logout', [AuthController::class, 'logout']);
+
+
 });

@@ -44,8 +44,8 @@
           <div class="bg-gradient-custom rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm" style="width: 42px; height: 42px;">
             <i class="bi bi-person-fill fs-5"></i>
           </div>
-          <a routerLink="/auth/logout" class="btn rounded-pill px-4 py-2 fw-medium shadow-sm d-flex align-items-center" style="background-color: var(--paso-purple); color: white; transition: all 0.3s ease;">
-            <i class="bi bi-box-arrow-in-right me-2 fs-5">Cerrar Sesión</i> 
+          <a (click)="authService.logout()" style="cursor: pointer;" class="btn rounded-pill px-4 py-2 fw-medium shadow-sm d-flex align-items-center" style="background-color: var(--paso-purple); color: white; transition: all 0.3s ease;">
+            <i class="bi bi-box-arrow-right me-2 fs-5"></i> Cerrar Sesión
           </a>
         }
         @else {

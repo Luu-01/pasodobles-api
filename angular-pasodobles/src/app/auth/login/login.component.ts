@@ -34,7 +34,6 @@ export class LoginComponent {
         this.router.navigate(['/admin/pasodobles']);
       },
       error: (err) => {
-        this.isLoading = false; 
         
         if (err.status === 401) {
           this.errorMessage = 'Correo o contraseña incorrectos.';
