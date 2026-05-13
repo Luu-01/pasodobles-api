@@ -16,9 +16,7 @@ class PasodobleController extends Controller
     }
     public function show(Pasodoble $pasodoble){
         $pasodoble->load('author');
-        return response()->json([
-            "data" => $pasodoble
-        ], 200);
+        return response()->json($pasodoble);
     }
     public function store(Request $request){
         //! replace by Resource
@@ -33,7 +31,7 @@ class PasodobleController extends Controller
 
         $pasodoble = Pasodoble::create($data);
         return response()->json([
-            "data" => compact('pasodoble'),
+            compact('pasodoble'),
             "message" => "Created"
         ], 201);
     }
@@ -46,7 +44,7 @@ class PasodobleController extends Controller
         ];
         $pasodoble->update($data);
         return response()->json([
-            "data" => compact('pasodoble'),
+            compact('pasodoble'),
             "message" => "Updated"
         ]);
     }

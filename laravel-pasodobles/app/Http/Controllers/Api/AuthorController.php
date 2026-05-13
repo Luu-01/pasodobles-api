@@ -11,9 +11,7 @@ class AuthorController extends Controller
     {
         $authors = Author::all();
         
-        return response()->json([
-            'data' => $authors
-        ]);
+        return response()->json($authors);
     }
 
     public function show(Author $author)
@@ -23,8 +21,6 @@ class AuthorController extends Controller
         }
         // force pasodobles loading with the author
         $author->load('pasodobles');
-        return response()->json([
-            'data' => $author
-        ]);
+        return response()->json($author);
     }
 }
