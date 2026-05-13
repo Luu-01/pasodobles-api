@@ -5,32 +5,26 @@
     <div class="card card-minimal p-4 p-sm-5 border-0">
       <div class="text-center mb-5">
         <h2 class="fw-bold text-dark mb-1">Bienvenido de nuevo</h2>
-        <p class="text-muted small">Accede al panel de administración musical</p>
       </div>
 
-      <!-- Bloque de Error Dinámico -->
       @if (errorMessage) {
         <div class="alert alert-danger text-center small py-2 mb-4 rounded-3 border-0 bg-danger bg-opacity-10 text-danger">
           <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
         </div>
       }
 
-      <!-- Formulario (Ahora es reactivo) -->
       <form (ngSubmit)="onSubmit()">
         
-        <!-- Email -->
         <div class="mb-4">
           <label for="emailInput" class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight">Correo Electrónico</label>
           <div class="input-group">
             <span class="input-group-text bg-white border-end-0 text-muted ps-3 rounded-start-4" style="border-color: rgba(0,0,0,0.08);">
               <i class="bi bi-envelope"></i>
             </span>
-            <!-- Añadido ngModel y required -->
             <input type="email" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" id="emailInput" placeholder="admin@pasodobles.com" name="email" [(ngModel)]="credentials.email" required>
           </div>
         </div>
 
-        <!-- Contraseña -->
         <div class="mb-5">
           <div class="d-flex justify-content-between align-items-center mb-1">
             <label for="passwordInput" class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight mb-0">Contraseña</label>
@@ -39,13 +33,11 @@
             <span class="input-group-text bg-white border-end-0 text-muted ps-3 rounded-start-4" style="border-color: rgba(0,0,0,0.08);">
               <i class="bi bi-lock"></i>
             </span>
-            <!-- Añadido ngModel y required -->
             <input type="password" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" id="passwordInput" placeholder="••••••••" name="password" [(ngModel)]="credentials.password" required>
           </div>
         </div>
 
-        <!-- Botón de Envío (Cambia estado) -->
-        <button type="submit" [disabled]="isLoading" class="btn text-white w-100 rounded-pill py-3 fw-medium shadow-sm mb-4" style="background-color: var(--paso-purple); transition: all 0.3s ease;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">
+        <button type="submit" [disabled]="isLoading" class="btn text-light w-100 rounded-pill py-3 fw-medium shadow-sm mb-4" style="background-color: var(--paso-blue); transition: all 0.3s ease;" onmouseover="this.style.filter='brightness(0.8)'" onmouseout="this.style.filter='brightness(1)'">
           {{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
         </button>
 
@@ -53,7 +45,7 @@
 
       <div class="text-center mt-3 border-top pt-4">
         <p class="text-muted small mb-0">
-          ¿No tienes una cuenta de administrador? 
+          ¿No tienes una cuenta? 
           <a routerLink="/auth/register" class="text-blue text-decoration-none fw-bold hover-text-purple">Regístrate aquí</a>
         </p>
       </div>

@@ -17,11 +17,11 @@ export class AuthorsListComponent implements OnInit {
 
   private authorService = inject(AuthorService);
   private cdr = inject(ChangeDetectorRef);
-
+  
   ngOnInit(): void {
     this.authorService.getAuthors().subscribe({
       next: (respuesta: any) => {
-        this.authors = respuesta.data;
+        this.authors = respuesta;
         this.cdr.detectChanges();
       },
       error: (error) => {

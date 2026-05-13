@@ -14,7 +14,7 @@ export class PasodobleService {
   getPasodobles(): Observable<Pasodoble[]> {
     return this.http.get<Pasodoble[]>(this.apiUrl);
   }
-  getPasodoble(id: string | null): Observable<{ data: Pasodoble }> {
-  return this.http.get<{ data: Pasodoble }>(`${this.apiUrl}/${id}`);
+  getPasodoble(id: string | null): Observable<Pasodoble> {
+  return this.http.get<Pasodoble>(`${this.apiUrl}/${id}`);
 }
 }

@@ -27,13 +27,14 @@ export class AdminPasodobleFormComponent implements OnInit {
   });
   
   authors: any[] = [];
+  categories: any[] = [];
   isEditMode: boolean = false;
   isLoading: boolean = false;
   pasdobleId: string = '';
 
   ngOnInit() {
     this.loadAuthors();
-    
+    this.loadCategories();
     const id = this.route.snapshot.paramMap.get('id');
     
     if (id) {
@@ -55,6 +56,13 @@ export class AdminPasodobleFormComponent implements OnInit {
     this.http.get<any[]>(`${this.baseUrl}/authors`).subscribe({
       next: (data) => this.authors = data,
       error: (err) => console.error('Error cargando autores', err)
+    });
+  }
+
+  loadCategories() {
+    this.http.get<any[]>(`${this.baseUrl}/categories`).subscribe({
+      next: (data) => this.categories = data,
+      error: (err) => console.error('Error cargando categorias', err)
     });
   }
 

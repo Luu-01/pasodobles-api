@@ -49,7 +49,6 @@ export class AdminPasodoblesListComponent implements OnInit {
     });
   }
 
-  // 5. Función "Getter" que devuelve la lista filtrada en tiempo real
   get filteredPasodobles() {
     if (!this.searchTerm.trim()) {
       return this.pasodobles;
@@ -68,6 +67,7 @@ export class AdminPasodoblesListComponent implements OnInit {
       this.http.delete(`${this.adminApiUrl}/${id}`, { headers: this.getHeaders() }).subscribe({
         next: () => {
           this.pasodobles = this.pasodobles.filter(p => p.id !== id);
+          window.location.reload();
         },
         error: (err) => {
           console.error('Error al eliminar', err);

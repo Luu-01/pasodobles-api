@@ -2,9 +2,8 @@
   <div class="row justify-content-center">
     <div class="col-md-10">
       
-      <!-- Ficha del Autor -->
       <div class="bg-white p-5 rounded-4 shadow-sm mb-5 text-center">
-        <span class="badge bg-white text-purple mb-3 px-3 py-2 rounded-pill shadow-sm">Compositor</span>
+        <span class="badge bg-white text-dark mb-3 px-3 py-2 rounded-pill shadow-sm">Compositor</span>
         <h1 class="display-4 fw-bold mb-2">{{ author.name }}</h1>
         <p class="fs-5 opacity-75">Nacimiento: {{ author.birth_year || 'No registrado' }}</p>
         
@@ -15,8 +14,8 @@
         </div>
       </div>
 
-      <!-- Lista de Obras del Autor -->
-      <h4 class="fw-bold text-dark mb-4 ms-2">Obras en el Archivo <span class="text-purple">({{ author.pasodobles?.length || 0 }})</span></h4>
+      <!-- Lista pasodobles -->
+      <h4 class="fw-bold mb-4 ms-2" style="color: var(--paso-blue);">Obras en el Archivo <span class="text-purple">({{ author.pasodobles?.length || 0 }})</span></h4>
 
       <div class="card card-minimal mb-5 border-0">
         <div class="list-group list-group-flush rounded-4">

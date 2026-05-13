@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\PasodobleController;
 use App\Http\Controllers\Api\AuthorController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckAdminRole;
@@ -9,8 +10,11 @@ use App\Http\Middleware\CheckAdminRole;
 //^ Public routes
 Route::get('pasodobles', [PasodobleController::class, 'index']);
 Route::get('pasodobles/{pasodoble}', [PasodobleController::class, 'show']);
+Route::get('categories', [CategoryController::class, 'index']);
 Route::get('authors', [AuthorController::class, 'index']);
 Route::get('authors/{author}', [AuthorController::class, 'show']);
+
+
 
 //^ AUTH
 Route::post('auth/login', [AuthController::class, 'login']);

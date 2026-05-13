@@ -11,11 +11,9 @@ import { AuthService } from '../auth.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  // Inyectamos las herramientas que necesitamos
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  // Variables vinculadas al formulario
   credentials = {
     email: '',
     password: ''
@@ -31,7 +29,7 @@ export class LoginComponent {
   this.authService.login(this.credentials).subscribe({
       next: (res) => {
         console.log('Login exitoso', res);
-        this.router.navigate(['/admin/pasodobles']);
+        this.router.navigate(['/pasodobles']);
       },
       error: (err) => {
         

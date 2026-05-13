@@ -13,16 +13,15 @@ export class PasodobleDetailComponent implements OnInit {
   pasodoble?: Pasodoble;
   
   private pasodobleService = inject(PasodobleService);
-  private route = inject(ActivatedRoute); // Para leer el ID de la URL
+  private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    // Leemos el ID de la ruta (ej: /pasodobles/3)
     const id = this.route.snapshot.paramMap.get('id');
     
     this.pasodobleService.getPasodoble(id).subscribe({
-      next: (respuesta) => {
-        this.pasodoble = respuesta.data;
+      next: (response) => {
+        this.pasodoble = response;
         this.cdr.detectChanges();
       }
     });

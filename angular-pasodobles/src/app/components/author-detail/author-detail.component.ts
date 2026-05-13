@@ -20,9 +20,13 @@ export class AuthorDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     
     this.authorService.getAuthor(id).subscribe({
-      next: (respuesta) => {
-        this.author = respuesta.data;
+      next: (response) => {
+        this.author = response;
+        console.log(response)
         this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error("Error al mostrar los datos");
       }
     });
   }

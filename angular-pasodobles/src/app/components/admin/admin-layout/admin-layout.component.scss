@@ -1,71 +1,54 @@
 .admin-wrapper {
-  // Con esto rompemos el contenedor de app.component y nos pegamos a las esquinas
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 1050; // Nos ponemos por encima del NavBar público para ocultarlo
-  
+  z-index: 1050; 
   background-color: var(--paso-bg); 
   overflow: hidden; 
 }
 
-// -----------------------------------------
-// BARRA LATERAL (SIDEBAR)
-// -----------------------------------------
 .sidebar {
-  width: 280px;
-  background-color: var(--paso-nav-bg); // El negro pizarra elegante
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
+  width: 240px;
+  background-color: var(--paso-nav-bg); 
+  border-right: 1px solid rgba(255, 255, 255, 0.1); 
   z-index: 10;
 
   .sidebar-link {
-    color: #9ca3af; // Gris claro
-    border-radius: 0.75rem;
-    padding: 0.8rem 1.2rem;
+    color: #9ca3af; 
+    border-radius: 0;
+    padding: 0.6rem 1.2rem;
     font-weight: 500;
-    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    transition: background-color 0.2s ease;
 
     &:hover {
       color: #ffffff;
       background-color: rgba(255, 255, 255, 0.05);
-      transform: translateX(4px);
     }
-
-    // El estilo mágico cuando la ruta está activa
     &.active-sidebar-link {
-      color: #ffffff !important;
-      background-color: var(--paso-purple);
-      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
-    }
-  }
-
-  .btn-logout {
-    transition: all 0.3s ease;
-    &:hover {
-      background-color:rgba(0, 0, 0, 0.05);
-      color: #dc3545 !important;
+      background-color: rgba(0, 0, 0, 0.098);
+      border-left: 3px solid var(--paso-purple);
     }
   }
 }
 
-// -----------------------------------------
-// ÁREA PRINCIPAL Y TOPBAR
-// -----------------------------------------
 .main-content {
   height: 100vh;
+  background-color: #f8f9fa; // Un gris muy clarito para el fondo de trabajo
 }
 
 .topbar {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: none;
   z-index: 5;
+  background-color: #2563eb;
 }
 
 .content-area {
-  overflow-y: auto; // El scroll solo ocurre en el contenido
+  overflow-y: auto; 
   
-  // Customizamos un poco la barra de scroll para que se vea premium
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -73,10 +56,10 @@
     background: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 0;
   }
   &::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.25);
   }
 }

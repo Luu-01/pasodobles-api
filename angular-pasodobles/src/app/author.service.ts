@@ -11,10 +11,10 @@ export class AuthorService {
 
   private apiUrl = 'http://pasodobles.mb/api/authors'; 
 
-  getAuthors(): Observable<{ data: Author[] }> {
-    return this.http.get<{ data: Author[] }>(this.apiUrl);
+  getAuthors(): Observable<Author[]> {
+    return this.http.get<Author[]>(this.apiUrl);
   }
-  getAuthor(id: string | null): Observable<{ data: Author }> {
-  return this.http.get<{ data: Author }>(`${this.apiUrl}/${id}`);
+  getAuthor(id: string | null): Observable<Author> {
+  return this.http.get<Author>(`${this.apiUrl}/${id}`);
 }
 }

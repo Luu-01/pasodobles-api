@@ -32,20 +32,16 @@
   </div>
 </div>
 
-<div class="row g-2"> <!-- Cambiado a g-2 para acercar las filas entre sí -->
+<div class="row g-2">
   @for (pasodoble of filteredPasodobles; track pasodoble.id) {
     <div class="col-12">
-      <!-- Eliminado el p-2 extra que tenía el contenedor de la tarjeta -->
       <div class="card card-minimal border-0">
-        <!-- Añadido py-2 px-3 para forzar un padding vertical mínimo -->
         <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
           
           <div class="col-md-5">
-            <!-- Reducido de fs-5 a fs-6 y eliminado el mb-1 -->
             <a [routerLink]="['/pasodobles', pasodoble.id]" class="fw-bold text-dark fs-6 text-decoration-none d-block">
               {{ pasodoble.title }}
             </a>
-            <!-- Reducido ligeramente el tamaño de la dedicatoria -->
             <small class="text-muted fst-italic" style="font-size: 0.75rem; line-height: 1.2; display: block;">
               {{ pasodoble.description || 'Sin dedicatoria registrada' }}
             </small>
@@ -53,7 +49,6 @@
 
           <div class="col-md-3 text-center d-none d-md-block">
             @if (pasodoble.author) {
-              <!-- Ajuste sutil del tamaño de fuente del autor -->
               <a [routerLink]="['/authors', pasodoble.author.id]" class="text-dark text-decoration-none opacity-75 hover-text-blue" style="font-size: 0.85rem;">
                 <i class="bi bi-person me-1"></i> {{ pasodoble.author.name }}
               </a>
@@ -63,14 +58,12 @@
           </div>
 
           <div class="col-md-3 text-end">
-            <!-- Reducido el padding vertical de la etiqueta (py-1) y peso normal -->
-            <span class="badge badge-purple px-3 py-1 rounded-pill fw-normal" style="font-size: 0.75rem;">
+            <span class="px-3 py-1 rounded-pill fw-normal" style="font-size: 0.75rem;">
               {{ pasodoble.category.name}}
             </span>
           </div>
 
           <div class="col-md-1 text-end">
-            <!-- Reducido el tamaño de la flecha de fs-4 a fs-5 -->
             <a [routerLink]="['/pasodobles', pasodoble.id]" class="text-purple text-decoration-none fs-5">&rsaquo;</a>
           </div>
 
