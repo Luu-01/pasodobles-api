@@ -1,4 +1,4 @@
-import { Author } from './author.interface';
+import { Author } from '../../authors/models/author.interface';
 import { Category } from './category.interface';
 
 export interface Pasodoble {

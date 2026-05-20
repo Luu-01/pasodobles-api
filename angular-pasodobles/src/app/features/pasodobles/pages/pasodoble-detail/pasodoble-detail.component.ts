@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { PasodobleService } from '../../pasodoble.service';
-import { Pasodoble } from '../../pasodoble.interface';
+import { PasodobleService } from '../../services/pasodoble.service';
+import { Pasodoble } from '../../models/pasodoble.interface';
 
 @Component({
   selector: 'app-pasodoble-detail',
