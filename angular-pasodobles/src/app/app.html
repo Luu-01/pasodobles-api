@@ -29,11 +29,11 @@
         }
       </ul>
 
-      <div class="d-flex align-items-center gap-3">
+      <div class="d-flex align-items-center gap-3" >
         @if(authService.currentUser$ | async; as user){
-          <div class="text-end d-none d-sm-block">
-            <p class="mb-0 text-white fw-medium lh-1" style="font-size: 0.85rem;">{{ user.name }}</p>
-            <small class="text-secondary" style="font-size: 0.7rem;">{{ user.email }}</small>
+          <div class="text-end d-none d-sm-block border-1">
+            <a class="mb-0 text-white fw-medium lh-1" style="font-size: 0.85rem;" routerLink="/auth/user">{{ user.name }}</a>
+            <p class="text-secondary" style="font-size: 0.7rem;">{{ user.email }}</p>
           </div>
           <button (click)="authService.logout()" class="btn-auth btn rounded-0 px-3 py-1 d-flex align-items-center">
             <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión

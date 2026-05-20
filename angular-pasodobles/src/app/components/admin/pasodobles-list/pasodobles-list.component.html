@@ -3,13 +3,12 @@
     <h3 class="fw-bold text-dark mb-0">Gestión de Pasodobles</h3>
     <p class="text-muted small mt-1">Administra el catálogo completo del archivo</p>
   </div>
-  <!-- Botón para crear uno nuevo -->
   <a routerLink="/admin/pasodobles/new" class="btn text-white rounded-pill px-4 shadow-sm" style="background-color: var(--paso-blue);">
     <i class="bi bi-plus-lg me-2"></i> Nuevo Pasodoble
   </a>
 </div>
 
-<!-- Buscador / Filtro -->
+<!-- Search bar -->
 <div class="card card-minimal mb-4 p-2 border-0">
   <div class="card-body">
     <div class="input-group">
@@ -23,7 +22,6 @@
   </div>
 </div>
 
-<!-- Tarjeta que contiene la tabla -->
 <div class="card card-minimal border-0 overflow-hidden">
   <div class="table-responsive">
     <table class="table table-hover align-middle mb-0">
@@ -37,7 +35,6 @@
       </thead>
       <tbody class="border-top-0">
         
-        <!-- Iteramos sobre la lista FILTRADA -->
         @for (pasodoble of filteredPasodobles; track pasodoble.id) {
           <tr>
             <td class="ps-4 py-3">

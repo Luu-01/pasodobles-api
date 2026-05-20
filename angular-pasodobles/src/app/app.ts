@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from './auth/auth.service';
+import { UserService } from './user.service';
 import { AsyncPipe } from '@angular/common';
 
 @Component({

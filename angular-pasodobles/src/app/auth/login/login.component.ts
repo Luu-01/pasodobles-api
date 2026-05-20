@@ -20,7 +20,7 @@ export class LoginComponent {
   };
   
   errorMessage: string = '';
-  isLoading: boolean = false;
+  isLoading: boolean = false; // button status changer
 
   onSubmit() {
   this.isLoading = true;

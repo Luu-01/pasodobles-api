@@ -1,64 +1,53 @@
 <div class="row justify-content-center align-items-center py-5" style="min-height: 70vh;">
   <div class="col-12 col-md-8 col-lg-5">
     
-    <!-- Tarjeta de Registro -->
     <div class="card card-minimal p-4 p-sm-5 border-0">
       <div class="text-center mb-5">
         <h2 class="fw-bold text-dark mb-1">Crear Cuenta</h2>
         <p class="text-muted small">Únete para gestionar el archivo musical</p>
       </div>
 
-      <!-- Bloque de Error Dinámico -->
       @if (errorMessage) {
         <div class="alert alert-danger text-center small py-2 mb-4 rounded-3 border-0 bg-danger bg-opacity-10 text-danger">
           <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
         </div>
       }
 
-      <!-- Formulario (Ahora es reactivo) -->
       <form (ngSubmit)="onSubmit()">
         
-        <!-- Nombre Completo -->
         <div class="mb-4">
           <label for="nameInput" class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight">Nombre Completo</label>
           <div class="input-group">
             <span class="input-group-text bg-white border-end-0 text-muted ps-3 rounded-start-4" style="border-color: rgba(0,0,0,0.08);">
               <i class="bi bi-person"></i>
             </span>
-            <!-- Añadido ngModel y required -->
             <input type="text" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" id="nameInput" placeholder="Ej: Pascual Marquina" name="name" [(ngModel)]="userData.name" required>
           </div>
         </div>
 
-        <!-- Email -->
         <div class="mb-4">
           <label for="emailInput" class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight">Correo Electrónico</label>
           <div class="input-group">
             <span class="input-group-text bg-white border-end-0 text-muted ps-3 rounded-start-4" style="border-color: rgba(0,0,0,0.08);">
               <i class="bi bi-envelope"></i>
             </span>
-            <!-- Añadido ngModel y required -->
             <input type="email" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" id="emailInput" placeholder="admin@pasodobles.com" name="email" [(ngModel)]="userData.email" required>
           </div>
         </div>
 
-        <!-- Contraseña -->
         <div class="mb-5">
           <label for="passwordInput" class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight mb-0">Contraseña</label>
           <div class="input-group mt-1">
             <span class="input-group-text bg-white border-end-0 text-muted ps-3 rounded-start-4" style="border-color: rgba(0,0,0,0.08);">
               <i class="bi bi-shield-lock"></i>
             </span>
-            <!-- Añadido ngModel y required -->
             <input type="password" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" id="passwordInput" placeholder="Mínimo 8 caracteres" name="password" [(ngModel)]="userData.password" required minlength="8">
           </div>
-          <!-- Tip de seguridad para el usuario -->
           <div class="form-text small mt-2 opacity-75">
             <i class="bi bi-info-circle me-1"></i> Usa una contraseña segura y única.
           </div>
         </div>
 
-        <!-- Botón de Envío (Cambia estado) -->
         <button type="submit" [disabled]="isLoading" class="btn text-white w-100 rounded-pill py-3 fw-medium shadow-sm mb-4" style="background-color: var(--paso-blue); transition: all 0.3s ease;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">
           {{ isLoading ? 'Registrando...' : 'Registrarse' }}
         </button>

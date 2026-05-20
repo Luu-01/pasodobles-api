@@ -13,12 +13,11 @@ import { FormsModule } from '@angular/forms';
 export class PasodoblesListComponent implements OnInit {
   pasodobles: Pasodoble[] = [];
   
-  // Variables que guardarán lo que el usuario escriba/seleccione
+  // Filtering
   searchTerm: string = '';
   selectedCategory: string = '';
   selectedAuthor: string = '';
 
-  // Listas automáticas para los desplegables (se rellenarán solas)
   categories: string[] = [];
   authors: string[] = [];
 
@@ -27,10 +26,9 @@ export class PasodoblesListComponent implements OnInit {
 
   ngOnInit(): void {
     this.pasodobleService.getPasodobles().subscribe({
-      next: (respuesta: any) => {
-        this.pasodobles = respuesta.data;
+      next: (response: any) => {
+        this.pasodobles = response.data;
         
-        // Extraemos las categorías y autores únicos para los selectores
         this.extractFilterOptions();
         
         this.cdr.detectChanges();

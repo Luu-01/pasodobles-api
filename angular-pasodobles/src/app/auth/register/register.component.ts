@@ -30,7 +30,7 @@ export class RegisterComponent {
     this.authService.register(this.userData).subscribe({
       next: (res) => {
         console.log('Registro exitoso', res);
-        this.router.navigate(['/admin/pasodobles']);
+        this.router.navigate(['pasodobles']);
       },
       error: (err) => {
         this.isLoading = false;

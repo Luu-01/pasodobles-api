@@ -66,7 +66,8 @@
           "options": {
             "allowedHosts": [
               "192.168.1.36",
-              "localhost"
+              "localhost",
+              "directed-trailing-cradle.ngrok-free.dev"
             ]
           },
           "configurations": {

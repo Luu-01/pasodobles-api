@@ -43,7 +43,6 @@ export class AuthService {
   login(credentials: any) {
     return this.http.post(`${this.apiUrl}/login`, credentials, { headers: this.headers }).pipe(
       tap((response: any) => {
-        console.log(response.user)
         this.saveToken(response.access_token);
         this.saveUser(response.user)
         

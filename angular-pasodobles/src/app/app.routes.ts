@@ -8,6 +8,7 @@ import { AdminPasodoblesListComponent } from './components/admin/pasodobles-list
 import { AdminPasodobleFormComponent } from './components/admin/pasodoble-form/pasodoble-form.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { CurrentUserComponent } from './components/current-user/current-user.component';
 
 export const routes: Routes = [
 
@@ -33,7 +34,7 @@ export const routes: Routes = [
     },
 
     // AUTH
-
+    { path: 'auth/user', component: CurrentUserComponent },
     { path: 'auth/login', component: LoginComponent },
     { path: 'auth/register', component: RegisterComponent },
     { path: 'auth/logout', component: LoginComponent },
