@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckAdminRole;
+use App\Http\Controllers\Api\FavoritePasodobleController;
 
 //^ Public routes
 Route::get('pasodobles', [PasodobleController::class, 'index']);
@@ -30,7 +31,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('pasodobles/{pasodoble}', [PasodobleController::class, 'update']);
         Route::delete('pasodobles/{pasodoble}', [PasodobleController::class, 'destroy']);
     });
-
+    
+    // set as favorite
+    Route::get('/user/favorites', [FavoritePasodobleController::class, 'index']);
+    Route::post('/pasodobles/{pasodoble}/favorite', [FavoritePasodobleController::class, 'toggle']);
+    
     Route::get('auth/user', [AuthController::class, 'currentUser']);
     Route::post('auth/logout-all', [AuthController::class, 'logoutAllDevices']);
     Route::post('auth/logout', [AuthController::class, 'logout']);

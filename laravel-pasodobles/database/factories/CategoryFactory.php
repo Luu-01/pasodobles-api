@@ -2,23 +2,27 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Category>
- */
 class CategoryFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
+         $categories = [
+            'Pascual Marquina',
+            'Emilio Cebrián',
+            'Manuel Penella',
+            'José Serrano',
+            'Ricardo Dorado',
+            'Teo Aparicio',
+            'José Franco',
+            'Jaime Teixidor',
+            'Abel Moreno',
+            'Francisco Grau'
+        ];
+
         return [
-            //
+            'name' => fake()->randomElement($categories),
         ];
     }
 }
