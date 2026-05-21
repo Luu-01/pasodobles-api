@@ -99,7 +99,11 @@ export class AuthService {
     if(isPlatformBrowser(this.platformId)){ // SSR Protecting
       token = localStorage.getItem('auth_token') || '';
     }
-    return this.http.get<User>(`${this.apiUrl}/user`, {}).pipe(
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Accept': `application/json`
+    });
+    return this.http.get<User>(`${this.apiUrl}/user`, { headers }).pipe(
       tap(user => {
         this.currentUserSubject.next(user); // Update BehaviorSubject
       }),

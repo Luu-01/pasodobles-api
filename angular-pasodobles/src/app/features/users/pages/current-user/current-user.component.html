@@ -1,5 +1,101 @@
-<div class="text-center shadow-sm py-3 px-3 rounded-4">
-    <span class="display-6 px-3 py-3">{{user?.name}}</span>
-    <p class="text-muted px-3 py-3">{{user?.email}}</p>
-    <a class="bi bi-arrow-bar-down" href="https://www.youtube.com/watch?v=uKWcIaJtS6Q">Descargar troyano</a>
-</div>
+<section class="user-profile-page">
+
+  @if(authService.currentUser$ | async; as user) {
+
+    <header class="profile-header border">
+      <div>
+        <p class="section-kicker mb-1">Área personal</p>
+        <h1 class="profile-title mb-1">{{ user.name }}</h1>
+        <p class="profile-subtitle mb-0">{{ user.email }}</p>
+      </div>
+
+      <div class="profile-role-box">
+        <span class="role-label">Rol</span>
+        <span class="role-value text-uppercase">{{ user.role }}</span>
+      </div>
+    </header>
+
+    <div class="profile-grid mt-4">
+
+      <article class="profile-card border">
+        <div class="card-heading">
+          <div>
+            <p class="section-kicker mb-1">Archivo musical</p>
+            <h2 class="card-title mb-0">Favoritos</h2>
+          </div>
+          <i class="bi bi-heart-fill text-danger"></i>
+        </div>
+
+        <p class="card-description">
+          Obras guardadas para acceso rápido desde tu perfil.
+        </p>
+
+        @if(favorites.length > 0) {
+          <div class="favorite-list">
+            @for(pasodoble of favorites; track pasodoble.id) {
+              <a class="favorite-item" [routerLink]="['/pasodobles', pasodoble.id]">
+                <div>
+                  <strong>{{ pasodoble.title }}</strong>
+                  <span>{{ pasodoble.author?.name || 'Autor no asignado' }}</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+              </a>
+            }
+          </div>
+        
+        }@else if (favoritesLoading === true) {
+          <div class="spinner-border" role="status">
+            <span class="sr-only"></span>
+          </div>
+        } 
+        @else {
+          <div class="empty-state">
+            <i class="bi bi-heart"></i>
+            <span>Todavía no tienes pasodobles favoritos.</span>
+          </div>
+        }
+      </article>
+
+      <article class="profile-card border feature-disabled">
+        <div class="card-heading">
+          <div>
+            <p class="section-kicker mb-1">Ensayos</p>
+            <h2 class="card-title mb-0">Calendario</h2>
+          </div>
+          <i class="bi bi-calendar-event"></i>
+        </div>
+
+        <p class="card-description">
+          Próximamente podrás confirmar o rechazar asistencia a ensayos.
+        </p>
+
+        <div class="status-line">
+          <span class="status-dot"></span>
+          <span>Funcionalidad pendiente</span>
+        </div>
+      </article>
+
+      <article class="profile-card border feature-disabled">
+        <div class="card-heading">
+          <div>
+            <p class="section-kicker mb-1">Solicitudes</p>
+            <h2 class="card-title mb-0">Cambios propuestos</h2>
+          </div>
+          <i class="bi bi-pencil-square"></i>
+        </div>
+
+        <p class="card-description">
+          Aquí aparecerán tus sugerencias de edición, creación o borrado de obras.
+        </p>
+
+        <div class="status-line">
+          <span class="status-dot"></span>
+          <span>Preparado para tickets</span>
+        </div>
+      </article>
+
+    </div>
+
+  }
+
+</section>
