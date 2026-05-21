@@ -10,8 +10,7 @@ class Category extends Model
     /** @use HasFactory<\Database\Factories\CategoryFactory> */
     use HasFactory;
     protected $fillable = [
-        'title',
-        'description',
+        'name',
     ];
     public function pasodobles(){
         return $this->hasMany(Pasodoble::class);

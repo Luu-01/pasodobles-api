@@ -1,11 +1,13 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Pasodoble } from '../../models/pasodoble.interface';
+import { Pasodoble, FavoriteToggleResponse, FavoritesResponse } from '../../models/pasodoble.interface';
 import { PasodobleService } from '../../services/pasodoble.service';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../../core/auth/auth.service';
+import { AsyncPipe, NgClass } from '@angular/common';
 
 @Component({
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, AsyncPipe, NgClass, FormsModule],
   selector: 'app-pasodobles-list',
   standalone: true,
   templateUrl: './pasodobles-list.component.html'
@@ -18,26 +20,106 @@ export class PasodoblesListComponent implements OnInit {
   selectedCategory: string = '';
   selectedAuthor: string = '';
 
+  favoriteIds = new Set<number>();
+  loading = false;
+  favoritesLoading = false;
+  updatingFavoriteIds = new Set<number>(); // status changer to prevent multiple requests
+
   categories: string[] = [];
   authors: string[] = [];
 
   private pasodobleService = inject(PasodobleService);
+  public authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.pasodobleService.getPasodobles().subscribe({
       next: (response: any) => {
         this.pasodobles = response.data;
-        
         this.extractFilterOptions();
-        
         this.cdr.detectChanges();
+        this.loadFavorites();
       },
       error: (err) => console.error(err)
     });
   }
 
-  //~ Filtering
+ 
+  loadFavorites(): void {
+    this.favoritesLoading = true;
+
+    this.pasodobleService.getUserFavorites().subscribe({
+      next: (response) => {
+        this.favoriteIds = new Set(
+          response.data.map((pasodoble) => pasodoble.id)
+        );
+        
+        this.favoritesLoading = false;
+        this.cdr.markForCheck(); // change
+      },
+      error: (error) => {
+        console.error('Error loading favorites', error);
+        this.favoritesLoading = false;
+        this.cdr.markForCheck(); // change
+
+      },
+    });
+  }
+
+  isFavorite(pasodobleId: number): boolean {
+    return this.favoriteIds.has(pasodobleId);
+  }
+
+  toggleFavorite(pasodoble: Pasodoble): void {
+
+    // status changer
+    if (this.updatingFavoriteIds.has(pasodoble.id)) {
+      return;
+    }
+    this.updatingFavoriteIds = new Set(this.updatingFavoriteIds).add(pasodoble.id);
+      const wasFavorite = this.isFavorite(pasodoble.id);
+      const optimisticFavorites = new Set(this.favoriteIds);
+
+      if (wasFavorite) {
+        optimisticFavorites.delete(pasodoble.id);
+      } else {
+        optimisticFavorites.add(pasodoble.id);
+      }
+
+      this.favoriteIds = optimisticFavorites;
+
+      this.pasodobleService.toggleFavorite(pasodoble.id).subscribe({
+        next: (response) => {
+          const confirmedFavorites = new Set(this.favoriteIds);
+
+          if (response.is_favorite) {
+            confirmedFavorites.add(pasodoble.id);
+          } else {
+            confirmedFavorites.delete(pasodoble.id);
+          }
+
+          this.favoriteIds = confirmedFavorites;
+          this.updatingFavoriteIds.delete(pasodoble.id);
+          this.cdr.markForCheck(); // change
+        },
+        error: (error) => {
+          console.error('Error toggling favorite', error);
+          const rollbackFavorites = new Set(this.favoriteIds);
+
+          if (wasFavorite) {
+            rollbackFavorites.add(pasodoble.id);
+          } else {
+            rollbackFavorites.delete(pasodoble.id);
+          }
+
+          this.favoriteIds = rollbackFavorites;
+          this.updatingFavoriteIds.delete(pasodoble.id);
+          this.cdr.markForCheck(); // change
+        },
+      });
+  };
+
+   //~ Filtering
   extractFilterOptions() {
 
     const categoriasSet = new Set(this.pasodobles.map(p => p.category?.name).filter(Boolean));
@@ -57,4 +139,5 @@ export class PasodoblesListComponent implements OnInit {
       return matchSearch && matchCategory && matchAuthor;
     });
   }
+
 }

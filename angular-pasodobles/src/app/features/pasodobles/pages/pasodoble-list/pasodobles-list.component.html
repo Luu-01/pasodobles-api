@@ -59,9 +59,25 @@
 
           <div class="col-md-3 text-end">
             <span class="px-3 py-1 rounded-pill fw-normal" style="font-size: 0.75rem;">
-              {{ pasodoble.category.name}}
+              {{ pasodoble.category?.name}}
             </span>
           </div>
+
+          @if(authService.currentUser$ | async; as user){
+            <button
+            type="button"
+            class="btn btn-sm btn-link text-decoration-none p-0"
+            (click)="toggleFavorite(pasodoble); $event.stopPropagation()"
+            [disabled]="updatingFavoriteIds.has(pasodoble.id)">
+            <i
+              class="bi"
+              [ngClass]="{
+                'bi-heart-fill text-danger': isFavorite(pasodoble.id),
+                'bi-heart text-muted': !isFavorite(pasodoble.id)
+              }"
+            ></i>
+          </button>
+          }
 
           <div class="col-md-1 text-end">
             <a [routerLink]="['/pasodobles', pasodoble.id]" class="text-purple text-decoration-none fs-5">&rsaquo;</a>
