@@ -75,22 +75,36 @@ export class AuthService {
     }
   }
 
+  getToken(){
+    let token = '';
+    if(isPlatformBrowser(this.platformId)){ // SSR Protecting
+      token = localStorage.getItem('auth_token') || '';
+    }
+    return token;
+  }
+
+  getAuthHeaders(){
+    let token = this.getToken();
+    return{
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }),
+    };
+  };
+
   getUser(){
 
     let token = '';
     if(isPlatformBrowser(this.platformId)){ // SSR Protecting
       token = localStorage.getItem('auth_token') || '';
     }
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    return this.http.get<User>(`${this.apiUrl}/user`, { headers }).pipe(
+    return this.http.get<User>(`${this.apiUrl}/user`, {}).pipe(
       tap(user => {
         this.currentUserSubject.next(user); // Update BehaviorSubject
-      })
+      }),
     );
-  }
+  };
 
   logout() { 
 
