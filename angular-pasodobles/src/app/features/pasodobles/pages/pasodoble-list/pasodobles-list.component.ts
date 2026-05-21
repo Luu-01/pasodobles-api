@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { PasodobleService } from '../../pasodoble.service';
 import { RouterLink } from '@angular/router';
-import { Pasodoble } from '../../pasodoble.interface';
+import { Pasodoble } from '../../models/pasodoble.interface';
+import { PasodobleService } from '../../services/pasodoble.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({

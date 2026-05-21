@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Pasodoble } from './pasodoble.interface';
+import { Pasodoble } from '../models/pasodoble.interface';
 
 @Injectable({
   providedIn: 'root'

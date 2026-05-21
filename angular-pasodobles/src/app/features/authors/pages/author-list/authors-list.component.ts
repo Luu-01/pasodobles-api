@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AuthorService } from '../../author.service';
-import { Author } from '../../author.interface';
+import { AuthorService } from '../../services/author.service';
+import { Author } from '../../models/author.interface';
 import { FormsModule } from '@angular/forms';
 
 @Component({

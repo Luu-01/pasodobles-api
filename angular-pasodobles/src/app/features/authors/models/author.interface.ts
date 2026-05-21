@@ -1,4 +1,4 @@
-import { Pasodoble } from "./pasodoble.interface";
+import { Pasodoble } from "../../pasodobles/models/pasodoble.interface";
 
 export interface Author {
   id: number;

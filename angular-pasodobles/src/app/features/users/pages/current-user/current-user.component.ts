@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { UserService } from '../../user.service';
-import { User } from '../../user.interface';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/user.interface';
 
 @Component({
   selector: 'app-current-user',
