@@ -8,7 +8,6 @@
     <p class="text-muted small mt-0">Completa los datos de la obra musical</p>
   </div>
 </div>
-
 <form [formGroup]="pasodoble" (ngSubmit)="save()">
   <div class="row g-4">
     <div class="col-12 col-lg-8">
@@ -18,19 +17,59 @@
           <div class="col-md-8">
             <label class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight">Título de la Obra</label>
             <input type="text" class="form-control form-control-minimal" placeholder="Ej: Serra i Mar..." formControlName="title">
+            <div class="mt-4">
+              @if (isInvalid('title')) {
+                <div class="invalid-feedback d-block">
+                  @if (pasodoble.get('title')?.errors?.['required']) {
+                    <span>El título es obligatorio.</span>
+                  }
+
+                  @if (pasodoble.get('title')?.errors?.['minlength']) {
+                    <span>El título debe tener al menos 3 caracteres.</span>
+                  }
+
+                  @if (pasodoble.get('title')?.errors?.['maxlength']) {
+                    <span>El título no puede superar los 150 caracteres.</span>
+                  }
+                </div>
+              }
+            </div>
           </div>
+          
           
           <div class="col-md-4">
             <label class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight">Año</label>
             <input type="number" class="form-control form-control-minimal" placeholder="Ej: 1902..." formControlName="year">
+            <div class="mt-4">
+             @if (isInvalid('year')) {
+              <div class="invalid-feedback d-block">
+                @if (pasodoble.get('year')?.errors?.['required']) {
+                  <span>El año es obligatorio.</span>
+                }
+
+                @if (pasodoble.get('year')?.errors?.['min']) {
+                  <span>El año no puede ser anterior a 1800.</span>
+                }
+
+                @if (pasodoble.get('year')?.errors?.['max']) {
+                  <span>El año no puede ser posterior al año actual.</span>
+                }
+              </div>
+            }
+            </div>
           </div>
+          
         </div>
 
         <div class="mb-4">
           <label class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight">Dedicatoria e Historia</label>
           <textarea class="form-control form-control-minimal" rows="4" placeholder="Escribe aquí el contexto de la obra o a quién está dedicada..." formControlName="description"></textarea>
         </div>
-
+        @if(isInvalid('description')){
+            <div class="invalid-feedback d-block">
+              <span>Demasiado largo.</span>
+            </div>
+          }
         <div class="mb-2">
           <label class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight">Enlace a Partitura (PDF)</label>
           <div class="input-group">
@@ -39,6 +78,11 @@
             </span>
             <input type="url" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" placeholder="https://ejemplo.com/partitura.pdf" formControlName="pdf_url">
           </div>
+          @if(isInvalid('pdf_url')){
+            <div class="invalid-feedback d-block">
+              <span>Revisa el formato del enlace.</span>
+            </div>
+          }
         </div>
 
       </div>
@@ -48,7 +92,7 @@
       <div class="card card-minimal border-0 p-4 mb-4">
         <h6 class="fw-bold text-dark text-uppercase letter-spacing-tight mb-4 border-bottom pb-2">Clasificación</h6>
         
-        <div class="mb-4">
+        <div class="mb-2">
           <label class="form-label text-muted small fw-bold">Compositor</label>
           <select class="form-select form-select-minimal" formControlName="author_id">
             <option value="">Selecciona un autor...</option>
@@ -57,6 +101,12 @@
             }
           </select>
         </div>
+        @if (isInvalid('author_id')) {
+          <div class="invalid-feedback d-block">
+            <span>Debes seleccionar un compositor.</span>
+          </div>
+        }
+        
 
         <div class="mb-2">
           <label class="form-label text-muted small fw-bold">Categoría</label>
@@ -66,6 +116,11 @@
             }
           </select>
         </div>
+        @if (isInvalid('category_id')) {
+          <div class="invalid-feedback d-block">
+            <span>Debes seleccionar una categoría.</span>
+          </div>
+        }
       </div>
 
       <button type="submit" class="btn text-white w-100 rounded-pill py-3 fw-medium shadow-sm mb-3" style="background-color: var(--paso-blue); transition: all 0.3s ease;">
