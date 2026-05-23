@@ -47,6 +47,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //? archive-request
     Route::get('archive-requests', [ArchiveChangeRequestController::class, 'index']);
+    Route::get('archive-requests/{archiveChangeRequest}', [ArchiveChangeRequestController::class, 'show']);
+
     Route::post('archive-requests', [ArchiveChangeRequestController::class, 'store']);
     
     //^ Auth

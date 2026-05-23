@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { Pasodoble, FavoriteToggleResponse, FavoritesResponse } from '../../models/pasodoble.interface';
 import { PasodobleService } from '../../services/pasodoble.service';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../../../core/auth/auth.service';
+import { AuthService } from '../../../../auth/auth.service';
 import { AsyncPipe, NgClass } from '@angular/common';
 
 @Component({

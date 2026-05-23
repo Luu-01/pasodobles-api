@@ -1,0 +1,163 @@
+<section class="container-fluid px-0">
+
+  <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+    <div>
+      <h4 class="fw-semibold mb-1">
+        {{ isAdmin ? 'Solicitudes del archivo' : 'Mis solicitudes' }}
+      </h4>
+
+      <p class="text-muted small mb-0">
+        @if (isAdmin) {
+          Revisa, aprueba o rechaza las solicitudes enviadas por los usuarios.
+        } @else {
+          Consulta el estado de tus solicitudes enviadas al archivo musical.
+        }
+      </p>
+    </div>
+
+    <span class="badge rounded-0 border text-bg-light small">
+      {{ archiveRequests.length }} solicitudes
+    </span>
+  </div>
+
+  @if (isLoading) {
+    <div class="bg-white border rounded-0 p-4 text-center">
+      <p class="text-muted small mb-0">
+        Cargando solicitudes...
+      </p>
+    </div>
+  }
+
+  @if (!isLoading && archiveRequests.length === 0) {
+    <div class="bg-white border rounded-0 p-4 text-center">
+      <h6 class="fw-semibold mb-2">No hay solicitudes todavía</h6>
+
+      <p class="text-muted small mb-0">
+        @if (isAdmin) {
+          Cuando los usuarios envíen solicitudes, aparecerán en esta lista.
+        } @else {
+          Todavía no has enviado ninguna solicitud de cambio.
+        }
+      </p>
+    </div>
+  }
+
+  @if (!isLoading && archiveRequests.length > 0) {
+    <div class="bg-white border rounded-0">
+
+      <div class="table-responsive">
+        <table class="table table-sm align-middle mb-0">
+          <thead class="table-light border-bottom">
+            <tr>
+              <th class="small text-muted fw-semibold px-3 py-2">ID</th>
+
+              @if (isAdmin) {
+                <th class="small text-muted fw-semibold px-3 py-2">Usuario</th>
+              }
+
+              <th class="small text-muted fw-semibold px-3 py-2">Tipo</th>
+              <th class="small text-muted fw-semibold px-3 py-2">Acción</th>
+              <th class="small text-muted fw-semibold px-3 py-2">Estado</th>
+              <th class="small text-muted fw-semibold px-3 py-2">Objetivo</th>
+              <th class="small text-muted fw-semibold px-3 py-2">Fecha</th>
+              <th class="small text-muted fw-semibold px-3 py-2 text-end">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (request of archiveRequests; track request.id) {
+              <tr>
+                <td class="px-3 py-2 small">
+                  #{{ request.id }}
+                </td>
+
+                @if (isAdmin) {
+                  <td class="px-3 py-2 small">
+                    @if (request.user) {
+                      <div class="fw-semibold">
+                        {{ request.user.name }}
+                      </div>
+                      <div class="text-muted" style="font-size: 0.75rem;">
+                        {{ request.user.email }}
+                      </div>
+                    } @else {
+                      <span class="text-muted">Usuario no cargado</span>
+                    }
+                  </td>
+                }
+
+                <td class="px-3 py-2 small text-capitalize">
+                  {{ request.target_type }}
+                </td>
+
+                <td class="px-3 py-2 small">
+                  <span
+                    class="badge rounded-0 border"
+                    [ngClass]="{
+                      'text-bg-primary': request.action === 'create',
+                      'text-bg-warning': request.action === 'edit',
+                      'text-bg-danger': request.action === 'delete'
+                    }">
+                    @if (request.action === 'create') {
+                      Crear
+                    }
+
+                    @if (request.action === 'edit') {
+                      Editar
+                    }
+
+                    @if (request.action === 'delete') {
+                      Borrar
+                    }
+                  </span>
+                </td>
+
+                <td class="px-3 py-2 small">
+                  <span
+                    class="badge rounded-0 border"
+                    [ngClass]="{
+                      'text-bg-warning': request.status === 'pending',
+                      'text-bg-success': request.status === 'approved',
+                      'text-bg-danger': request.status === 'rejected'
+                    }">
+                    @if (request.status === 'pending') {
+                      Pendiente
+                    }
+
+                    @if (request.status === 'approved') {
+                      Aprobada
+                    }
+
+                    @if (request.status === 'rejected') {
+                      Rechazada
+                    }
+                  </span>
+                </td>
+
+                <td class="px-3 py-2 small">
+                  @if (request.target_id) {
+                    #{{ request.target_id }}
+                  } @else {
+                    <span class="text-muted">Nuevo registro</span>
+                  }
+                </td>
+
+                <td class="px-3 py-2 small text-muted">
+                  {{ request.created_at || 'Sin fecha' }}
+                </td>
+
+                <td class="px-3 py-2 text-end">
+                  <a
+                    class="btn btn-outline-primary btn-sm rounded-0"
+                    [routerLink]="isAdmin ? ['/admin/archive-requests', request.id] : ['/requests', request.id]">
+                    Ver detalle
+                  </a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</section>

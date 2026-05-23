@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Pasodoble, FavoritesResponse, FavoriteToggleResponse } from '../models/pasodoble.interface';
-import { AuthService } from '../../../core/auth/auth.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +30,8 @@ export class PasodobleService {
     );
   }
 
-  getUserFavorites(): Observable<FavoritesResponse> {
+  getUserFavorites(): Observable< FavoritesResponse > {
     const headers = this.authService.getAuthHeaders();
-    return this.http.get<FavoritesResponse>(`${this.apiUrl}/user/favorites`, headers);
+    return this.http.get< FavoritesResponse >(`${this.apiUrl}/user/favorites`, headers );
   }
 }

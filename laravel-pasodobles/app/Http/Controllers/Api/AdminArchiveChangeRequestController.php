@@ -25,11 +25,11 @@ class AdminArchiveChangeRequestController extends Controller
     public function show(ArchiveChangeRequest $archiveChangeRequest)
     {
         return new ArchiveChangeRequestResource(
-            $archiveChangeRequest->load(['user', 'reviewer'])
+            $archiveChangeRequest->fresh()->load(['user', 'reviewer'])
         );
     }
 
-    //^ 'status' changing methods use DB::transaction to isolate all the validation
+    //^ 'status changing methods use DB::transaction to isolate all the validation
     //  and allow full rollback in case that validation fails
 
     public function approve(
@@ -47,7 +47,7 @@ class AdminArchiveChangeRequestController extends Controller
 
             $archiveChangeRequest->update([
                 'status' => 'approved',
-                'reviewed_by' => $request->user()->id,
+                'reviewed  _by' => $request->user()->id,
                 'admin_reason' => $request->validated('admin_reason'),
                 'reviewed_at' => now(),
             ]);

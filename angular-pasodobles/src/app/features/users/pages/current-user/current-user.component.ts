@@ -3,7 +3,7 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.interface';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
-import { AuthService } from '../../../../core/auth/auth.service';
+import { AuthService } from '../../../../auth/auth.service';
 import { FavoritesResponse, Pasodoble } from '../../../pasodobles/models/pasodoble.interface';
 
 @Component({
@@ -22,13 +22,9 @@ export class CurrentUserComponent implements OnInit{
   favoritesLoading: Boolean = false;
 
   ngOnInit(): void {
-
-    this.userService.getUser().subscribe({
-      next: (response) => {
-        this.user = response;
-        this.loadFavorites();
-      },
-    });
+      this.user = this.userService.getUser();
+      this.loadFavorites();
+      this.cdr.markForCheck();
   }
 
   loadFavorites(){

@@ -1,18 +1,11 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common'; // SSR
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
-
+import { User } from '../features/users/models/user.interface';
 
 // Using BehaviorSubject and ServerSideRendering protection to prevent early localStorage access
-
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -29,14 +22,34 @@ export class AuthService {
   });
 
   // BehaviorSubject
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  private currentUserSubject = new BehaviorSubject<User | null>(this.loadStoredUser());
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor() {
-    if(isPlatformBrowser(this.platformId)){ 
-      if (localStorage.getItem('auth_token')) {
-        this.getUser().subscribe();
-      }
+  loadCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/user`, this.getAuthHeaders()).pipe(
+      tap((user) => {
+        this.saveUser(user);   
+      })
+    );
+  }
+  
+  // avoid window reload session loss
+  private loadStoredUser(): User | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+
+    const storedUser = localStorage.getItem('user');
+
+    if (!storedUser) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(storedUser) as User;
+    } catch {
+      localStorage.removeItem('user');
+      return null;
     }
   }
 
@@ -62,54 +75,6 @@ export class AuthService {
     );
   }
 
-  // SSR protected saving methods
-  private saveToken(token: string) {
-    if(isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('auth_token', token);
-    }
-  }
-
-  private saveUser(user: any){
-    if(isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('user', JSON.stringify(user));
-    }
-  }
-
-  getToken(){
-    let token = '';
-    if(isPlatformBrowser(this.platformId)){ // SSR Protecting
-      token = localStorage.getItem('auth_token') || '';
-    }
-    return token;
-  }
-
-  getAuthHeaders(){
-    let token = this.getToken();
-    return{
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json'
-      }),
-    };
-  };
-
-  getUser(){
-
-    let token = '';
-    if(isPlatformBrowser(this.platformId)){ // SSR Protecting
-      token = localStorage.getItem('auth_token') || '';
-    }
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Accept': `application/json`
-    });
-    return this.http.get<User>(`${this.apiUrl}/user`, { headers }).pipe(
-      tap(user => {
-        this.currentUserSubject.next(user); // Update BehaviorSubject
-      }),
-    );
-  };
-
   logout() { 
 
     let token = '';
@@ -121,15 +86,73 @@ export class AuthService {
       'Accept': `application/json`
     });
 
-    return this.http.post(`${this.apiUrl}/logout`, {}, { headers }).subscribe({
-      next: () => {
+    return this.http.post(`${this.apiUrl}/logout`, {}, { headers }).pipe(
+      tap(() => {
         this.cleanSession();
-      },
-      error: () => {
-        alert("error loging out")
-        this.cleanSession(); // prevent user of keeping trapped in the session in case the token
-      }
-    });
+      })
+    );
+  }
+
+  // SSR protected saving methods
+  private saveToken(token: string) {
+    if(isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('auth_token', token);
+    }
+  }
+
+  private saveUser(user: User): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('user', JSON.stringify(user));
+    }
+    this.currentUserSubject.next(user);
+  }
+
+  getToken(){
+    let token = '';
+    if(isPlatformBrowser(this.platformId)){ // SSR Protecting
+      token = localStorage.getItem('auth_token') || '';
+    }
+    return token;
+  }
+
+  getAuthHeaders(): { headers: HttpHeaders } {
+    let token = this.getToken();
+    if(isPlatformBrowser(this.platformId)){ // SSR Protecting
+        token = localStorage.getItem('auth_token') || '';
+    }
+
+    return {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      }),
+    };
+  }
+
+  getCurrentUser(): User | null | any{
+    if (!isPlatformBrowser(this.platformId)) {
+      return '';
+    }
+    return this.currentUserSubject.value;
+  }
+
+  getRole(): string | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return '';
+    }
+    return this.currentUserSubject.value?.role ?? null;
+  }
+
+  setCurrentUser(user: User): void {
+    this.currentUserSubject.next(user);
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  isAuthenticated(): boolean | any {
+    if (!isPlatformBrowser(this.platformId)) {
+      return '';
+    }
+    return this.getToken() !== '';
   }
 
   cleanSession(){
@@ -140,4 +163,5 @@ export class AuthService {
     this.currentUserSubject.next(null);
     this.router.navigate(['/auth/login']);
   }
+
 }
