@@ -56,4 +56,14 @@ class User extends Authenticatable
             'pasodoble_user_favorites'
         )->withTimestamps();
     }
+
+    public function archiveChangeRequests()
+    {
+        return $this->hasMany(ArchiveChangeRequest::class);
+    }
+
+    public function reviewedArchiveChangeRequests()
+    {
+        return $this->hasMany(ArchiveChangeRequest::class, 'reviewed_by');
+    }
 }

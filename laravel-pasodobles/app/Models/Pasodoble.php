@@ -20,6 +20,10 @@ class Pasodoble extends Model
         'category_id',
     ];
 
+    protected $casts = [
+        'year' => 'date',
+    ];
+
     public function author()
     {
         return $this->belongsTo(Author::class);
@@ -29,7 +33,6 @@ class Pasodoble extends Model
     {
         return $this->belongsTo(Category::class);
     }
-
 
     public function favoritedByUsers()
     {
