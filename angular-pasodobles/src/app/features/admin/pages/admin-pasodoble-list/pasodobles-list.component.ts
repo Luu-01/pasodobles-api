@@ -19,8 +19,6 @@ export class AdminPasodoblesListComponent implements OnInit {
 
   pasodobles: any[] = [];
   isLoading: boolean = true;
-  
-  // 3. Variable para el buscador
   searchTerm: string = '';
 
   ngOnInit() {
@@ -67,7 +65,7 @@ export class AdminPasodoblesListComponent implements OnInit {
       this.http.delete(`${this.adminApiUrl}/${id}`, { headers: this.getHeaders() }).subscribe({
         next: () => {
           this.pasodobles = this.pasodobles.filter(p => p.id !== id);
-          window.location.reload();
+          this.cdr.markForCheck();
         },
         error: (err) => {
           console.error('Error al eliminar', err);
