@@ -1,0 +1,74 @@
+<nav class="navbar navbar-expand-lg navbar-dark-custom py-2 mb-4 sticky-top" data-bs-theme="dark">
+  <div class="container-fluid navbar-shell">
+
+    <a class="navbar-brand fw-semibold fs-5 letter-spacing-tight navbar-brand-area" routerLink="/pasodobles">
+      <span class="text-white px-3">Pasodobles</span>
+    </a>
+
+    <div class="collapse navbar-collapse navbar-center-area" id="navbarPrincipal">
+      <ul class="navbar-nav mb-lg-0 gap-1">
+        <li class="nav-item">
+          <a
+            class="nav-link nav-link-custom"
+            routerLink="/pasodobles"
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{exact: true}">
+            Archivo Musical
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link nav-link-custom" routerLink="/authors" routerLinkActive="active-link">
+            Compositores
+          </a>
+        </li>
+
+        @if(authService.currentUser$ | async; as user){
+          @if(user.role == 'admin'){
+            <li class="nav-item">
+              <a class="nav-link nav-link-custom" routerLink="/admin/pasodobles" routerLinkActive="active-link">
+                Admin Panel
+              </a>
+            </li>
+          }
+        }
+      </ul>
+    </div>
+
+    <div class="navbar-actions-area">
+      @if(authService.currentUser$ | async; as user){
+        <div class="user-navbar d-none d-md-block">
+          <div class="lh-1">
+            <span class="user-welcome">Hola de nuevo, </span>
+            <a routerLink="/auth/user" class="user-name">{{ user.name }}</a>
+            <i class="bi bi-person-fill ms-2"></i>
+          </div>
+
+          <div class="lh-1 mt-1">
+            <a routerLink="/auth/user" class="user-email">{{ user.email }}</a>
+            <i class="bi bi-envelope ms-2"></i>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          (click)="authService.logout()"
+          class="btn-auth btn rounded-0 px-2 py-1 d-flex align-items-center"
+          title="Cerrar sesión">
+          <i class="bi bi-box-arrow-right"></i>
+          <span class="d-none d-xl-inline ms-2">Cerrar Sesión</span>
+        </button>
+      }
+      @else {
+        <a routerLink="/auth/login" class="btn-auth btn rounded-0 px-3 py-1 d-flex align-items-center">
+          <i class="bi bi-box-arrow-in-right me-2"></i>
+          Iniciar Sesión
+        </a>
+      }
+    </div>
+
+  </div>
+</nav>
+<main class="container px-4 pb-5">
+  <router-outlet></router-outlet>
+</main>

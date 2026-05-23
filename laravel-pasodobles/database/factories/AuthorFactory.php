@@ -2,23 +2,29 @@
 
 namespace Database\Factories;
 
-use App\Models\Author;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Author>
- */
 class AuthorFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
+        $authors = [
+            'Pascual Marquina',
+            'Emilio Cebrián',
+            'Manuel Penella',
+            'José Serrano',
+            'Ricardo Dorado',
+            'Teo Aparicio',
+            'José Franco',
+            'Jaime Teixidor',
+            'Abel Moreno',
+            'Francisco Grau'
+        ];
+
         return [
-            //
+            'name' => fake()->randomElement($authors),
+            'birth_year' => fake()->numberBetween(1850, 1970),
+            'biography' => fake()->paragraph(),
         ];
     }
 }

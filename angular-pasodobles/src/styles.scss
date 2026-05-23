@@ -4,51 +4,6 @@
   --paso-nav-bg: #1d1d20;
 }
 
-.navbar-dark-custom {
-  background-color: var(--paso-nav-bg);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-
-  .nav-link-custom {
-    font-weight: 500;
-    color: #9ca3af;
-    position: relative;
-    padding-bottom: 0.25rem;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: #ffffff;
-    }
-
-    &.active-link {
-      color: #ffffff;
-      
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 24px;
-        height: 2px;
-        background-color: var(--paso-blue);
-        border-radius: 2px;
-        box-shadow: 0 0 8px rgba(55, 52, 242, 0.6);
-      }
-    }
-  }
-}
-
-.btn-auth {
-  color: white;
-  border: 1.5px solid var(--paso-blue);
-  background-color: transparent;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  text-align: center;
-
-  &:hover {
-    background-color: var(--paso-blue);
-    color: white;
-    box-shadow: 0 4px 12px rgba(58, 61, 237, 0.3);
-  }
+body {
+    background: #f4f4f4;
 }

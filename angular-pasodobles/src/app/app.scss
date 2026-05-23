@@ -1,0 +1,30 @@
+.app-wrapper {
+    width: 100%;
+    max-width: 1600px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: white;
+}
+
+// zoom on PC
+@media (max-width: 1100pxpx) {
+    .app-wrapper {
+        max-width: 100%;
+        padding: 1.5rem;
+    }
+}
+
+// tablet
+@media (max-width: 992px) {
+    .app-wrapper {
+        max-width: 100%;
+        padding: 1rem;
+    }
+}
+
+// phone
+@media (max-width: 768px) {
+    .app-wrapper {
+        padding: .75rem;
+    }
+}
