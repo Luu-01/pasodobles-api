@@ -19,6 +19,7 @@ import { CurrentUserComponent } from './features/users/pages/current-user/curren
 
 import { ArchiveRequestsComponent } from './features/archive-requests/pages/archive-requests-list/archive-requests.component';
 import { ArchiveRequestsDetailComponent } from './features/archive-requests/pages/archive-requests-detail/archive-requests-detail.component';
+import { ArchiveRequestsFormComponent } from './features/archive-requests/pages/archive-requests-form/archive-requests-form';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,7 @@ export const routes: Routes = [
       { path: 'authors/:id', component: AuthorDetailComponent },
       { path: 'auth/user', component: CurrentUserComponent },
       { path: 'archive-requests', component: ArchiveRequestsComponent},
+      { path: 'archive-requests/form', component: ArchiveRequestsFormComponent },
       { path: 'archive-requests/:id', component: ArchiveRequestsDetailComponent},
     ],
   },

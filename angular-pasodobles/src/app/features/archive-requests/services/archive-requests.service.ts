@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { ArchiveRequests } from "../model/archive-requests.interface";
+import { ArchiveRequests, ArchiveRequestsResponse, RequestAuthorPayload, RequestPasodoblePayload } from "../model/archive-requests.interface";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { AuthService } from "../../../auth/auth.service";
@@ -40,5 +40,13 @@ export class ArchiveRequestsService{
             this.authService.getAuthHeaders()
         );
     }
+
+    createArchiveRequest(payload: Pick<ArchiveRequests, 'target_type' | 'target_id' | 'action' | 'payload'>): Observable<ArchiveRequestsResponse> {
+        return this.http.post<ArchiveRequestsResponse>(
+            `${this.apiUrl}/archive-requests`,
+            payload,
+            this.authService.getAuthHeaders()
+        );
+        }
 
 }

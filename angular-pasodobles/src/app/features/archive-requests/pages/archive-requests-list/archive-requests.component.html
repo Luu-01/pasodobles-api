@@ -14,10 +14,12 @@
         }
       </p>
     </div>
-
-    <span class="badge rounded-0 border text-bg-light small">
-      {{ archiveRequests.length }} solicitudes
-    </span>
+    <div>
+      <button class="btn btn-primary rounded-0 me-4 mb-1" routerLink="/archive-requests/form">Nueva Solicitud <i class="bi bi-plus-lg"></i></button>
+      <span class=" rounded-0 border text-bg-light p-2">
+        {{ archiveRequests.length }} solicitudes
+      </span>
+    </div>
   </div>
 
   @if (isLoading) {

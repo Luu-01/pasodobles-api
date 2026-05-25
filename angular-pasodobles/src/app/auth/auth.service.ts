@@ -81,12 +81,8 @@ export class AuthService {
     if(isPlatformBrowser(this.platformId)){ 
       token = localStorage.getItem('auth_token') || '';
     }
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Accept': `application/json`
-    });
 
-    return this.http.post(`${this.apiUrl}/logout`, {}, { headers }).pipe(
+    return this.http.post(`${this.apiUrl}/logout`, {}, this.getAuthHeaders()).pipe(
       tap(() => {
         this.cleanSession();
       })
@@ -160,8 +156,8 @@ export class AuthService {
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user');
     }
+    
     this.currentUserSubject.next(null);
     this.router.navigate(['/auth/login']);
   }
-
 }

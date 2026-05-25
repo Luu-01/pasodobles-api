@@ -1,4 +1,3 @@
-import { User } from "../../users/models/user.interface";
 
 export interface RequestPasodoblePayload{
 
@@ -13,6 +12,15 @@ export interface RequestPasodoblePayload{
 
     reason?: string; // added user reason field
 }
+export interface RequestAuthorPayload{
+
+    name?: string;
+    biography?: string;
+    birth_year?: number | string;
+    image_url?: string | null;
+
+    reason?: string; // added user reason field
+}
 
 export interface ArchiveRequests {
   id: number;
@@ -21,7 +29,7 @@ export interface ArchiveRequests {
   target_type: 'pasodoble' | 'author';
   target_id: number | null;
   action: 'create' | 'edit' | 'delete';
-  payload?: RequestPasodoblePayload | null;
+  payload?: RequestPasodoblePayload | RequestAuthorPayload | null;
 
   status: 'pending' | 'approved' | 'rejected';
 

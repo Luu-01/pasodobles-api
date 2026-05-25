@@ -75,7 +75,7 @@
         </div>
       </article>
 
-      <article class="profile-card border feature-disabled">
+      <article class="profile-card border">
         <div class="card-heading">
           <div>
             <p class="section-kicker mb-1">Solicitudes</p>
@@ -88,10 +88,20 @@
           Aquí aparecerán tus sugerencias de edición, creación o borrado de obras.
         </p>
 
-        <div class="status-line">
-          <span class="status-dot"></span>
-          <span>Preparado para tickets</span>
-        </div>
+          @for(request of archiveRequests; track request.id) {
+            <div class="row mb-2 align-items-center border-bottom py-2">
+              <div class="col-12">
+                <a
+                  class="ticket-container d-block text-decoration-none p-1"
+                  [routerLink]="authService.getRole() == 'admin' ? ['/admin/archive-requests', request.id] : ['/archive-requests', request.id]">
+
+                  #REQ{{ request.id }}:
+                  <span>{{ actionLabels[request.action] }} </span>
+                  <span>{{ targetTypeLabels[request.target_type] }} </span>
+                </a>
+              </div>
+            </div>
+          }
       </article>
 
     </div>

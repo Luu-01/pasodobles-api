@@ -5,6 +5,8 @@ import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { AuthService } from '../../../../auth/auth.service';
 import { FavoritesResponse, Pasodoble } from '../../../pasodobles/models/pasodoble.interface';
+import { ArchiveRequestsService } from '../../../archive-requests/services/archive-requests.service';
+import { ArchiveRequests } from '../../../archive-requests/model/archive-requests.interface';
 
 @Component({
   selector: 'app-current-user',
@@ -16,14 +18,29 @@ export class CurrentUserComponent implements OnInit{
   private userService = inject(UserService);
   public authService = inject(AuthService);
   private cdr= inject(ChangeDetectorRef);
+  private archiveRequestService = inject(ArchiveRequestsService);
 
   user?: User;
   favorites: Pasodoble[] = [];
   favoritesLoading: Boolean = false;
+  archiveRequests: ArchiveRequests[] = [];
+  archiveRequestsLoading: Boolean = false;
+
+  actionLabels: Record<string, string> = {
+    create: 'Crear',
+    edit: 'Editar',
+    delete: 'Eliminar',
+  };
+
+  targetTypeLabels: Record<string, string> = {
+    pasodoble: 'Pasodoble',
+    author: 'Autor',
+  };
 
   ngOnInit(): void {
       this.user = this.userService.getUser();
       this.loadFavorites();
+      this.loadArchiveRequests();
       this.cdr.markForCheck();
   }
 
@@ -33,7 +50,7 @@ export class CurrentUserComponent implements OnInit{
       next: (response) => {
         this.favorites = response.data;
         this.favoritesLoading = false;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       },
       error: () =>{
         this.favoritesLoading = false;
@@ -41,5 +58,16 @@ export class CurrentUserComponent implements OnInit{
       }
     })
     
+  }
+
+  loadArchiveRequests(){
+    this.archiveRequestsLoading = true;
+    this.archiveRequestService.getArchiveRequests().subscribe({
+      next: (response) => {
+        this.archiveRequests = response.data;
+        this.archiveRequestsLoading = false;
+        this.cdr.markForCheck();
+      }
+    })
   }
 }

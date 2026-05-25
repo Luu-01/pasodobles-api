@@ -69,6 +69,8 @@ export class ArchiveRequestsDetailComponent implements OnInit{
           console.log(response)
           this.isSubmitting = false;
           this.reviewForm.reset();
+          this.cdr.markForCheck();
+
         },
         error: (error) => {
           console.error('Error approving request', error);
@@ -91,6 +93,7 @@ export class ArchiveRequestsDetailComponent implements OnInit{
           this.archiveRequest = response;
           this.isSubmitting = false;
           this.reviewForm.reset();
+          this.cdr.markForCheck();
         },
         error: (error) => {
           console.error('Error rejecting request', error);

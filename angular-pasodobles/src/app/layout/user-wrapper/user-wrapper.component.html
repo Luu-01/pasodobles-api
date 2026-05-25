@@ -23,6 +23,13 @@
           </a>
         </li>
 
+        <li class="nav-item">
+          <a class="nav-link nav-link-custom" routerLink="/archive-requests" routerLinkActive="active-link">
+            Mis solicitudes
+          </a>
+        </li>
+
+
         @if(authService.currentUser$ | async; as user){
           @if(user.role == 'admin'){
             <li class="nav-item">
