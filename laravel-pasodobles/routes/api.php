@@ -9,6 +9,8 @@ use App\Http\Middleware\CheckAdminRole;
 use App\Http\Controllers\Api\FavoritePasodobleController;
 use App\Http\Controllers\api\ArchiveChangeRequestController;
 use App\Http\Controllers\api\AdminArchiveChangeRequestController;
+use App\Http\Controllers\Api\RehearsalController;
+use App\Http\Controllers\Api\AdminRehearsalController;
 
 
 //^ Public routes
@@ -39,6 +41,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('archive-requests/{archiveChangeRequest}', [AdminArchiveChangeRequestController::class, 'show']);
         Route::post('archive-requests/{archiveChangeRequest}/approve', [AdminArchiveChangeRequestController::class, 'approve']);
         Route::post('archive-requests/{archiveChangeRequest}/reject', [AdminArchiveChangeRequestController::class, 'reject']);
+
+        Route::post('/rehearsals', [AdminRehearsalController::class, 'store']);
+        Route::put('/rehearsals/{rehearsal}', [AdminRehearsalController::class, 'update']);
+        Route::delete('/rehearsals/{rehearsal}', [AdminRehearsalController::class, 'destroy']);
+        Route::get('/rehearsals/{rehearsal}/attendances', [AdminRehearsalController::class, 'attendances']);
     });
     
     //& set as favorite
@@ -50,6 +57,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('archive-requests/{archiveChangeRequest}', [ArchiveChangeRequestController::class, 'show']);
 
     Route::post('archive-requests', [ArchiveChangeRequestController::class, 'store']);
+
+    Route::get('/rehearsals', [RehearsalController::class, 'index']);
+    Route::get('/rehearsals/{rehearsal}', [RehearsalController::class, 'show']);
+    Route::post('/rehearsals/{rehearsal}/attendance', [RehearsalController::class, 'setAttendance']);
     
     //^ Auth
     Route::get('auth/user', [AuthController::class, 'currentUser']);

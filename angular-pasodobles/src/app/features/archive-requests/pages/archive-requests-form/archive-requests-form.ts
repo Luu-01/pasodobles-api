@@ -23,7 +23,6 @@ export class ArchiveRequestsFormComponent {
   isSubmitting = false;
   errorMessage = '';
 
-  // strictly typed form fields
   requestForm = new FormGroup({
     target_type: new FormControl<ArchiveRequests['target_type']>('pasodoble', {
       nonNullable: true,
@@ -37,7 +36,6 @@ export class ArchiveRequestsFormComponent {
 
     target_id: new FormControl<number | null>(null),
 
-    // pasodoble
     title: new FormControl<string>(''),
     description: new FormControl<string>(''),
     year: new FormControl<number | null>(null),
@@ -45,7 +43,6 @@ export class ArchiveRequestsFormComponent {
     author_id: new FormControl<number | null>(null),
     category_id: new FormControl<number | null>(null),
 
-    // author
     name: new FormControl<string>(''),
     biography: new FormControl<string>(''),
     birth_year: new FormControl<number | null>(null),
@@ -53,8 +50,6 @@ export class ArchiveRequestsFormComponent {
 
     reason: new FormControl<string>(''),
   });
-
-  // getters
 
   get targetType(): ArchiveRequests['target_type'] {
     return this.requestForm.controls.target_type.value;
@@ -89,13 +84,11 @@ export class ArchiveRequestsFormComponent {
 
     const formValue = this.requestForm.getRawValue();
 
-    // check whether action and target_id are included in the actions that require them
     if ((formValue.action === 'edit' || formValue.action === 'delete') && !formValue.target_id) {
       this.errorMessage = 'Debes indicar el ID del registro que quieres editar o eliminar.';
       return;
     }
 
-    // picks only certain fields of ArchiveRequests interface
     const requestPayload: Pick<ArchiveRequests, 'target_type' | 'target_id' | 'action' | 'payload'> = {
       target_type: formValue.target_type,
       action: formValue.action,
@@ -105,7 +98,6 @@ export class ArchiveRequestsFormComponent {
 
     this.isSubmitting = true;
 
-    // send backend request
     this.archiveRequestsService.createArchiveRequest(requestPayload).subscribe({
       next: () => {
         this.isSubmitting = false;
@@ -121,8 +113,6 @@ export class ArchiveRequestsFormComponent {
 
   private buildPayload(): RequestPasodoblePayload | RequestAuthorPayload {
     const formValue = this.requestForm.getRawValue();
-
-    // return payload depending on the action and target_type
 
     if (formValue.action === 'delete') {
       return {
