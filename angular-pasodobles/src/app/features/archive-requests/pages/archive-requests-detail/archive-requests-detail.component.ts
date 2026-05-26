@@ -57,6 +57,7 @@ export class ArchiveRequestsDetailComponent implements OnInit{
   approveRequest(){
     if(!this.archiveRequest) return;
 
+    // status changer
     this.isSubmitting = true;
 
     const reason = this.reviewForm.value.admin_reason ?? ''
@@ -66,7 +67,6 @@ export class ArchiveRequestsDetailComponent implements OnInit{
       .subscribe({
         next: (response) => {
           this.archiveRequest = response;
-          console.log(response)
           this.isSubmitting = false;
           this.reviewForm.reset();
           this.cdr.markForCheck();
@@ -102,7 +102,7 @@ export class ArchiveRequestsDetailComponent implements OnInit{
       });
   }
 
-  // aux form methods
+  // getters
 
   //! no interface
   get payload(): any {
@@ -136,6 +136,8 @@ export class ArchiveRequestsDetailComponent implements OnInit{
   get status(): string | undefined{
     return this.archiveRequest?.status;
   }
+
+  // payload toString
 
   getPayloadValue(key: string): string {
     const value = this.payload[key];

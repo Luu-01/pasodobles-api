@@ -72,24 +72,34 @@ export class PasodoblesListComponent implements OnInit {
 
   toggleFavorite(pasodoble: Pasodoble): void {
 
-    // status changer
+    // check if is already updating ( evade double-clicking )
     if (this.updatingFavoriteIds.has(pasodoble.id)) {
       return;
     }
+    
+    // changes temporary status to updating to disable interface button
     this.updatingFavoriteIds = new Set(this.updatingFavoriteIds).add(pasodoble.id);
-      const wasFavorite = this.isFavorite(pasodoble.id);
-      const optimisticFavorites = new Set(this.favoriteIds);
 
+    // rollback of previous status
+    const wasFavorite = this.isFavorite(pasodoble.id);
+
+    // copy of favoriteIds to modify ( instant interface update )
+    const optimisticFavorites = new Set(this.favoriteIds);
+
+    // changes status depending on the previous one ( inverted boolean logic )
       if (wasFavorite) {
         optimisticFavorites.delete(pasodoble.id);
       } else {
         optimisticFavorites.add(pasodoble.id);
       }
 
-      this.favoriteIds = optimisticFavorites;
+    // applies changes to interface
+    this.favoriteIds = optimisticFavorites;
 
+    // backend real request
       this.pasodobleService.toggleFavorite(pasodoble.id).subscribe({
         next: (response) => {
+          // modify the real database if succeeded
           const confirmedFavorites = new Set(this.favoriteIds);
 
           if (response.is_favorite) {
@@ -99,11 +109,13 @@ export class PasodoblesListComponent implements OnInit {
           }
 
           this.favoriteIds = confirmedFavorites;
+          // remove updating status
           this.updatingFavoriteIds.delete(pasodoble.id);
           this.cdr.markForCheck(); // change
         },
         error: (error) => {
           console.error('Error toggling favorite', error);
+          // rollback if failed
           const rollbackFavorites = new Set(this.favoriteIds);
 
           if (wasFavorite) {
@@ -113,6 +125,7 @@ export class PasodoblesListComponent implements OnInit {
           }
 
           this.favoriteIds = rollbackFavorites;
+          // remove updating status
           this.updatingFavoriteIds.delete(pasodoble.id);
           this.cdr.markForCheck(); // change
         },
