@@ -1,0 +1,94 @@
+<section class="admin-rehearsals">
+  <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+    <div>
+      <h1 class="h5 mb-1 fw-semibold">Gestión de ensayos</h1>
+      <p class="text-muted small mb-0">
+        Crea convocatorias y revisa el estado general de asistencia.
+      </p>
+    </div>
+
+    <a routerLink="/admin/rehearsals/new" class="btn btn-primary btn-sm rounded-0">
+      Nuevo ensayo
+    </a>
+  </div>
+
+  @if (errorMessage) {
+    <div class="alert alert-danger rounded-0 py-2 small">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="border rounded-0 p-3 bg-white small text-muted">
+      Cargando ensayos...
+    </div>
+  } @else {
+    @if (rehearsals.length === 0) {
+      <div class="border rounded-0 p-3 bg-white small text-muted">
+        No hay ensayos registrados.
+      </div>
+    } @else {
+      <div class="table-responsive bg-white border">
+        <table class="table table-sm align-middle mb-0 admin-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Detalles</th>
+              <th class="text-center">Confirmados</th>
+              <th class="text-center">Rechazados</th>
+              <th class="text-center">Pendientes</th>
+              <th class="text-end">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (rehearsal of rehearsals; track rehearsal.id) {
+              <tr>
+                <td class="fw-medium text-nowrap">
+                  {{ rehearsal.date || 'Sin fecha' }}
+                </td>
+
+                <td class="small text-muted details-cell">
+                  {{ rehearsal.details || 'Sin detalles' }}
+                </td>
+
+                <td class="text-center">
+                  <span class="badge rounded-0 text-bg-success">
+                    {{ rehearsal.confirmed_count }}
+                  </span>
+                </td>
+
+                <td class="text-center">
+                  <span class="badge rounded-0 text-bg-danger">
+                    {{ rehearsal.declined_count }}
+                  </span>
+                </td>
+
+                <td class="text-center">
+                  <span class="badge rounded-0 text-bg-warning">
+                    {{ rehearsal.pending_count }}
+                  </span>
+                </td>
+
+                <td class="text-end text-nowrap">
+                  <a
+                    class="btn btn-outline-secondary btn-sm rounded-0 me-1"
+                    [routerLink]="['/admin/rehearsals/edit', rehearsal.id]">
+                    Editar
+                  </a>
+
+                  <button
+                    class="btn btn-outline-danger btn-sm rounded-0"
+                    type="button"
+                    (click)="deleteRehearsal(rehearsal)">
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

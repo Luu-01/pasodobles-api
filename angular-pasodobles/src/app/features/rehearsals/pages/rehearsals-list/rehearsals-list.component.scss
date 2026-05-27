@@ -1,0 +1,251 @@
+.rehearsal-calendar-page {
+  font-size: 0.9rem;
+}
+
+.calendar-shell {
+  min-height: calc(100vh - 8rem);
+  box-shadow: none;
+}
+
+.calendar-toolbar {
+  min-height: 58px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  background-color: #ffffff;
+}
+
+.calendar-title-row {
+  padding: 0.75rem 1rem;
+  background-color: #f8f9fa;
+}
+
+.calendar-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  min-height: 620px;
+}
+
+.calendar-main {
+  min-width: 0;
+}
+
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  background-color: #f8f9fa;
+}
+
+.week-day {
+  padding: 0.55rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6c757d;
+  text-transform: uppercase;
+  border-right: 1px solid #dee2e6;
+
+  &:last-child {
+    border-right: 0;
+  }
+}
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: 104px;
+}
+
+.calendar-day {
+  position: relative;
+  text-align: left;
+  border: 0;
+  border-right: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+  background-color: #ffffff;
+  padding: 0.45rem;
+  overflow: hidden;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+
+  &:nth-child(7n) {
+    border-right: 0;
+  }
+
+  &.other-month {
+    background-color: #fafafa;
+    color: #adb5bd;
+  }
+
+  &.today .day-number {
+    background-color: #0d6efd;
+    color: #ffffff;
+  }
+
+  &.selected {
+    outline: 2px solid #0d6efd;
+    outline-offset: -2px;
+    background-color: #eef5ff;
+  }
+
+  &.has-rehearsal {
+    border-left: 3px solid #0d6efd;
+  }
+}
+
+.day-number {
+  width: 1.55rem;
+  height: 1.55rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.day-events {
+  margin-top: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.event-pill {
+  display: block;
+  width: 100%;
+  padding: 0.15rem 0.3rem;
+  font-size: 0.7rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-left: 3px solid #6c757d;
+  background-color: #f1f3f5;
+  color: #212529;
+}
+
+.more-events {
+  font-size: 0.7rem;
+  color: #6c757d;
+}
+
+.calendar-side-panel {
+  background-color: #ffffff;
+  min-width: 0;
+}
+
+.side-panel-header {
+  padding: 1rem;
+  background-color: #f8f9fa;
+}
+
+.side-panel-content {
+  padding: 1rem;
+}
+
+.empty-day {
+  padding: 1rem;
+  border: 1px dashed #ced4da;
+  background-color: #f8f9fa;
+}
+
+.rehearsal-detail-card {
+  padding: 1rem;
+  background-color: #ffffff;
+}
+
+.rehearsal-details {
+  white-space: pre-line;
+}
+
+.attendance-badge {
+  padding: 0.25rem 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.attendance-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: #f8f9fa;
+
+  div {
+    padding: 0.5rem;
+    text-align: center;
+    border-right: 1px solid #dee2e6;
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+
+  strong {
+    display: block;
+    font-size: 1rem;
+    line-height: 1.1;
+  }
+
+  span {
+    display: block;
+    font-size: 0.7rem;
+    color: #6c757d;
+  }
+}
+
+.status-confirmed {
+  background-color: #d1e7dd;
+  color: #0f5132;
+  border-left-color: #198754;
+}
+
+.status-declined {
+  background-color: #f8d7da;
+  color: #842029;
+  border-left-color: #dc3545;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #664d03;
+  border-left-color: #ffc107;
+}
+
+.status-empty {
+  background-color: #e9ecef;
+  color: #495057;
+  border-left-color: #6c757d;
+}
+
+@media (max-width: 992px) {
+  .calendar-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-main {
+    border-right: 0 !important;
+  }
+
+  .calendar-side-panel {
+    border-top: 1px solid #dee2e6;
+  }
+}
+
+@media (max-width: 768px) {
+  .calendar-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .month-grid {
+    grid-auto-rows: 86px;
+  }
+
+  .week-day {
+    padding: 0.45rem;
+    font-size: 0.7rem;
+  }
+}

@@ -26,11 +26,10 @@ class AdminRehearsalController extends Controller
         ], 201);
     }
 
-    public function update(
-        UpdateRehearsalRequest $request,
-        Rehearsal $rehearsal
-    ): JsonResponse {
-        $rehearsal->update([$request]);
+    public function update(UpdateRehearsalRequest $request, Rehearsal $rehearsal)
+    {
+        // The request object itself should not be passed to update().
+        $rehearsal->update($request->validated());
 
         return response()->json([
             'message' => 'Rehearsal updated successfully.',

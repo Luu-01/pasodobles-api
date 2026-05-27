@@ -21,6 +21,9 @@ import { ArchiveRequestsComponent } from './features/archive-requests/pages/arch
 import { ArchiveRequestsDetailComponent } from './features/archive-requests/pages/archive-requests-detail/archive-requests-detail.component';
 import { ArchiveRequestsFormComponent } from './features/archive-requests/pages/archive-requests-form/archive-requests-form';
 
+import { RehearsalsListComponent } from './features/rehearsals/pages/rehearsals-list/rehearsals-list.component';
+import { AdminRehearsalFormComponent } from './features/admin/rehearsals/pages/rehearsals-form.component/rehearsals-form.component';
+import { AdminRehearsalListComponent } from './features/admin/rehearsals/pages/rehearsals-list.component/rehearsals-list.component';
 export const routes: Routes = [
   {
     path: '',
@@ -35,6 +38,7 @@ export const routes: Routes = [
       { path: 'archive-requests', component: ArchiveRequestsComponent},
       { path: 'archive-requests/form', component: ArchiveRequestsFormComponent },
       { path: 'archive-requests/:id', component: ArchiveRequestsDetailComponent},
+      { path: 'rehearsals', component: RehearsalsListComponent },
     ],
   },
 
@@ -56,6 +60,10 @@ export const routes: Routes = [
       //? admin may access through the same components as users, backend authorizes and interface is conditional
       { path: 'archive-requests', component: ArchiveRequestsComponent},
       { path: 'archive-requests/:id', component: ArchiveRequestsDetailComponent}, 
+
+      { path: 'rehearsals', component: AdminRehearsalListComponent },
+      { path: 'rehearsals/new', component: AdminRehearsalFormComponent },
+      { path: 'rehearsals/edit/:id', component: AdminRehearsalFormComponent },
     ],
   },
 

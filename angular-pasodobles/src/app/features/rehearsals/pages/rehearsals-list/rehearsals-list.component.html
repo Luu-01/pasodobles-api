@@ -1,0 +1,162 @@
+<section class="rehearsal-calendar-page">
+  <div class="calendar-shell bg-white border rounded-0">
+    <header class="calendar-toolbar border-bottom">
+      <div>
+        <h1 class="h6 mb-1 fw-semibold">Calendario de ensayos</h1>
+        <p class="small text-muted mb-0">
+          Consulta las convocatorias y confirma tu asistencia.
+        </p>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-0" type="button" (click)="goToToday()">
+          Hoy
+        </button>
+
+        <div class="btn-group btn-group-sm">
+          <button class="btn btn-outline-secondary rounded-0" type="button" (click)="previousMonth()">
+            ‹
+          </button>
+          <button class="btn btn-outline-secondary rounded-0" type="button" (click)="nextMonth()">
+            ›
+          </button>
+        </div>
+
+        <button class="btn btn-outline-secondary btn-sm rounded-0" type="button" (click)="loadRehearsals()">
+          Actualizar
+        </button>
+      </div>
+    </header>
+
+    <div class="calendar-title-row border-bottom">
+      <h2 class="h5 mb-0 text-capitalize">{{ monthLabel }}</h2>
+    </div>
+
+    @if (errorMessage) {
+      <div class="alert alert-danger rounded-0 py-2 small m-3">
+        {{ errorMessage }}
+      </div>
+    }
+
+    @if (isLoading) {
+      <div class="p-3 small text-muted">
+        Cargando calendario...
+      </div>
+    } @else {
+      <div class="calendar-layout">
+        <div class="calendar-main border-end">
+          <div class="week-grid border-bottom">
+            @for (weekDay of weekDays; track weekDay) {
+              <div class="week-day">
+                {{ weekDay }}
+              </div>
+            }
+          </div>
+
+          <div class="month-grid">
+            @for (day of calendarDays; track day.isoDate) {
+              <button
+                type="button"
+                class="calendar-day"
+                [class.other-month]="!day.isCurrentMonth"
+                [class.today]="day.isToday"
+                [class.selected]="day.isSelected"
+                [class.has-rehearsal]="day.rehearsals.length > 0"
+                (click)="selectDay(day)">
+                <span class="day-number">{{ day.dayNumber }}</span>
+
+                <div class="day-events">
+                  @for (rehearsal of day.rehearsals.slice(0, 2); track rehearsal.id) {
+                    <span class="event-pill" [class]="getStatusClass(rehearsal.my_attendance_status)">
+                      Ensayo
+                    </span>
+                  }
+
+                  @if (day.rehearsals.length > 2) {
+                    <span class="more-events">
+                      +{{ day.rehearsals.length - 2 }} más
+                    </span>
+                  }
+                </div>
+              </button>
+            }
+          </div>
+        </div>
+
+        <aside class="calendar-side-panel">
+          <div class="side-panel-header border-bottom">
+            <p class="small text-muted mb-1">Día seleccionado</p>
+            <h3 class="h6 mb-0">{{ selectedDate }}</h3>
+          </div>
+
+          <div class="side-panel-content">
+            @if (selectedDayRehearsals.length === 0) {
+              <div class="empty-day">
+                <p class="mb-1 fw-semibold">Sin ensayos</p>
+                <p class="small text-muted mb-0">
+                  No hay convocatorias registradas para este día.
+                </p>
+              </div>
+            } @else {
+              <div class="vstack gap-2">
+                @for (rehearsal of selectedDayRehearsals; track rehearsal.id) {
+                  <article class="rehearsal-detail-card border rounded-0">
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                      <div>
+                        <h4 class="h6 mb-1 fw-semibold">Ensayo</h4>
+                        <p class="small text-muted mb-0">
+                          Convocado por {{ rehearsal.creator?.name || 'Administración' }}
+                        </p>
+                      </div>
+
+                      <span class="attendance-badge" [class]="getStatusClass(rehearsal.my_attendance_status)">
+                        {{ getStatusLabel(rehearsal.my_attendance_status) }}
+                      </span>
+                    </div>
+
+                    <p class="small rehearsal-details mb-3">
+                      {{ rehearsal.details || 'Sin detalles adicionales.' }}
+                    </p>
+
+                    <div class="attendance-summary border rounded-0 mb-3">
+                      <div>
+                        <strong>{{ rehearsal.confirmed_count }}</strong>
+                        <span>Confirmados</span>
+                      </div>
+                      <div>
+                        <strong>{{ rehearsal.declined_count }}</strong>
+                        <span>Rechazados</span>
+                      </div>
+                      <div>
+                        <strong>{{ rehearsal.pending_count }}</strong>
+                        <span>Pendientes</span>
+                      </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                      <button
+                        class="btn btn-success btn-sm rounded-0"
+                        type="button"
+                        [disabled]="isActionLoading(rehearsal.id)"
+                        (click)="setAttendance(rehearsal, 'confirmed')">
+                        Confirmar asistencia
+                      </button>
+
+                      <button
+                        class="btn btn-outline-danger btn-sm rounded-0"
+                        type="button"
+                        [disabled]="isActionLoading(rehearsal.id)"
+                        (click)="setAttendance(rehearsal, 'declined')">
+                        Rechazar asistencia
+                      </button>
+                    </div>
+                  </article>
+                }
+              </div>
+            }
+          </div>
+        </aside>
+      </div>
+    }
+  </div>
+</section>
