@@ -24,6 +24,7 @@ import { ArchiveRequestsFormComponent } from './features/archive-requests/pages/
 import { RehearsalsListComponent } from './features/rehearsals/pages/rehearsals-list/rehearsals-list.component';
 import { AdminRehearsalFormComponent } from './features/admin/rehearsals/pages/rehearsals-form.component/rehearsals-form.component';
 import { AdminRehearsalListComponent } from './features/admin/rehearsals/pages/rehearsals-list.component/rehearsals-list.component';
+import { ExternalPasodobleSearchComponent } from './features/external-music/pages/external-pasodoble-search/external-pasodoble-search.component';
 export const routes: Routes = [
   {
     path: '',
@@ -34,6 +35,7 @@ export const routes: Routes = [
       { path: 'pasodobles/:id', component: PasodobleDetailComponent },
       { path: 'authors', component: AuthorsListComponent },
       { path: 'authors/:id', component: AuthorDetailComponent },
+      { path: 'external-search', component: ExternalPasodobleSearchComponent },
       { path: 'auth/user', component: CurrentUserComponent },
       { path: 'archive-requests', component: ArchiveRequestsComponent},
       { path: 'archive-requests/form', component: ArchiveRequestsFormComponent },
@@ -56,6 +58,7 @@ export const routes: Routes = [
       { path: 'pasodobles', component: AdminPasodoblesListComponent },
       { path: 'pasodobles/new', component: AdminPasodobleFormComponent},
       { path: 'pasodobles/edit/:id', component: AdminPasodobleFormComponent},
+      { path: 'external-search', component: ExternalPasodobleSearchComponent },
 
       //? admin may access through the same components as users, backend authorizes and interface is conditional
       { path: 'archive-requests', component: ArchiveRequestsComponent},

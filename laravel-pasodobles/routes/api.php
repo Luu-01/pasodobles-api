@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\PasodobleController;
 use App\Http\Controllers\Api\AuthorController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ExternalPasodobleSearchController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,8 @@ Route::get('pasodobles/{pasodoble}', [PasodobleController::class, 'show']);
 Route::get('categories', [CategoryController::class, 'index']);
 Route::get('authors', [AuthorController::class, 'index']);
 Route::get('authors/{author}', [AuthorController::class, 'show']);
+Route::get('external/pasodobles/search', ExternalPasodobleSearchController::class)
+    ->middleware('throttle:30,1');
 
 
 
