@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\WelcomeUserNotification;
 
 class AuthController extends Controller
 {
@@ -48,7 +49,10 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        
+        // Sends a transactional welcome email right after the account exists.
+        // The token response remains unchanged, so the frontend registration flow does not need any update.
+        $user->notify(new WelcomeUserNotification());
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
