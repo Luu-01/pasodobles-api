@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Notifications\WelcomeUserNotification;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email:rfc,dns',
             'password' => 'required'
         ]);
 
@@ -39,7 +39,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email:rfc,dns|max:255|unique:users',
             'password' => 'required|string|min:6',
         ]);
 
@@ -49,14 +49,14 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Sends a transactional welcome email right after the account exists.
-        // The token response remains unchanged, so the frontend registration flow does not need any update.
-        $user->notify(new WelcomeUserNotification());
+        // Dispatching Registered delegates ownership verification to Laravel's
+        // native MustVerifyEmail flow instead of trusting the raw email value.
+        event(new Registered($user));
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'message' => 'Bienvenido/a/e/i/o/u, ' . $user->name,
+            'message' => 'Cuenta creada correctamente. Revisa tu correo para verificar tu email.',
             'access_token' => $token,
             'token_type' => 'Bearer',
             'user' => $user

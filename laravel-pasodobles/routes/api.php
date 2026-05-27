@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\PasodobleController;
 use App\Http\Controllers\Api\AuthorController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\EmailVerificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckAdminRole;
 use App\Http\Controllers\Api\FavoritePasodobleController;
@@ -25,11 +26,18 @@ Route::get('authors/{author}', [AuthorController::class, 'show']);
 //^ AUTH
 Route::post('auth/login', [AuthController::class, 'login']);
 Route::post('auth/register', [AuthController::class, 'register']);
+Route::get('email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->middleware('signed')
+    ->name('verification.verify');
 
 
 // ~--- authenticated API routes ---
 Route::middleware('auth:sanctum')->group(function () {
     
+    Route::post('email/verification-notification', [EmailVerificationController::class, 'send'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
+
     //^ admin features
     Route::middleware([CheckAdminRole::class])->prefix('admin')->group(function () {
         Route::post('pasodobles', [PasodobleController::class, 'store']);
