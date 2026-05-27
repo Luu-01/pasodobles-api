@@ -21,7 +21,7 @@ class Pasodoble extends Model
     ];
 
     protected $casts = [
-        'year' => 'date',
+        'year' => 'date:Y',
     ];
 
     public function author()
