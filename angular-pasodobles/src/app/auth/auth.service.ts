@@ -1,8 +1,8 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common'; // SSR
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { BehaviorSubject, Observable, tap, catchError } from 'rxjs';
+import { Router } from '@angular/router';
 import { User } from '../features/users/models/user.interface';
 
 // Using BehaviorSubject and ServerSideRendering protection to prevent early localStorage access
@@ -25,7 +25,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(this.loadStoredUser());
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  loadCurrentUser(): Observable<User> {
+  loadCurrentUser(): Observable<User | null> {
     return this.http.get<User>(`${this.apiUrl}/user`, this.getAuthHeaders()).pipe(
       tap((user) => {
         this.saveUser(user);   
@@ -77,16 +77,18 @@ export class AuthService {
 
   logout() { 
 
-    let token = '';
-    if(isPlatformBrowser(this.platformId)){ 
-      token = localStorage.getItem('auth_token') || '';
-    }
-
     return this.http.post(`${this.apiUrl}/logout`, {}, this.getAuthHeaders()).pipe(
-      tap(() => {
-        this.cleanSession();
-      })
-    );
+    tap(() => {
+      this.cleanSession();
+      this.router.navigate(['/auth/login']);
+    }),
+    catchError((error) => {
+      this.cleanSession();
+      this.router.navigate(['/auth/login']);
+
+      return error;
+    })
+  );
   }
 
   // SSR protected saving methods
@@ -145,18 +147,15 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean | any {
-    if (!isPlatformBrowser(this.platformId)) {
-      return '';
-    }
-    return this.getToken() !== '';
+    return this.currentUserSubject.value !== null;
   }
 
   cleanSession(){
-    if(isPlatformBrowser(this.platformId)){  // SSR Protecting
+    if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user');
     }
-    
+
     this.currentUserSubject.next(null);
     this.router.navigate(['/auth/login']);
   }

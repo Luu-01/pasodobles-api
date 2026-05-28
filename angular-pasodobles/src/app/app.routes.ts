@@ -25,10 +25,15 @@ import { RehearsalsListComponent } from './features/rehearsals/pages/rehearsals-
 import { AdminRehearsalFormComponent } from './features/admin/rehearsals/pages/rehearsals-form.component/rehearsals-form.component';
 import { AdminRehearsalListComponent } from './features/admin/rehearsals/pages/rehearsals-list.component/rehearsals-list.component';
 import { ExternalPasodobleSearchComponent } from './features/external-music/pages/external-pasodoble-search/external-pasodoble-search.component';
+
+import { authGuard } from './auth/guards/auth.guard';
+
 export const routes: Routes = [
+
   {
     path: '',
     component: UserWrapperComponent,
+    canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'pasodobles', pathMatch: 'full' },
       { path: 'pasodobles', component: PasodoblesListComponent },
@@ -36,22 +41,23 @@ export const routes: Routes = [
       { path: 'authors', component: AuthorsListComponent },
       { path: 'authors/:id', component: AuthorDetailComponent },
       { path: 'external-search', component: ExternalPasodobleSearchComponent },
-      { path: 'auth/user', component: CurrentUserComponent },
       { path: 'archive-requests', component: ArchiveRequestsComponent},
       { path: 'archive-requests/form', component: ArchiveRequestsFormComponent },
       { path: 'archive-requests/:id', component: ArchiveRequestsDetailComponent},
       { path: 'rehearsals', component: RehearsalsListComponent },
+      { path: 'auth/user', component: CurrentUserComponent },
+
     ],
   },
 
   // Auth pages stay outside UserLayout so login/register do not inherit the main app interface.
   { path: 'auth/login', component: LoginComponent },
   { path: 'auth/register', component: RegisterComponent },
-  { path: 'auth/logout',component: LoginComponent },
 
   // Admin layout owns the admin interface.
   {
     path: 'admin',
+    canActivate: [authGuard],
     component: AdminLayoutComponent,
     children: [
       { path: '', redirectTo: 'pasodobles', pathMatch: 'full' },
@@ -70,8 +76,4 @@ export const routes: Routes = [
     ],
   },
 
-  {
-    path: '**',
-    redirectTo: 'pasodobles',
-  },
 ];

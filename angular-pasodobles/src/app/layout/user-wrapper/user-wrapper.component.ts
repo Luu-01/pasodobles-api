@@ -12,4 +12,8 @@ import { AsyncPipe } from '@angular/common';
 export class UserWrapperComponent {
   public authService = inject(AuthService);
   private router = inject(Router);
+
+  logout(): void {
+    this.authService.logout().subscribe();
+  }
 }

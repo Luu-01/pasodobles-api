@@ -16,9 +16,7 @@ export class AdminLayoutComponent {
   private router = inject(Router);
 
   logout() {
-    console.log('Cerrando sesión...');
     this.authService.logout();
-    this.router.navigate(['/auth/login']);
   }
 
   getUser(){
