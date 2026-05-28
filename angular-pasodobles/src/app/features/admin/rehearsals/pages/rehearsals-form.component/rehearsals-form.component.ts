@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { RehearsalPayload } from '../../../../rehearsals/models/rehearsal.interface';
-import { RehearsalService
-  
- } from '../../../../rehearsals/services/rehearsal.service';
+import { RehearsalService } from '../../../../rehearsals/services/rehearsal.service';
+
 @Component({
   selector: 'app-rehearsal-form',
   standalone: true,
@@ -48,7 +48,7 @@ export class AdminRehearsalFormComponent implements OnInit {
     this.rehearsalService.getRehearsal(id).subscribe({
       next: (response) => {
         this.rehearsalForm.patchValue({
-          date: response.data.date ?? '',
+          date: this.normalizeDate(response.data.date),
           details: response.data.details,
         });
 
@@ -74,16 +74,16 @@ export class AdminRehearsalFormComponent implements OnInit {
     this.errorMessage = '';
 
     const payload: RehearsalPayload = {
-      date: this.rehearsalForm.controls.date.value,
+      date: this.normalizeDate(this.rehearsalForm.controls.date.value),
       details: this.rehearsalForm.controls.details.value,
     };
 
     if (this.isEditMode && this.rehearsalId) {
       this.rehearsalService.updateRehearsal(this.rehearsalId, payload).subscribe({
         next: () => this.router.navigate(['/admin/rehearsals']),
-        error: (error) => {
+        error: (error: HttpErrorResponse) => {
           console.error('Error updating rehearsal', error);
-          this.errorMessage = 'No se pudo actualizar el ensayo.';
+          this.errorMessage = this.getRehearsalErrorMessage(error, 'No se pudo actualizar el ensayo.');
           this.isLoading = false;
           this.cdr.markForCheck();
         },
@@ -94,9 +94,9 @@ export class AdminRehearsalFormComponent implements OnInit {
 
     this.rehearsalService.createRehearsal(payload).subscribe({
       next: () => this.router.navigate(['/admin/rehearsals']),
-      error: (error) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Error creating rehearsal', error);
-        this.errorMessage = 'No se pudo crear el ensayo.';
+        this.errorMessage = this.getRehearsalErrorMessage(error, 'No se pudo crear el ensayo.');
         this.isLoading = false;
         this.cdr.markForCheck();
       },
@@ -106,5 +106,24 @@ export class AdminRehearsalFormComponent implements OnInit {
   isInvalid(controlName: 'date' | 'details'): boolean {
     const control = this.rehearsalForm.get(controlName);
     return !!control && control.invalid && (control.touched || control.dirty);
+  }
+
+  private normalizeDate(value: string | null | undefined): string {
+    if (!value) {
+      return '';
+    }
+
+    return value.includes('T') ? value.split('T')[0] : value.substring(0, 10);
+  }
+
+  private getRehearsalErrorMessage(error: HttpErrorResponse, fallback: string): string {
+    if (error.status === 422) {
+      const errors = error.error?.errors as Record<string, string[]> | undefined;
+      const firstValidationError = errors ? Object.values(errors).flat()[0] : null;
+
+      return firstValidationError || error.error?.message || 'Revisa los datos del ensayo.';
+    }
+
+    return error.error?.message || fallback;
   }
 }

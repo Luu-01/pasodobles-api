@@ -1,11 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ArchiveRequestsService } from '../../services/archive-requests.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ArchiveRequests, ArchiveRequestsResponse } from '../../model/archive-requests.interface';
+import { ArchiveRequests } from '../../model/archive-requests.interface';
 import { AuthService } from '../../../../auth/auth.service';
 import { RouterLink } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-archive-requests',
@@ -14,11 +14,12 @@ import { RouterLink } from '@angular/router';
   styleUrl: './archive-requests.scss',
   standalone: true,
 })
-export class ArchiveRequestsComponent implements OnInit{
+export class ArchiveRequestsComponent implements OnInit, OnDestroy{
 
   private archiveRequestService = inject(ArchiveRequestsService);
   private cdr = inject(ChangeDetectorRef);
   private authService = inject(AuthService);
+  private destroy$ = new Subject<void>();
   
 
   archiveRequests: ArchiveRequests [] = [];
@@ -26,18 +27,34 @@ export class ArchiveRequestsComponent implements OnInit{
   isAdmin: boolean = false;
 
   ngOnInit(): void {
-  this.authService.currentUser$.subscribe({
-    next: (user) => {
-      this.isAdmin = user?.role === 'admin';
+    this.authService.currentUser$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (user) => {
+          this.archiveRequests = [];
 
-      if (this.isAdmin) {
-        this.loadAdminArchiveRequests();
-      } else {
-        this.loadArchiveRequests();
-      }
-    }
-  });
-}
+          if (!user) {
+            this.isAdmin = false;
+            this.isLoading = false;
+            this.cdr.markForCheck();
+            return;
+          }
+
+          this.isAdmin = user.role === 'admin';
+
+          if (this.isAdmin) {
+            this.loadAdminArchiveRequests();
+          } else {
+            this.loadArchiveRequests();
+          }
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   loadArchiveRequests(){
     this.isLoading = true;

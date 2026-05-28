@@ -35,7 +35,6 @@ export const routes: Routes = [
   {
     path: '',
     component: UserWrapperComponent,
-    canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'pasodobles', pathMatch: 'full' },
       { path: 'pasodobles', component: PasodoblesListComponent },
@@ -43,11 +42,11 @@ export const routes: Routes = [
       { path: 'authors', component: AuthorsListComponent },
       { path: 'authors/:id', component: AuthorDetailComponent },
       { path: 'external-search', component: ExternalPasodobleSearchComponent },
-      { path: 'archive-requests', component: ArchiveRequestsComponent},
-      { path: 'archive-requests/form', component: ArchiveRequestsFormComponent },
-      { path: 'archive-requests/:id', component: ArchiveRequestsDetailComponent},
-      { path: 'rehearsals', component: RehearsalsListComponent },
-      { path: 'auth/user', component: CurrentUserComponent },
+      { path: 'archive-requests', component: ArchiveRequestsComponent, canActivate: [authGuard] },
+      { path: 'archive-requests/form', component: ArchiveRequestsFormComponent, canActivate: [authGuard] },
+      { path: 'archive-requests/:id', component: ArchiveRequestsDetailComponent, canActivate: [authGuard] },
+      { path: 'rehearsals', component: RehearsalsListComponent, canActivate: [authGuard] },
+      { path: 'auth/user', component: CurrentUserComponent, canActivate: [authGuard] },
 
     ],
   },
