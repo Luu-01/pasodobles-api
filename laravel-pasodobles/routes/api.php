@@ -9,8 +9,8 @@ use App\Http\Controllers\Auth\EmailVerificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckAdminRole;
 use App\Http\Controllers\Api\FavoritePasodobleController;
-use App\Http\Controllers\api\ArchiveChangeRequestController;
-use App\Http\Controllers\api\AdminArchiveChangeRequestController;
+use App\Http\Controllers\Api\ArchiveChangeRequestController;
+use App\Http\Controllers\Api\AdminArchiveChangeRequestController;
 use App\Http\Controllers\Api\RehearsalController;
 use App\Http\Controllers\Api\AdminRehearsalController;
 
