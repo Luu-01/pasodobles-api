@@ -37,8 +37,11 @@ export class PasodoblesListComponent implements OnInit {
       next: (response: any) => {
         this.pasodobles = response.data;
         this.extractFilterOptions();
-        this.cdr.detectChanges();
+        if(!this.authService.isAuthenticated()){
+          return;
+        }
         this.loadFavorites();
+        this.cdr.markForCheck();
       },
       error: (err) => console.error(err)
     });

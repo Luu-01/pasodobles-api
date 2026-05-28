@@ -6,6 +6,7 @@ import {
   RehearsalAttendanceStatus,
 } from '../../models/rehearsal.interface';
 import { RehearsalService } from '../../services/rehearsal.service';
+import { AuthService } from '../../../../auth/auth.service';
 
 interface CalendarDay {
   date: Date;
@@ -26,6 +27,7 @@ interface CalendarDay {
 export class RehearsalsListComponent implements OnInit {
   private readonly rehearsalService = inject(RehearsalService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private authService = inject(AuthService);
 
   rehearsals: Rehearsal[] = [];
   calendarDays: CalendarDay[] = [];
@@ -40,7 +42,11 @@ export class RehearsalsListComponent implements OnInit {
   readonly weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
   ngOnInit(): void {
+    if(!this.authService.isAuthenticated()){
+      return;
+    }
     this.loadRehearsals();
+    this.cdr.markForCheck();
   }
 
   loadRehearsals(): void {
