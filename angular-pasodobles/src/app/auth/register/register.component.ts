@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -14,6 +14,7 @@ import { AuthService } from '../auth.service';
 export class RegisterComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   userData = {
     name: '',
@@ -29,6 +30,16 @@ export class RegisterComponent {
 
     if (form?.invalid) {
       form.control.markAllAsTouched();
+      this.cdr.markForCheck();
+      return;
+    }
+
+    if (!this.hasValidEmailDomain(this.userData.email)) {
+      this.errorMessage = 'Introduce una dirección de correo válida.';
+      this.isLoading = false;
+      form?.controls['email']?.control.setErrors({ invalidDomain: true });
+      form?.controls['email']?.control.markAsTouched();
+      this.cdr.markForCheck();
       return;
     }
 
@@ -43,8 +54,13 @@ export class RegisterComponent {
       error: (err: HttpErrorResponse) => {
         this.isLoading = false;
         this.errorMessage = this.getRegisterErrorMessage(err);
+        this.cdr.markForCheck();
       }
     });
+  }
+
+  private hasValidEmailDomain(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
   }
 
   private getRegisterErrorMessage(err: HttpErrorResponse): string {
