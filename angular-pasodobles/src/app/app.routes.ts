@@ -11,6 +11,8 @@ import { AuthorDetailComponent } from './features/authors/pages/author-detail/au
 
 import { AdminPasodoblesListComponent } from './features/admin/pasodobles/admin-pasodoble-list/pasodobles-list.component';
 import { AdminPasodobleFormComponent } from './features/admin/pasodobles/admin-pasodoble-form/pasodoble-form.component';
+import { AdminAuthorsListComponent } from './features/admin/authors/admin-author-list/authors-list.component';
+import { AdminAuthorFormComponent } from './features/admin/authors/admin-author-form/author-form.component';
 
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
@@ -64,6 +66,12 @@ export const routes: Routes = [
       { path: 'pasodobles', component: AdminPasodoblesListComponent },
       { path: 'pasodobles/new', component: AdminPasodobleFormComponent},
       { path: 'pasodobles/edit/:id', component: AdminPasodobleFormComponent},
+      { path: 'compositores', component: AdminAuthorsListComponent },
+      { path: 'compositores/new', component: AdminAuthorFormComponent },
+      { path: 'compositores/edit/:id', component: AdminAuthorFormComponent },
+      { path: 'authors', redirectTo: 'compositores', pathMatch: 'full' },
+      { path: 'authors/new', redirectTo: 'compositores/new', pathMatch: 'full' },
+      { path: 'authors/edit/:id', redirectTo: 'compositores/edit/:id', pathMatch: 'full' },
       { path: 'external-search', component: ExternalPasodobleSearchComponent },
 
       //? admin may access through the same components as users, backend authorizes and interface is conditional

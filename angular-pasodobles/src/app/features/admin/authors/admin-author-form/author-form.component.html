@@ -1,0 +1,99 @@
+<div class="d-flex align-items-center mb-4">
+  <a routerLink="/admin/compositores" class="btn btn-light rounded-circle p-1 me-3 shadow-sm text-secondary hover-text-blue" style="width: 40px; height: 40px;">
+    <i class="bi bi-arrow-left fs-5 text-dark"></i>
+  </a>
+  <div>
+    <h3 class="fw-bold text-dark mb-1">{{ isEditMode ? 'Editar Compositor' : 'Nuevo Compositor' }}</h3>
+    <p class="text-muted small mt-0">Completa los datos del autor musical</p>
+  </div>
+</div>
+
+<form [formGroup]="author" (ngSubmit)="save()">
+  <div class="row g-4">
+    <div class="col-12 col-lg-8">
+      <div class="card card-minimal border-0 p-4 p-md-5">
+        <div class="row g-4 mb-4">
+          <div class="col-md-8">
+            <label class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight">Nombre del Compositor</label>
+            <input type="text" class="form-control form-control-minimal" placeholder="Ej: Jaime Texidor..." formControlName="name">
+            <div class="mt-4">
+              @if (isInvalid('name')) {
+                <div class="invalid-feedback d-block">
+                  @if (author.get('name')?.errors?.['required']) {
+                    <span>El nombre es obligatorio.</span>
+                  }
+                  @if (author.get('name')?.errors?.['minlength']) {
+                    <span>El nombre debe tener al menos 2 caracteres.</span>
+                  }
+                  @if (author.get('name')?.errors?.['maxlength']) {
+                    <span>El nombre no puede superar los 150 caracteres.</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight">Año de nacimiento</label>
+            <input type="number" class="form-control form-control-minimal" placeholder="Ej: 1884..." formControlName="birth_year">
+            <div class="mt-4">
+              @if (isInvalid('birth_year')) {
+                <div class="invalid-feedback d-block">
+                  @if (author.get('birth_year')?.errors?.['min']) {
+                    <span>El año no puede ser anterior a 1000.</span>
+                  }
+                  @if (author.get('birth_year')?.errors?.['max']) {
+                    <span>El año no puede ser posterior al año actual.</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight">Biografía</label>
+          <textarea class="form-control form-control-minimal" rows="6" placeholder="Escribe aquí la historia, trayectoria o contexto del compositor..." formControlName="biography"></textarea>
+        </div>
+        @if (isInvalid('biography')) {
+          <div class="invalid-feedback d-block">
+            <span>La biografía no puede superar los 5000 caracteres.</span>
+          </div>
+        }
+
+        <div class="mb-2">
+          <label class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight">Imagen del Compositor</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-0 text-muted ps-3 rounded-start-4">
+              <i class="bi bi-link-45deg"></i>
+            </span>
+            <input type="url" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" placeholder="https://ejemplo.com/imagen.jpg" formControlName="image_url">
+          </div>
+          @if (isInvalid('image_url')) {
+            <div class="invalid-feedback d-block">
+              <span>Revisa el formato del enlace.</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card card-minimal border-0 p-4 mb-4">
+        <h6 class="fw-bold text-dark text-uppercase letter-spacing-tight mb-4 border-bottom pb-2">Publicación</h6>
+        <p class="text-muted small mb-0">
+          Este formulario guarda compositores en la misma tabla que consume el directorio público de autores.
+          Al guardar, el listado público y el panel de administración leerán los mismos datos.
+        </p>
+      </div>
+
+      <button type="submit" class="btn text-white w-100 rounded-pill py-3 fw-medium shadow-sm mb-3" style="background-color: var(--paso-blue); transition: all 0.3s ease;" [disabled]="isLoading">
+        <i class="bi bi-save me-2"></i>{{ isLoading ? 'Guardando...' : 'Guardar Compositor' }}
+      </button>
+
+      <a routerLink="/admin/compositores" class="btn btn-outline-secondary w-100 rounded-pill py-2">
+        Cancelar
+      </a>
+    </div>
+  </div>
+</form>

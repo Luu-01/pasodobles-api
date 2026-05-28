@@ -47,6 +47,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('pasodobles/{pasodoble}', [PasodobleController::class, 'update']);
         Route::delete('pasodobles/{pasodoble}', [PasodobleController::class, 'destroy']);
 
+        Route::post('authors', [AuthorController::class, 'store']);
+        Route::put('authors/{author}', [AuthorController::class, 'update']);
+        Route::delete('authors/{author}', [AuthorController::class, 'destroy']);
+
         //? archive-request
         Route::get('archive-requests', [AdminArchiveChangeRequestController::class, 'index']);
         Route::get('archive-requests/{archiveChangeRequest}', [AdminArchiveChangeRequestController::class, 'show']);
