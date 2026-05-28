@@ -50,6 +50,14 @@ export class RegisterComponent {
   private getRegisterErrorMessage(err: HttpErrorResponse): string {
     if (err.status === 422) {
       const errors = err.error?.errors as Record<string, string[]> | undefined;
+
+      // Laravel returns validation errors grouped by field. When the backend rejects
+      // the email format, keep the UI message stable and user-facing instead of
+      // exposing the raw API validation text.
+      if (errors?.['email']?.length) {
+        return 'Introduce una dirección de correo válida.';
+      }
+
       const firstValidationError = errors ? Object.values(errors).flat()[0] : null;
 
       return firstValidationError || err.error?.message || 'Revisa los datos del formulario.';
