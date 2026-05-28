@@ -101,7 +101,7 @@ export class ArchiveRequestsFormComponent {
     this.archiveRequestsService.createArchiveRequest(requestPayload).subscribe({
       next: () => {
         this.isSubmitting = false;
-        this.router.navigate(['/requests']);
+        this.router.navigate(['/archive-requests']);
       },
       error: (error) => {
         console.error('Error creating archive request', error);

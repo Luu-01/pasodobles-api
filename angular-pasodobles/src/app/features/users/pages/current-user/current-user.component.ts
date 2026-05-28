@@ -4,7 +4,7 @@ import { User } from '../../models/user.interface';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { AuthService } from '../../../../auth/auth.service';
-import { FavoritesResponse, Pasodoble } from '../../../pasodobles/models/pasodoble.interface';
+import { Pasodoble } from '../../../pasodobles/models/pasodoble.interface';
 import { ArchiveRequestsService } from '../../../archive-requests/services/archive-requests.service';
 import { ArchiveRequests } from '../../../archive-requests/model/archive-requests.interface';
 
@@ -22,9 +22,9 @@ export class CurrentUserComponent implements OnInit{
 
   user?: User;
   favorites: Pasodoble[] = [];
-  favoritesLoading: Boolean = false;
+  favoritesLoading: boolean = false;
   archiveRequests: ArchiveRequests[] = [];
-  archiveRequestsLoading: Boolean = false;
+  archiveRequestsLoading: boolean = false;
 
   actionLabels: Record<string, string> = {
     create: 'Crear',
@@ -35,6 +35,12 @@ export class CurrentUserComponent implements OnInit{
   targetTypeLabels: Record<string, string> = {
     pasodoble: 'Pasodoble',
     author: 'Autor',
+  };
+
+  statusLabels: Record<string, string> = {
+    pending: 'Pendiente',
+    approved: 'Aprobada',
+    rejected: 'Rechazada',
   };
 
   ngOnInit(): void {
@@ -54,7 +60,7 @@ export class CurrentUserComponent implements OnInit{
       },
       error: () =>{
         this.favoritesLoading = false;
-        console.error("Error al cargar los pasodobles favoritos.");
+        console.error('Error al cargar los pasodobles favoritos.');
       }
     })
     
@@ -67,7 +73,27 @@ export class CurrentUserComponent implements OnInit{
         this.archiveRequests = response.data;
         this.archiveRequestsLoading = false;
         this.cdr.markForCheck();
+      },
+      error: () => {
+        this.archiveRequestsLoading = false;
+        this.cdr.markForCheck();
+        console.error('Error al cargar las solicitudes del usuario.');
       }
     })
+  }
+
+  getPasodobleAuthorName(pasodoble: Pasodoble): string {
+    return pasodoble.author?.name || 'Autor no asignado';
+  }
+
+  getRequestStatusClass(status: ArchiveRequests['status']): string {
+    switch (status) {
+      case 'approved':
+        return 'text-bg-success';
+      case 'rejected':
+        return 'text-bg-danger';
+      default:
+        return 'text-bg-warning';
+    }
   }
 }

@@ -2,7 +2,7 @@
 
   @if(authService.currentUser$ | async; as user) {
 
-    <header class="profile-header border">
+    <header class="profile-header border rounded-0">
       <div>
         <p class="section-kicker mb-1">Área personal</p>
         <h1 class="profile-title mb-1">{{ user.name }}</h1>
@@ -17,7 +17,7 @@
 
     <div class="profile-grid mt-4">
 
-      <article class="profile-card border">
+      <article class="profile-card border rounded-0">
         <div class="card-heading">
           <div>
             <p class="section-kicker mb-1">Archivo musical</p>
@@ -30,33 +30,38 @@
           Obras guardadas para acceso rápido desde tu perfil.
         </p>
 
-        @if(favorites.length > 0) {
+        @if(favoritesLoading === true) {
+          <div class="small text-muted border rounded-0 p-3">
+            Cargando favoritos...
+          </div>
+        } @else if(favorites.length > 0) {
           <div class="favorite-list">
             @for(pasodoble of favorites; track pasodoble.id) {
               <a class="favorite-item" [routerLink]="['/pasodobles', pasodoble.id]">
                 <div>
                   <strong>{{ pasodoble.title }}</strong>
-                  <span>{{ pasodoble.author?.name || 'Autor no asignado' }}</span>
+                  <span>
+                    <i class="bi bi-person me-1"></i>
+                    {{ getPasodobleAuthorName(pasodoble) }}
+                  </span>
+                  <span>
+                    <i class="bi bi-music-note-list me-1"></i>
+                    {{ pasodoble.category?.name || 'Sin categoría' }} · {{ pasodoble.year || 'Año N/D' }}
+                  </span>
                 </div>
                 <i class="bi bi-chevron-right"></i>
               </a>
             }
           </div>
-        
-        }@else if (favoritesLoading === true) {
-          <div class="spinner-border" role="status">
-            <span class="sr-only"></span>
-          </div>
-        } 
-        @else {
-          <div class="empty-state">
+        } @else {
+          <div class="empty-state rounded-0">
             <i class="bi bi-heart"></i>
             <span>Todavía no tienes pasodobles favoritos.</span>
           </div>
         }
       </article>
 
-      <article class="profile-card border feature-disabled">
+      <article class="profile-card border rounded-0">
         <div class="card-heading">
           <div>
             <p class="section-kicker mb-1">Ensayos</p>
@@ -66,16 +71,20 @@
         </div>
 
         <p class="card-description">
-          Próximamente podrás confirmar o rechazar asistencia a ensayos.
+          Consulta las próximas convocatorias y confirma o rechaza tu asistencia.
         </p>
 
-        <div class="status-line">
-          <span class="status-dot"></span>
-          <span>Funcionalidad pendiente</span>
+        <div class="status-line mb-3">
+          <span class="status-dot status-dot-active"></span>
+          <span>Módulo activo</span>
         </div>
+
+        <a routerLink="/rehearsals" class="btn btn-outline-primary btn-sm rounded-0 w-100">
+          Abrir calendario
+        </a>
       </article>
 
-      <article class="profile-card border">
+      <article class="profile-card border rounded-0">
         <div class="card-heading">
           <div>
             <p class="section-kicker mb-1">Solicitudes</p>
@@ -85,23 +94,35 @@
         </div>
 
         <p class="card-description">
-          Aquí aparecerán tus sugerencias de edición, creación o borrado de obras.
+          Revisa el estado de tus propuestas de edición, creación o borrado.
         </p>
 
-          @for(request of archiveRequests; track request.id) {
-            <div class="row mb-2 align-items-center border-bottom py-2">
-              <div class="col-12">
-                <a
-                  class="ticket-container d-block text-decoration-none p-1"
-                  [routerLink]="authService.getRole() == 'admin' ? ['/admin/archive-requests', request.id] : ['/archive-requests', request.id]">
-
-                  #REQ{{ request.id }}:
-                  <span>{{ actionLabels[request.action] }} </span>
-                  <span>{{ targetTypeLabels[request.target_type] }} </span>
-                </a>
-              </div>
-            </div>
-          }
+        @if(archiveRequestsLoading === true) {
+          <div class="small text-muted border rounded-0 p-3">
+            Cargando solicitudes...
+          </div>
+        } @else if(archiveRequests.length > 0) {
+          <div class="request-list">
+            @for(request of archiveRequests; track request.id) {
+              <a
+                class="request-item text-decoration-none"
+                [routerLink]="authService.getRole() == 'admin' ? ['/admin/archive-requests', request.id] : ['/archive-requests', request.id]">
+                <div>
+                  <strong>#REQ{{ request.id }}</strong>
+                  <span>{{ actionLabels[request.action] }} {{ targetTypeLabels[request.target_type] }}</span>
+                </div>
+                <span class="badge rounded-0 border" [class]="getRequestStatusClass(request.status)">
+                  {{ statusLabels[request.status] }}
+                </span>
+              </a>
+            }
+          </div>
+        } @else {
+          <div class="empty-state rounded-0">
+            <i class="bi bi-inbox"></i>
+            <span>No hay solicitudes registradas.</span>
+          </div>
+        }
       </article>
 
     </div>

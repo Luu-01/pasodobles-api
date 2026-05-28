@@ -15,7 +15,7 @@ class PasodobleController extends Controller
         ], 200);
     }
     public function show(Pasodoble $pasodoble){
-        $pasodoble->load('author');
+        $pasodoble->load('author', 'category');
         return response()->json($pasodoble);
     }
     public function store(Request $request){
@@ -38,9 +38,11 @@ class PasodobleController extends Controller
     public function update(Pasodoble $pasodoble, Request $request){
          $data = [
             "title" => $request->title,
-            "author" => $request->author,
             "description" => $request->description,
             "year" => $request->year,
+            "pdf_url" => $request->pdf_url,
+            "author_id" => $request->author_id,
+            "category_id" => $request->category_id
         ];
         $pasodoble->update($data);
         return response()->json([

@@ -13,6 +13,7 @@ class FavoritePasodobleController extends Controller
     {
         $favorites = $request->user()
             ->favoritePasodobles()
+            ->with(['author', 'category'])
             ->latest('pasodoble_user_favorites.created_at')
             ->get();
 
@@ -38,4 +39,3 @@ class FavoritePasodobleController extends Controller
         ]);
     }
 }
-

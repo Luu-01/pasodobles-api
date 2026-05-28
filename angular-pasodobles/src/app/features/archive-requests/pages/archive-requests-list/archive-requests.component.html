@@ -15,8 +15,10 @@
       </p>
     </div>
     <div>
-      <button class="btn btn-primary rounded-0 me-4 mb-1" routerLink="/archive-requests/form">Nueva Solicitud <i class="bi bi-plus-lg"></i></button>
-      <span class=" rounded-0 border text-bg-light p-2">
+      @if (!isAdmin) {
+        <button class="btn btn-primary rounded-0 me-4 mb-1" routerLink="/archive-requests/form">Nueva Solicitud <i class="bi bi-plus-lg"></i></button>
+      }
+      <span class="rounded-0 border text-bg-light p-2">
         {{ archiveRequests.length }} solicitudes
       </span>
     </div>
@@ -151,7 +153,7 @@
                 <td class="px-3 py-2 text-end">
                   <a
                     class="btn btn-outline-primary btn-sm rounded-0"
-                    [routerLink]="isAdmin ? ['/admin/archive-requests', request.id] : ['/requests', request.id]">
+                    [routerLink]="isAdmin ? ['/admin/archive-requests', request.id] : ['/archive-requests', request.id]">
                     Ver detalle
                   </a>
                 </td>

@@ -11,6 +11,7 @@ import { AuthorService } from '../../services/author.service';
 })
 export class AuthorDetailComponent implements OnInit {
   author?: Author;
+  errorMessage = '';
   
   private authorService = inject(AuthorService);
   private route = inject(ActivatedRoute);
@@ -22,11 +23,12 @@ export class AuthorDetailComponent implements OnInit {
     this.authorService.getAuthor(id).subscribe({
       next: (response) => {
         this.author = response;
-        console.log(response)
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       },
       error: (error) => {
-        console.error("Error al mostrar los datos");
+        console.error('Error al mostrar los datos', error);
+        this.errorMessage = 'No se pudo cargar el compositor.';
+        this.cdr.markForCheck();
       }
     });
   }

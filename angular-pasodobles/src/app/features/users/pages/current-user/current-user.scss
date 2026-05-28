@@ -55,7 +55,7 @@
 
 .profile-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1.2fr;
   gap: 1rem;
 }
 
@@ -90,13 +90,15 @@
   margin-bottom: 1rem;
 }
 
-.favorite-list {
+.favorite-list,
+.request-list {
   display: flex;
   flex-direction: column;
   border-top: 1px solid #dee2e6;
 }
 
-.favorite-item {
+.favorite-item,
+.request-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -108,19 +110,22 @@
   border-bottom: 1px solid #dee2e6;
 }
 
-.favorite-item strong {
+.favorite-item strong,
+.request-item strong {
   display: block;
   font-size: .86rem;
   font-weight: 600;
 }
 
-.favorite-item span {
+.favorite-item span,
+.request-item span:not(.badge) {
   display: block;
   font-size: .75rem;
   color: #6c757d;
 }
 
-.favorite-item:hover strong {
+.favorite-item:hover strong,
+.request-item:hover strong {
   color: #0d6efd;
 }
 
@@ -134,10 +139,6 @@
   color: #6c757d;
   background: #f8f9fa;
   border: 1px dashed #ced4da;
-}
-
-.feature-disabled {
-  background: #f8f9fa;
 }
 
 .status-line {
@@ -156,15 +157,8 @@
   display: inline-block;
 }
 
-.ticket-container{
-  background-color: #efefef;
-  color: #111827;
-  &:hover{
-    transition: 0.1s ease-in;
-    color: #ffffff;
-    background-color: #0d6efd;
-  }
-
+.status-dot-active {
+  background: #198754;
 }
 
 @media (max-width: 992px) {

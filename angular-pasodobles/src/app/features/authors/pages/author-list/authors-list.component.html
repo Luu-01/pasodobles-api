@@ -1,38 +1,40 @@
-<div class="mb-5 text-center">
-  <h2 class="display-6 fw-bold text-dark">Directorio de Compositores</h2>
-  <p class="text-muted">Conoce a los maestros detrás de las grandes obras</p>
+<div class="mb-4 text-center border-bottom pb-3">
+  <h2 class="h4 fw-semibold text-dark mb-1">Directorio de Compositores</h2>
+  <p class="text-muted small mb-0">Conoce a los maestros detrás de las grandes obras</p>
 </div>
 
-<!-- NavBar -->
-<div class="row mb-5 justify-content-center">
+<div class="row mb-4 justify-content-center">
   <div class="col-md-8">
-    <div class="input-group shadow-sm" style="border-radius: 0.75rem;">
-      <input type="text" class="form-control form-control-minimal border-0" 
+    <div class="input-group">
+      <span class="input-group-text bg-white border-end-0 rounded-0">
+        <i class="bi bi-search"></i>
+      </span>
+      <input type="text" class="form-control rounded-0 border-start-0" 
              placeholder="Buscar compositor por nombre..." 
              [(ngModel)]="searchTerm">
     </div>
   </div>
 </div>
 
-<div class="row g-4">
+<div class="row g-3">
   @for (author of filteredAuthors; track author.id) {
     <div class="col-12 col-md-6 col-lg-4">
-      <div class="card card-minimal h-100">
-        <div class="card-body d-flex flex-column p-4">
+      <div class="card h-100 rounded-0 border shadow-none">
+        <div class="card-body d-flex flex-column p-3">
           
           <div class="d-flex justify-content-between align-items-start mb-3">
-            <h5 class="fw-bold text-dark mb-0">{{ author.name }}</h5>
-            <span class="badge badge-purple rounded-pill px-3 py-2">
-              {{ author.birth_year || 'Desconocido' }}
+            <h5 class="fw-semibold text-dark mb-0">{{ author.name }}</h5>
+            <span class="badge bg-light text-secondary border rounded-0 px-2 py-1">
+              {{ author.birth_year || 'N/D' }}
             </span>
           </div>
 
-          <p class="text-muted small flex-grow-1">
+          <p class="text-muted small flex-grow-1 mb-3">
             {{ author.biography || 'Biografía no disponible por el momento.' }}
           </p>
 
-          <div class="mt-4 text-end">
-            <a [routerLink]="['/authors', author.id]" class="text-blue text-decoration-none fw-medium d-inline-flex align-items-center">
+          <div class="mt-auto text-end border-top pt-2">
+            <a [routerLink]="['/authors', author.id]" class="text-blue text-decoration-none fw-medium d-inline-flex align-items-center small">
               Ver perfil <span class="fs-5 ms-1">&rsaquo;</span>
             </a>
           </div>
@@ -43,7 +45,7 @@
   } @empty {
     <div class="col-12 text-center py-5">
       <div class="spinner-border text-purple mb-3" role="status"></div>
-      <p class="text-muted fs-5">Consultando el archivo...</p>
+      <p class="text-muted fs-6">Consultando el archivo...</p>
     </div>
   }
 </div>
