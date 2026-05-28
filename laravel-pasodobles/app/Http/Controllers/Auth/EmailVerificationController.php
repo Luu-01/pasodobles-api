@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
+use Throwable;
 
 class EmailVerificationController extends Controller
 {
@@ -42,10 +43,14 @@ class EmailVerificationController extends Controller
             ], 409);
         }
 
-        $request->user()->sendEmailVerificationNotification();
+        try {
+            $request->user()->sendEmailVerificationNotification();
+        } catch (Throwable $exception) {
+            report($exception);
+        }
 
         return response()->json([
-            'message' => 'Verification email sent.',
+            'message' => 'Verification email processed.',
         ]);
     }
 }

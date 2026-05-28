@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\ArchiveChangeRequest;
-use App\Models\Pasodoble;
-use App\Models\Author;
-use Illuminate\Support\Facades\DB;
-use App\Http\Resources\ArchiveChangeRequestResource;
 use App\Http\Requests\ReviewArchiveChangeRequestRequest;
+use App\Http\Resources\ArchiveChangeRequestResource;
+use App\Models\ArchiveChangeRequest;
+use App\Models\Author;
+use App\Models\Pasodoble;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class AdminArchiveChangeRequestController extends Controller
 {
@@ -31,7 +32,6 @@ class AdminArchiveChangeRequestController extends Controller
 
     //^ 'status changing methods use DB::transaction to isolate all the validation
     //  and allow full rollback in case that validation fails
-
     public function approve(
         ReviewArchiveChangeRequestRequest $request,
         ArchiveChangeRequest $archiveChangeRequest
@@ -47,7 +47,7 @@ class AdminArchiveChangeRequestController extends Controller
 
             $archiveChangeRequest->update([
                 'status' => 'approved',
-                'reviewed  _by' => $request->user()->id,
+                'reviewed_by' => $request->user()->id,
                 'admin_reason' => $request->validated('admin_reason'),
                 'reviewed_at' => now(),
             ]);
@@ -96,10 +96,12 @@ class AdminArchiveChangeRequestController extends Controller
 
     private function applyPasodobleRequest(ArchiveChangeRequest $archiveChangeRequest): void
     {
+        $payload = $this->payloadForPersistence($archiveChangeRequest);
+
         match ($archiveChangeRequest->action) {
-            'create' => Pasodoble::create($archiveChangeRequest->payload),
+            'create' => Pasodoble::create($payload),
             'edit' => Pasodoble::findOrFail($archiveChangeRequest->target_id)
-                ->update($archiveChangeRequest->payload),
+                ->update($payload),
             'delete' => Pasodoble::findOrFail($archiveChangeRequest->target_id)
                 ->delete(),
             default => abort(422, 'Invalid pasodoble action.'),
@@ -108,13 +110,25 @@ class AdminArchiveChangeRequestController extends Controller
 
     private function applyAuthorRequest(ArchiveChangeRequest $archiveChangeRequest): void
     {
+        $payload = $this->payloadForPersistence($archiveChangeRequest);
+
         match ($archiveChangeRequest->action) {
-            'create' => Author::create($archiveChangeRequest->payload),
+            'create' => Author::create($payload),
             'edit' => Author::findOrFail($archiveChangeRequest->target_id)
-                ->update($archiveChangeRequest->payload),
+                ->update($payload),
             'delete' => Author::findOrFail($archiveChangeRequest->target_id)
                 ->delete(),
             default => abort(422, 'Invalid author action.'),
         };
+    }
+
+    private function payloadForPersistence(ArchiveChangeRequest $archiveChangeRequest): array
+    {
+        /*
+         * The request payload stores all user-submitted data.
+         * Some user-submitted keys, like "reason", are useful for the
+         * request itself but must not be inserted into pasodobles/authors.
+         */
+        return Arr::except($archiveChangeRequest->payload ?? [], ['reason']);
     }
 }

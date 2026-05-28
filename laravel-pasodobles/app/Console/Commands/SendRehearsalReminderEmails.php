@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Rehearsal;
 use App\Notifications\RehearsalReminderNotification;
 use Illuminate\Console\Command;
+use Throwable;
 
 class SendRehearsalReminderEmails extends Command
 {
@@ -26,7 +27,13 @@ class SendRehearsalReminderEmails extends Command
             ->get()
             ->each(function (Rehearsal $rehearsal) {
                 $rehearsal->attendances->each(function ($attendance) use ($rehearsal) {
-                    $attendance->user?->notify(new RehearsalReminderNotification($rehearsal));
+                    try {
+                        $attendance->user?->notify(
+                            new RehearsalReminderNotification($rehearsal)
+                        );
+                    } catch (Throwable $exception) {
+                        report($exception);
+                    }
                 });
             });
 
