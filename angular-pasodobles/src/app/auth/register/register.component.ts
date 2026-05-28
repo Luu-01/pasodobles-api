@@ -37,8 +37,13 @@ export class RegisterComponent {
     if (!this.hasValidEmailDomain(this.userData.email)) {
       this.errorMessage = 'Introduce una dirección de correo válida.';
       this.isLoading = false;
-      form?.controls['email']?.control.setErrors({ invalidDomain: true });
-      form?.controls['email']?.control.markAsTouched();
+      const emailControl = form?.controls['email'];
+      emailControl?.setErrors({
+        ...emailControl.errors,
+        invalidDomain: true,
+      });
+
+emailControl?.markAsTouched();
       this.cdr.markForCheck();
       return;
     }
