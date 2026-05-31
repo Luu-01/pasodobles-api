@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../../environments/environment';
 
 interface AdminAuthor {
   id: number;
@@ -22,8 +23,8 @@ export class AdminAuthorsListComponent implements OnInit {
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
 
-  private publicApiUrl = 'http://pasodobles.mb/api/authors';
-  private adminApiUrl = 'http://pasodobles.mb/api/admin/authors';
+  private publicApiUrl = `${environment.apiUrl}/authors`;
+  private adminApiUrl = `${environment.apiUrl}/admin/authors`;
 
   authors: AdminAuthor[] = [];
   isLoading: boolean = true;

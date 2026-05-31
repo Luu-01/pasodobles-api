@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-
+import { environment } from '../../../../../environments/environment';
 @Component({
   selector: 'app-pasodoble-form',
   standalone: true,
@@ -16,7 +16,7 @@ export class AdminPasodobleFormComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
 
-  private baseUrl = 'http://pasodobles.mb/api'; 
+  private baseUrl = environment.apiUrl; 
 
   // Modelo de datos con FormGroup
   pasodoble = new FormGroup({

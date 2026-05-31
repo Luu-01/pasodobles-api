@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Pasodoble, FavoritesResponse, FavoriteToggleResponse } from '../models/pasodoble.interface';
 import { AuthService } from '../../../auth/auth.service';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PasodobleService {
 
-  private apiUrl = 'http://pasodobles.mb/api'; 
+  private apiUrl = environment.apiUrl; 
   private http = inject(HttpClient);
   private authService = inject(AuthService);
 

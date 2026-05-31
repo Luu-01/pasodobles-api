@@ -3,13 +3,14 @@ import { ArchiveRequests, ArchiveRequestsResponse, RequestAuthorPayload, Request
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { AuthService } from "../../../auth/auth.service";
+import { environment } from "../../../../environments/environment";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ArchiveRequestsService{
 
-    private apiUrl = 'http://pasodobles.mb/api'
+    private apiUrl = environment.apiUrl
     private http = inject(HttpClient);
     private authService = inject(AuthService);
 

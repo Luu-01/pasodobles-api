@@ -2,6 +2,7 @@ import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms'; // <-- 1. Importante para el buscador
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-pasodoble-list',
@@ -13,8 +14,8 @@ import { FormsModule } from '@angular/forms'; // <-- 1. Importante para el busca
 export class AdminPasodoblesListComponent implements OnInit {
   private http = inject(HttpClient);
   
-  private publicApiUrl = 'http://pasodobles.mb/api/pasodobles'; 
-  private adminApiUrl = 'http://pasodobles.mb/api/admin/pasodobles';
+  private publicApiUrl = `${environment.apiUrl}/pasodobles`; 
+  private adminApiUrl = `${environment.apiUrl}/admin/pasodobles`;
   private cdr = inject(ChangeDetectorRef);
 
   pasodobles: any[] = [];

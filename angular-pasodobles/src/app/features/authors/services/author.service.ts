@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Author } from '../models/author.interface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { Author } from '../models/author.interface';
 export class AuthorService {
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://pasodobles.mb/api/authors'; 
+  private apiUrl = `${environment.apiUrl}/authors`; 
 
   getAuthors(): Observable<Author[]> {
     return this.http.get<Author[]>(this.apiUrl);

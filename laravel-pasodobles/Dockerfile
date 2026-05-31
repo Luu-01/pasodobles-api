@@ -23,6 +23,8 @@ RUN composer install --no-dev --optimize-autoloader
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
+RUN docker compose exec api php artisan migrate
+
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
 EXPOSE 80

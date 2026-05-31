@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 import { AuthService } from '../../../auth/auth.service';
 import {
@@ -18,7 +19,7 @@ import {
   providedIn: 'root',
 })
 export class RehearsalService {
-  private readonly apiUrl = 'http://pasodobles.mb/api';
+  private readonly apiUrl = environment.apiUrl;
 
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);

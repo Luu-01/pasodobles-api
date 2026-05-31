@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap, catchError } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from '../features/users/models/user.interface';
+import { environment } from '../../environments/environment';
 
 // Using BehaviorSubject and ServerSideRendering protection to prevent early localStorage access
 
@@ -13,7 +14,7 @@ import { User } from '../features/users/models/user.interface';
 
 export class AuthService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://pasodobles.mb/api/auth'; 
+  private apiUrl = `${environment.apiUrl}/auth`; 
   private platformId = inject(PLATFORM_ID);
   private router = inject(Router);
 
