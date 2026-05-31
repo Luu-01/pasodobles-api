@@ -13,12 +13,14 @@ use Illuminate\Support\Facades\DB;
 
 class AdminArchiveChangeRequestController extends Controller
 {
+    private const PER_PAGE = 20;
+
     // admin is able to check every request existing
     public function index()
     {
         $requests = ArchiveChangeRequest::with(['user', 'reviewer'])
             ->latest()
-            ->get();
+            ->paginate(self::PER_PAGE);
 
         return ArchiveChangeRequestResource::collection($requests);
     }

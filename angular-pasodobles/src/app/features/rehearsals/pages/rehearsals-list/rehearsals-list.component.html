@@ -22,7 +22,7 @@
           </button>
         </div>
 
-        <button class="btn btn-outline-secondary btn-sm rounded-0" type="button" (click)="loadRehearsals()">
+        <button class="btn btn-outline-secondary btn-sm rounded-0" type="button" (click)="loadRehearsals(currentPage)">
           Actualizar
         </button>
       </div>
@@ -94,7 +94,7 @@
               <div class="empty-day">
                 <p class="mb-1 fw-semibold">Sin ensayos</p>
                 <p class="small text-muted mb-0">
-                  No hay convocatorias registradas para este día.
+                  No hay convocatorias registradas para este día en la página actual.
                 </p>
               </div>
             } @else {
@@ -157,6 +157,29 @@
           </div>
         </aside>
       </div>
+
+      @if (paginationMeta && paginationMeta.last_page > 1) {
+        <nav class="border-top p-3" aria-label="Paginación de ensayos">
+          <ul class="pagination justify-content-center rounded-0 mb-2">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button class="page-link rounded-0" type="button" (click)="goToPage(currentPage - 1)">Anterior</button>
+            </li>
+
+            @for (page of pageNumbers; track page) {
+              <li class="page-item" [class.active]="page === currentPage">
+                <button class="page-link rounded-0" type="button" (click)="goToPage(page)">{{ page }}</button>
+              </li>
+            }
+
+            <li class="page-item" [class.disabled]="currentPage === paginationMeta.last_page">
+              <button class="page-link rounded-0" type="button" (click)="goToPage(currentPage + 1)">Siguiente</button>
+            </li>
+          </ul>
+          <p class="text-center text-muted small mb-0">
+            Mostrando {{ paginationMeta.from }}-{{ paginationMeta.to }} de {{ paginationMeta.total }} registros
+          </p>
+        </nav>
+      }
     }
   </div>
 </section>

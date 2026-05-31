@@ -1,3 +1,5 @@
+import { PaginatedResponse } from '../../../shared/models/pagination.interface';
+
 export type RehearsalAttendanceStatus = 'pending' | 'confirmed' | 'declined';
 
 export type EditableRehearsalAttendanceStatus = Extract<
@@ -50,9 +52,7 @@ export interface SetRehearsalAttendancePayload {
   status: EditableRehearsalAttendanceStatus;
 }
 
-export interface RehearsalCollectionResponse {
-  data: Rehearsal[];
-}
+export type RehearsalCollectionResponse = PaginatedResponse<Rehearsal>;
 
 export interface RehearsalResponse {
   data: Rehearsal;

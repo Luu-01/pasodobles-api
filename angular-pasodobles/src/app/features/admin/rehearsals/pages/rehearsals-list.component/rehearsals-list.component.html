@@ -89,6 +89,29 @@
           </tbody>
         </table>
       </div>
+
+      @if (paginationMeta && paginationMeta.last_page > 1) {
+        <nav class="mt-3" aria-label="Paginación de ensayos admin">
+          <ul class="pagination justify-content-center rounded-0 mb-2">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button class="page-link rounded-0" type="button" (click)="goToPage(currentPage - 1)">Anterior</button>
+            </li>
+
+            @for (page of pageNumbers; track page) {
+              <li class="page-item" [class.active]="page === currentPage">
+                <button class="page-link rounded-0" type="button" (click)="goToPage(page)">{{ page }}</button>
+              </li>
+            }
+
+            <li class="page-item" [class.disabled]="currentPage === paginationMeta.last_page">
+              <button class="page-link rounded-0" type="button" (click)="goToPage(currentPage + 1)">Siguiente</button>
+            </li>
+          </ul>
+          <p class="text-center text-muted small mb-0">
+            Mostrando {{ paginationMeta.from }}-{{ paginationMeta.to }} de {{ paginationMeta.total }} registros
+          </p>
+        </nav>
+      }
     }
   }
 </section>

@@ -7,6 +7,7 @@ import {
 } from '../../models/rehearsal.interface';
 import { RehearsalService } from '../../services/rehearsal.service';
 import { AuthService } from '../../../../auth/auth.service';
+import { PaginationMeta } from '../../../../shared/models/pagination.interface';
 
 interface CalendarDay {
   date: Date;
@@ -31,6 +32,8 @@ export class RehearsalsListComponent implements OnInit {
 
   rehearsals: Rehearsal[] = [];
   calendarDays: CalendarDay[] = [];
+  paginationMeta: PaginationMeta | null = null;
+  currentPage = 1;
 
   currentDate = new Date();
   selectedDate = this.toIsoDate(new Date());
@@ -49,13 +52,15 @@ export class RehearsalsListComponent implements OnInit {
     this.cdr.markForCheck();
   }
 
-  loadRehearsals(): void {
+  loadRehearsals(page = 1): void {
     this.isLoading = true;
     this.errorMessage = '';
+    this.currentPage = page;
 
-    this.rehearsalService.getRehearsals().subscribe({
+    this.rehearsalService.getRehearsals(page).subscribe({
       next: (response) => {
         this.rehearsals = response.data;
+        this.paginationMeta = response.meta;
         this.buildCalendar();
         this.isLoading = false;
         this.cdr.markForCheck();
@@ -67,6 +72,19 @@ export class RehearsalsListComponent implements OnInit {
         this.cdr.markForCheck();
       },
     });
+  }
+
+  goToPage(page: number): void {
+    if (!this.paginationMeta || page < 1 || page > this.paginationMeta.last_page || page === this.currentPage) {
+      return;
+    }
+
+    this.loadRehearsals(page);
+  }
+
+  get pageNumbers(): number[] {
+    const lastPage = this.paginationMeta?.last_page ?? 1;
+    return Array.from({ length: lastPage }, (_, index) => index + 1);
   }
 
   previousMonth(): void {

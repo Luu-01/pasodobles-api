@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SetRehearsalAttendanceRequest;
 use App\Models\Rehearsal;
 use App\Models\RehearsalAttendance;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Resources\RehearsalResource;
 
 class RehearsalController extends Controller
 {
+    private const PER_PAGE = 20;
+
     public function index(Request $request) 
     {
         $userId = $request->user()->id;
@@ -31,7 +32,7 @@ class RehearsalController extends Controller
                 },
             ])
             ->orderBy('date')
-            ->get();
+            ->paginate(self::PER_PAGE);
 
         return RehearsalResource::collection($rehearsals);
     }

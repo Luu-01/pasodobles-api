@@ -1,8 +1,9 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms'; // <-- 1. Importante para el buscador
 import { environment } from '../../../../../environments/environment';
+import { PaginatedResponse, PaginationMeta } from '../../../../shared/models/pagination.interface';
 
 @Component({
   selector: 'app-pasodoble-list',
@@ -19,6 +20,8 @@ export class AdminPasodoblesListComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   pasodobles: any[] = [];
+  paginationMeta: PaginationMeta | null = null;
+  currentPage = 1;
   isLoading: boolean = true;
   searchTerm: string = '';
 
@@ -34,10 +37,16 @@ export class AdminPasodoblesListComponent implements OnInit {
     });
   }
 
-  loadPasodobles() {
-    this.http.get<any>(this.publicApiUrl).subscribe({
+  loadPasodobles(page = 1) {
+    this.isLoading = true;
+    this.currentPage = page;
+
+    const params = new HttpParams().set('page', page);
+
+    this.http.get<PaginatedResponse<any>>(this.publicApiUrl, { params }).subscribe({
       next: (response) => {
-        this.pasodobles = response.data ? response.data : response;
+        this.pasodobles = response.data;
+        this.paginationMeta = response.meta;
         this.cdr.detectChanges();
         this.isLoading = false;
       },
@@ -46,6 +55,19 @@ export class AdminPasodoblesListComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  goToPage(page: number): void {
+    if (!this.paginationMeta || page < 1 || page > this.paginationMeta.last_page || page === this.currentPage) {
+      return;
+    }
+
+    this.loadPasodobles(page);
+  }
+
+  get pageNumbers(): number[] {
+    const lastPage = this.paginationMeta?.last_page ?? 1;
+    return Array.from({ length: lastPage }, (_, index) => index + 1);
   }
 
   get filteredPasodobles() {

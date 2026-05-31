@@ -1,3 +1,4 @@
+import { PaginatedResponse } from '../../../shared/models/pagination.interface';
 
 export interface RequestPasodoblePayload{
 
@@ -44,9 +45,7 @@ export interface ArchiveRequests {
   reviewer?: ArchiveRequestUser | null;
 }
 
-export interface ArchiveRequestsResponse {
-  data: ArchiveRequests[];
-}
+export type ArchiveRequestsResponse = PaginatedResponse<ArchiveRequests>;
 
 export interface ArchiveRequestUser {
   id: number;

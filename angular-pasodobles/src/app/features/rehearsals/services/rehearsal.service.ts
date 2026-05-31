@@ -1,12 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
 import { AuthService } from '../../../auth/auth.service';
 import {
   DeleteRehearsalResponse,
-  Rehearsal,
   RehearsalAttendancesResponse,
   RehearsalCollectionResponse,
   RehearsalMutationResponse,
@@ -24,10 +23,11 @@ export class RehearsalService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
 
-  getRehearsals(): Observable<RehearsalCollectionResponse> {
+  getRehearsals(page = 1): Observable<RehearsalCollectionResponse> {
+    const params = new HttpParams().set('page', page);
     return this.http.get<RehearsalCollectionResponse>(
       `${this.apiUrl}/rehearsals`,
-      this.authService.getAuthHeaders()
+      { ...this.authService.getAuthHeaders(), params }
     );
   }
 

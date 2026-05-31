@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
-import { ArchiveRequests, ArchiveRequestsResponse, RequestAuthorPayload, RequestPasodoblePayload } from "../model/archive-requests.interface";
-import { HttpClient } from "@angular/common/http";
+import { ArchiveRequests, ArchiveRequestsResponse } from "../model/archive-requests.interface";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { AuthService } from "../../../auth/auth.service";
 import { environment } from "../../../../environments/environment";
@@ -14,16 +14,18 @@ export class ArchiveRequestsService{
     private http = inject(HttpClient);
     private authService = inject(AuthService);
 
-    getArchiveRequests(): Observable<{data: ArchiveRequests[] }>{
-        return this.http.get<{data: ArchiveRequests[] }>(`${this.apiUrl}/archive-requests`, this.authService.getAuthHeaders());
+    getArchiveRequests(page = 1): Observable<ArchiveRequestsResponse>{
+        const params = new HttpParams().set('page', page);
+        return this.http.get<ArchiveRequestsResponse>(`${this.apiUrl}/archive-requests`, { ...this.authService.getAuthHeaders(), params });
     }
 
     getArchiveRequest(id: string | null): Observable<{data: ArchiveRequests}>{
         return this.http.get<{data: ArchiveRequests}>(`${this.apiUrl}/archive-requests/${id}`, this.authService.getAuthHeaders());
     }
 
-    getAdminArchiveRequests(): Observable<{data: ArchiveRequests[]}>{
-        return this.http.get<{data: ArchiveRequests[] }>(`${this.apiUrl}/admin/archive-requests`, this.authService.getAuthHeaders());
+    getAdminArchiveRequests(page = 1): Observable<ArchiveRequestsResponse>{
+        const params = new HttpParams().set('page', page);
+        return this.http.get<ArchiveRequestsResponse>(`${this.apiUrl}/admin/archive-requests`, { ...this.authService.getAuthHeaders(), params });
     }
 
     approveArchiveRequest(id: number, admin_reason: string): Observable<ArchiveRequests>{
@@ -42,8 +44,8 @@ export class ArchiveRequestsService{
         );
     }
 
-    createArchiveRequest(payload: Pick<ArchiveRequests, 'target_type' | 'target_id' | 'action' | 'payload'>): Observable<ArchiveRequestsResponse> {
-        return this.http.post<ArchiveRequestsResponse>(
+    createArchiveRequest(payload: Pick<ArchiveRequests, 'target_type' | 'target_id' | 'action' | 'payload'>): Observable<{data: ArchiveRequests}> {
+        return this.http.post<{data: ArchiveRequests}>(
             `${this.apiUrl}/archive-requests`,
             payload,
             this.authService.getAuthHeaders()

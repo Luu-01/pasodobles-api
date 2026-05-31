@@ -1,4 +1,5 @@
 import { Author } from '../../authors/models/author.interface';
+import { PaginatedResponse } from '../../../shared/models/pagination.interface';
 import { Category } from './category.interface';
 
 export interface Pasodoble {
@@ -25,6 +26,5 @@ export interface FavoriteToggleResponse {
   pasodoble_id: number;
 }
 
-export interface FavoritesResponse {
-  data: Pasodoble[];
-}
+export type PasodoblesResponse = PaginatedResponse<Pasodoble>;
+export type FavoritesResponse = PaginatedResponse<Pasodoble>;

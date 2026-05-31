@@ -1,8 +1,9 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../../environments/environment';
+import { PaginatedResponse, PaginationMeta } from '../../../../shared/models/pagination.interface';
 
 interface AdminAuthor {
   id: number;
@@ -27,6 +28,8 @@ export class AdminAuthorsListComponent implements OnInit {
   private adminApiUrl = `${environment.apiUrl}/admin/authors`;
 
   authors: AdminAuthor[] = [];
+  paginationMeta: PaginationMeta | null = null;
+  currentPage = 1;
   isLoading: boolean = true;
   searchTerm: string = '';
 
@@ -42,10 +45,16 @@ export class AdminAuthorsListComponent implements OnInit {
     });
   }
 
-  loadAuthors() {
-    this.http.get<AdminAuthor[] | { data: AdminAuthor[] }>(this.publicApiUrl).subscribe({
+  loadAuthors(page = 1) {
+    this.isLoading = true;
+    this.currentPage = page;
+
+    const params = new HttpParams().set('page', page);
+
+    this.http.get<PaginatedResponse<AdminAuthor>>(this.publicApiUrl, { params }).subscribe({
       next: (response) => {
-        this.authors = Array.isArray(response) ? response : response.data;
+        this.authors = response.data;
+        this.paginationMeta = response.meta;
         this.cdr.detectChanges();
         this.isLoading = false;
       },
@@ -54,6 +63,19 @@ export class AdminAuthorsListComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  goToPage(page: number): void {
+    if (!this.paginationMeta || page < 1 || page > this.paginationMeta.last_page || page === this.currentPage) {
+      return;
+    }
+
+    this.loadAuthors(page);
+  }
+
+  get pageNumbers(): number[] {
+    const lastPage = this.paginationMeta?.last_page ?? 1;
+    return Array.from({ length: lastPage }, (_, index) => index + 1);
   }
 
   get filteredAuthors(): AdminAuthor[] {

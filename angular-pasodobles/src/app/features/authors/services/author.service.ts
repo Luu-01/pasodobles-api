@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Author } from '../models/author.interface';
+import { Author, AuthorsResponse } from '../models/author.interface';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -12,9 +12,11 @@ export class AuthorService {
 
   private apiUrl = `${environment.apiUrl}/authors`; 
 
-  getAuthors(): Observable<Author[]> {
-    return this.http.get<Author[]>(this.apiUrl);
+  getAuthors(page = 1): Observable<AuthorsResponse> {
+    const params = new HttpParams().set('page', page);
+    return this.http.get<AuthorsResponse>(this.apiUrl, { params });
   }
+
   getAuthor(id: string | null): Observable<Author> {
     return this.http.get<Author>(`${this.apiUrl}/${id}`);
   }

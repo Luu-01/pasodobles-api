@@ -10,17 +10,24 @@ use App\Http\Resources\ArchiveChangeRequestResource;
 
 class ArchiveChangeRequestController extends Controller
 {
+    private const PER_PAGE = 20;
 
     // limited to only see user's own requests 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $user = $request->user();
-        $archiveRequests= ArchiveChangeRequest::where('user_id', $user->id)->latest()->get()->load(['user', 'reviewer']);
+
+        $archiveRequests = ArchiveChangeRequest::query()
+            ->where('user_id', $user->id)
+            ->with(['user', 'reviewer'])
+            ->latest()
+            ->paginate(self::PER_PAGE);
 
         return ArchiveChangeRequestResource::collection($archiveRequests);
     }
 
-    public function show(Request $request, ArchiveChangeRequest $archiveChangeRequest){
-
+    public function show(Request $request, ArchiveChangeRequest $archiveChangeRequest)
+    {
         $user = $request->user();
 
         if ($archiveChangeRequest->user_id == $user->id || $user->role == 'admin') {
@@ -33,10 +40,10 @@ class ArchiveChangeRequestController extends Controller
         return response()->json([
             'message' => 'Archive change request not found.'
         ], 404);
-        
     }
 
-    public function store(StoreArchiveChangeRequestRequest $request){
+    public function store(StoreArchiveChangeRequestRequest $request)
+    {
         $validated = $request->validated();
 
         $changeRequest = ArchiveChangeRequest::create([
