@@ -17,8 +17,28 @@ export class PasodobleService {
   // not loading headers as property since PasodobleService can be
   // loaded without Authorization and evading old token keeping
 
-  getPasodobles(page = 1): Observable<PasodoblesResponse> {
-    const params = new HttpParams().set('page', page);
+  getPasodobles(
+    page = 1,
+    filters: {
+      search?: string;
+      category?: string;
+      author?: string;
+    } = {}
+    ): Observable<PasodoblesResponse> {
+      let params = new HttpParams().set('page', page);
+
+      if (filters.search?.trim()) {
+        params = params.set('search', filters.search.trim());
+      }
+
+      if (filters.category) {
+        params = params.set('category', filters.category);
+      }
+
+      if (filters.author) {
+        params = params.set('author', filters.author);
+      }
+
     return this.http.get<PasodoblesResponse>(`${this.apiUrl}/pasodobles`, { params });
   }
 

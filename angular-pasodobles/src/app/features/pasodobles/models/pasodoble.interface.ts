@@ -8,6 +8,7 @@ export interface Pasodoble {
   year?: number | null;
   description?: string | null;
   pdf_url?: string | null;
+  video_url?: string | null;
   
   // id's
   author_id?: number | null;

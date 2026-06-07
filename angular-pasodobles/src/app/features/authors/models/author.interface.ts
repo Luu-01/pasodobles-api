@@ -6,6 +6,7 @@ export interface Author {
     name: string;
     biography?: string | null;
     birth_year?: number | null;
+    death_year?: number | null;
     image_url?: string | null;
     pasodobles?: [Pasodoble];
 }

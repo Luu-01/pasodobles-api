@@ -12,9 +12,19 @@ export class AuthorService {
 
   private apiUrl = `${environment.apiUrl}/authors`; 
 
-  getAuthors(page = 1): Observable<AuthorsResponse> {
-    const params = new HttpParams().set('page', page);
-    return this.http.get<AuthorsResponse>(this.apiUrl, { params });
+  getAuthors(
+    page = 1,
+    filters: {
+      search?: string;
+    } = {}
+  ): Observable<AuthorsResponse> {
+    let params = new HttpParams().set('page', page);
+
+    if (filters.search?.trim()) {
+      params = params.set('search', filters.search.trim());
+    }
+
+    return this.http.get<AuthorsResponse>(`${this.apiUrl}`, { params });
   }
 
   getAuthor(id: string | null): Observable<Author> {

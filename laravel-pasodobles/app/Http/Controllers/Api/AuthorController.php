@@ -10,24 +10,35 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class AuthorController extends Controller
 {
-    private const PER_PAGE = 20;
+    private const PER_PAGE = 75;
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $authors = Author::query()
             ->with([
                 'pasodobles:id,title,description,year,author_id',
             ])
             ->select(['id', 'name', 'biography', 'birth_year', 'image_url'])
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = $request->string('search')->toString();
+
+                $query->where(function ($subquery) use ($search) {
+                    $subquery
+                        ->where('name', 'like', "%{$search}%")
+                        ->orWhere('biography', 'like', "%{$search}%")
+                        ->orWhere('birth_year', 'like', "%{$search}%");
+                });
+            })
             ->orderBy('name')
-            ->paginate(self::PER_PAGE);
+            ->paginate(self::PER_PAGE)
+            ->withQueryString();
 
         return $this->paginatedResponse($authors);
     }
 
     public function show(Author $author): JsonResponse
     {
-        $author->load('pasodobles.author_id', 'pasodobles.category_id');
+        $author->load('pasodobles');
         return response()->json($author);
     }
 
@@ -37,6 +48,7 @@ class AuthorController extends Controller
             'name' => ['required', 'string', 'min:2', 'max:150'],
             'biography' => ['nullable', 'string', 'max:5000'],
             'birth_year' => ['nullable', 'integer', 'min:1000', 'max:' . now()->year],
+            'death_year' => ['nullable', 'integer', 'min:1000', 'max:' . now()->year],
             'image_url' => ['nullable', 'url', 'max:2048'],
         ]);
 

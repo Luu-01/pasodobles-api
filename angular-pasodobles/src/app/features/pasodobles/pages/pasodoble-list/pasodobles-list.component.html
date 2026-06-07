@@ -8,11 +8,11 @@
   <div class="card-body">
     <div class="row g-3 align-items-center col-12 justify-content-center">
       <div class="col-md-3">
-        <input type="text" class="form-control form-control-minimal" placeholder="Buscar por título o dedicatoria..." [(ngModel)]="searchTerm">
+        <input type="text" class="form-control form-control-minimal" placeholder="Buscar por título o dedicatoria..." [(ngModel)]="searchTerm" (ngModelChange)="onFiltersChange()">
       </div>
       
       <div class="col-md-3">
-        <select class="form-select form-select-minimal" [(ngModel)]="selectedCategory">
+        <select class="form-select form-select-minimal" [(ngModel)]="selectedCategory" (ngModelChange)="onFiltersChange()">
           <option value="">Todas las categorías</option>
           @for (cat of categories; track cat) {
             <option [value]="cat">{{ cat }}</option>
@@ -21,7 +21,7 @@
       </div>
       
       <div class="col-md-3">
-        <select class="form-select form-select-minimal" [(ngModel)]="selectedAuthor">
+        <select class="form-select form-select-minimal" [(ngModel)]="selectedAuthor" (ngModelChange)="onFiltersChange()">
           <option value="">Todos los compositores</option>
           @for (author of authors; track author) {
             <option [value]="author">{{ author }}</option>
@@ -38,7 +38,7 @@
       <p class="text-muted fs-6">Consultando el archivo...</p>
     </div>
 }
-@else if(!loading && filteredPasodobles.length < 1){
+@else if(!loading && pasodobles.length < 1){
     <div class="col-10 text-center py-5 mt-4">
       <h5 class="text-muted fw-normal">No se encontraron pasodobles con esos filtros.</h5>
       <button class="btn btn-outline-primary rounded-pill px-4 mt-3" (click)="searchTerm=''; selectedCategory=''; selectedAuthor=''">Limpiar filtros</button>
@@ -46,7 +46,7 @@
 }
 
 <div class="row g-2 justify-content-center">
-  @for (pasodoble of filteredPasodobles; track pasodoble.id) {
+  @for (pasodoble of pasodobles; track pasodoble.id) {
     <div class="col-10 border">
       <div class="card card-minimal border-0">
         <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">

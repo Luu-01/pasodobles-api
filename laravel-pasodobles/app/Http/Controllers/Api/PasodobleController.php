@@ -10,9 +10,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class PasodobleController extends Controller
 {
-    private const PER_PAGE = 20;
+    private const PER_PAGE = 150;
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $pasodobles = Pasodoble::query()
             ->with([
@@ -30,8 +30,34 @@ class PasodobleController extends Controller
                 'created_at',
                 'updated_at',
             ])
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = $request->string('search')->toString();
+
+                $query->where(function ($subquery) use ($search) {
+                    $subquery
+                        ->where('title', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhereHas('author', function ($authorQuery) use ($search) {
+                            $authorQuery->where('name', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('category', function ($categoryQuery) use ($search) {
+                            $categoryQuery->where('name', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->when($request->filled('category'), function ($query) use ($request) {
+                $query->whereHas('category', function ($categoryQuery) use ($request) {
+                    $categoryQuery->where('name', $request->string('category')->toString());
+                });
+            })
+            ->when($request->filled('author'), function ($query) use ($request) {
+                $query->whereHas('author', function ($authorQuery) use ($request) {
+                    $authorQuery->where('name', $request->string('author')->toString());
+                });
+            })
             ->orderBy('title')
-            ->paginate(self::PER_PAGE);
+            ->paginate(self::PER_PAGE)
+            ->withQueryString();
 
         return $this->paginatedResponse($pasodobles);
     }

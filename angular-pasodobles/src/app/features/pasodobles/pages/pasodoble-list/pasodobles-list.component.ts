@@ -43,7 +43,11 @@ export class PasodoblesListComponent implements OnInit {
     this.loading = true;
     this.currentPage = page;
 
-    this.pasodobleService.getPasodobles(page).subscribe({
+    this.pasodobleService.getPasodobles(page, {
+      search: this.searchTerm,
+      category: this.selectedCategory,
+      author: this.selectedAuthor,
+    }).subscribe({
       next: (response) => {
         this.pasodobles = response.data;
         this.paginationMeta = response.meta;
@@ -62,6 +66,10 @@ export class PasodoblesListComponent implements OnInit {
         this.cdr.markForCheck();
       }
     });
+  }
+
+  onFiltersChange(): void {
+    this.loadPasodobles(1);
   }
 
   goToPage(page: number): void {
@@ -159,17 +167,6 @@ export class PasodoblesListComponent implements OnInit {
 
     const autoresSet = new Set(this.pasodobles.map(p => p.author?.name).filter(Boolean));
     this.authors = Array.from(autoresSet) as string[];
-  }
-
-  get filteredPasodobles(): Pasodoble[] {
-    return this.pasodobles.filter(p => {
-      const term = this.searchTerm.toLowerCase();
-      const matchSearch = p.title.toLowerCase().includes(term) || (p.description && p.description.toLowerCase().includes(term));
-      const matchCategory = this.selectedCategory ? p.category?.name === this.selectedCategory : true;
-      const matchAuthor = this.selectedAuthor ? p.author?.name === this.selectedAuthor : true;
-
-      return matchSearch && matchCategory && matchAuthor;
-    });
   }
 
 }

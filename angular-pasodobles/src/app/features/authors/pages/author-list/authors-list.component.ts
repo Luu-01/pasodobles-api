@@ -28,7 +28,9 @@ export class AuthorsListComponent implements OnInit {
   loadAuthors(page = 1): void {
     this.currentPage = page;
 
-    this.authorService.getAuthors(page).subscribe({
+    this.authorService.getAuthors(page, {
+      search: this.searchTerm,
+    }).subscribe({
       next: (response) => {
         this.authors = response.data;
         this.paginationMeta = response.meta;
@@ -38,6 +40,10 @@ export class AuthorsListComponent implements OnInit {
         console.error('Error al cargar los compositores', error);
       }
     });
+  }
+
+  onFiltersChange(): void {
+    this.loadAuthors(1);
   }
 
   goToPage(page: number): void {
@@ -53,15 +59,4 @@ export class AuthorsListComponent implements OnInit {
     return Array.from({ length: lastPage }, (_, index) => index + 1);
   }
 
-  //~ Filtering
-
-  get filteredAuthors(): Author[] {
-    if (!this.searchTerm) {
-      return this.authors;
-    }
-    
-    return this.authors.filter(a => 
-      a.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-  }
 }

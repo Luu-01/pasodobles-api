@@ -2,7 +2,6 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Author } from '../../models/author.interface';
 import { AuthorService } from '../../services/author.service';
-import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-author-detail',
