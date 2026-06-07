@@ -9,7 +9,17 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
+    && docker-php-ext-install \
+        pdo_mysql \
+        mbstring \
+        zip \
+        exif \
+        pcntl \
+        bcmath \
+        gd \
+        opcache \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN a2enmod rewrite
 
@@ -17,13 +27,24 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-COPY . .
+COPY composer.json composer.lock ./
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install \
+    --no-dev \
+    --optimize-autoloader \
+    --no-interaction \
+    --prefer-dist \
+    --no-scripts
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+COPY . /var/www/html/
 
-RUN docker compose exec api php artisan migrate
+RUN composer dump-autoload --optimize
+
+RUN chown -R www-data:www-data \
+    /var/www/html/storage \
+    /var/www/html/bootstrap/cache
+
+COPY docker/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 

@@ -66,11 +66,10 @@ export class ArchiveRequestsDetailComponent implements OnInit{
       .subscribe({
         next: (response) => {
           this.archiveRequest = response;
-          console.log(response)
           this.isSubmitting = false;
           this.reviewForm.reset();
           this.cdr.markForCheck();
-
+          window.location.reload();
         },
         error: (error) => {
           console.error('Error approving request', error);
@@ -94,6 +93,7 @@ export class ArchiveRequestsDetailComponent implements OnInit{
           this.isSubmitting = false;
           this.reviewForm.reset();
           this.cdr.markForCheck();
+          window.location.reload();
         },
         error: (error) => {
           console.error('Error rejecting request', error);

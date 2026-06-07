@@ -15,6 +15,9 @@ class AuthorController extends Controller
     public function index(): JsonResponse
     {
         $authors = Author::query()
+            ->with([
+                'pasodobles:id,title,description,year,author_id',
+            ])
             ->select(['id', 'name', 'biography', 'birth_year', 'image_url'])
             ->orderBy('name')
             ->paginate(self::PER_PAGE);
@@ -24,7 +27,7 @@ class AuthorController extends Controller
 
     public function show(Author $author): JsonResponse
     {
-        $author->load('pasodobles.author', 'pasodobles.category');
+        $author->load('pasodobles.author_id', 'pasodobles.category_id');
         return response()->json($author);
     }
 

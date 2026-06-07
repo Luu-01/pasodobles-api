@@ -13,7 +13,18 @@ export class UserWrapperComponent {
   public authService = inject(AuthService);
   private router = inject(Router);
 
+    isNavbarOpen = false;
+
   logout(): void {
     this.authService.logout().subscribe();
+  }
+
+
+  toggleNavbar(): void {
+    this.isNavbarOpen = !this.isNavbarOpen;
+  }
+
+  closeNavbar(): void {
+    this.isNavbarOpen = false;
   }
 }

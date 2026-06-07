@@ -6,8 +6,8 @@
 <!--~ Filters -->
 <div class="card card-minimal mb-5 p-2 border-0">
   <div class="card-body">
-    <div class="row g-3 align-items-center">
-      <div class="col-md-6">
+    <div class="row g-3 align-items-center col-12 justify-content-center">
+      <div class="col-md-3">
         <input type="text" class="form-control form-control-minimal" placeholder="Buscar por título o dedicatoria..." [(ngModel)]="searchTerm">
       </div>
       
@@ -33,22 +33,28 @@
 </div>
 
 @if (loading) {
-  <div class="text-center py-4 text-muted">Cargando pasodobles...</div>
+    <div class="col-12 text-center py-5">
+      <div class="spinner-border text-purple mb-3" role="status"></div>
+      <p class="text-muted fs-6">Consultando el archivo...</p>
+    </div>
+}
+@else if(!loading && filteredPasodobles.length < 1){
+    <div class="col-10 text-center py-5 mt-4">
+      <h5 class="text-muted fw-normal">No se encontraron pasodobles con esos filtros.</h5>
+      <button class="btn btn-outline-primary rounded-pill px-4 mt-3" (click)="searchTerm=''; selectedCategory=''; selectedAuthor=''">Limpiar filtros</button>
+    </div>
 }
 
-<div class="row g-2">
+<div class="row g-2 justify-content-center">
   @for (pasodoble of filteredPasodobles; track pasodoble.id) {
-    <div class="col-12">
+    <div class="col-10 border">
       <div class="card card-minimal border-0">
         <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
           
           <div class="col-md-5">
-            <a [routerLink]="['/pasodobles', pasodoble.id]" class="fw-bold text-dark fs-6 text-decoration-none d-block">
+            <a [routerLink]="['/pasodobles', pasodoble.id]" class="fw-bold text-dark text-decoration-none d-block"  style="font-size: 0.9rem;">
               {{ pasodoble.title }}
             </a>
-            <small class="text-muted fst-italic" style="font-size: 0.75rem; line-height: 1.2; display: block;">
-              {{ pasodoble.description || 'Sin dedicatoria registrada' }}
-            </small>
           </div>
 
           <div class="col-md-3 text-center d-none d-md-block">
@@ -89,11 +95,6 @@
 
         </div>
       </div>
-    </div>
-  } @empty {
-    <div class="col-12 text-center py-5 mt-4">
-      <h5 class="text-muted fw-normal">No se encontraron pasodobles con esos filtros.</h5>
-      <button class="btn btn-outline-primary rounded-pill px-4 mt-3" (click)="searchTerm=''; selectedCategory=''; selectedAuthor=''">Limpiar filtros</button>
     </div>
   }
 </div>

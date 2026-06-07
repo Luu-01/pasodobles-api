@@ -15,8 +15,18 @@ export class AdminLayoutComponent {
   public authService = inject(AuthService);
   private router = inject(Router);
 
+  isSidebarOpen = false;
+
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  closeSidebar(): void {
+    this.isSidebarOpen = false;
+  }
+
   logout() {
-    this.authService.logout();
+    this.authService.logout().subscribe();
   }
 
   getUser(){

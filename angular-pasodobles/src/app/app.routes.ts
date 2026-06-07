@@ -47,13 +47,10 @@ export const routes: Routes = [
       { path: 'archive-requests/:id', component: ArchiveRequestsDetailComponent, canActivate: [authGuard] },
       { path: 'rehearsals', component: RehearsalsListComponent, canActivate: [authGuard] },
       { path: 'auth/user', component: CurrentUserComponent, canActivate: [authGuard] },
-
+      { path: 'auth/login', component: LoginComponent },
+      { path: 'auth/register', component: RegisterComponent },
     ],
-  },
-
-  // Auth pages stay outside UserLayout so login/register do not inherit the main app interface.
-  { path: 'auth/login', component: LoginComponent },
-  { path: 'auth/register', component: RegisterComponent },
+  },  
 
   // Admin layout owns the admin interface.
   {

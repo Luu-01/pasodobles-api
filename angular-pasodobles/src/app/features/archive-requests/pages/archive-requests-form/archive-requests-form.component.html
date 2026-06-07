@@ -1,4 +1,3 @@
-
 <section class="container-fluid px-0">
   <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
     <div>
@@ -16,6 +15,12 @@
   @if (errorMessage) {
     <div class="alert alert-danger rounded-0 small">
       {{ errorMessage }}
+    </div>
+  }
+
+  @if (isLoadingOptions) {
+    <div class="alert alert-light border rounded-0 small">
+      Cargando datos del formulario...
     </div>
   }
 
@@ -41,12 +46,37 @@
 
     @if (isEdit || isDelete) {
       <div class="mb-3">
-        <label class="form-label small text-muted fw-semibold">ID del registro</label>
-        <input
-          type="number"
-          class="form-control rounded-0"
-          formControlName="target_id"
-          placeholder="ID del pasodoble o autor existente">
+        <label class="form-label small text-muted fw-semibold">Registro</label>
+
+        @if (isPasodoble) {
+          <select class="form-select rounded-0" formControlName="target_id">
+            <option [ngValue]="null">Selecciona un pasodoble</option>
+
+            @for (pasodoble of pasodobles; track pasodoble.id) {
+              <option [ngValue]="pasodoble.id">
+                {{ pasodoble.title }}
+              </option>
+            }
+          </select>
+        }
+
+        @if (isAuthor) {
+          <select class="form-select rounded-0" formControlName="target_id">
+            <option [ngValue]="null">Selecciona un autor</option>
+
+            @for (author of authors; track author.id) {
+              <option [ngValue]="author.id">
+                {{ author.name }}
+              </option>
+            }
+          </select>
+        }
+
+        @if (isEdit) {
+          <div class="form-text small">
+            Al seleccionar un registro, el formulario se rellenará con sus datos actuales.
+          </div>
+        }
       </div>
     }
 
@@ -66,13 +96,29 @@
           </div>
 
           <div class="col-md-6">
-            <label class="form-label small text-muted fw-semibold">ID autor</label>
-            <input type="number" class="form-control rounded-0" formControlName="author_id">
+            <label class="form-label small text-muted fw-semibold">Autor</label>
+            <select class="form-select rounded-0" formControlName="author_id">
+              <option [ngValue]="null">Selecciona un autor</option>
+
+              @for (author of authors; track author.id) {
+                <option [ngValue]="author.id">
+                  {{ author.name }}
+                </option>
+              }
+            </select>
           </div>
 
           <div class="col-md-6">
-            <label class="form-label small text-muted fw-semibold">ID categoría</label>
-            <input type="number" class="form-control rounded-0" formControlName="category_id">
+            <label class="form-label small text-muted fw-semibold">Categoría</label>
+            <select class="form-select rounded-0" formControlName="category_id">
+              <option [ngValue]="null">Selecciona una categoría</option>
+
+              @for (category of categories; track category.id) {
+                <option [ngValue]="category.id">
+                  {{ category.name }}
+                </option>
+              }
+            </select>
           </div>
 
           <div class="col-12">
@@ -133,7 +179,7 @@
       <button
         type="submit"
         class="btn btn-primary rounded-0"
-        [disabled]="isSubmitting">
+        [disabled]="isSubmitting || isLoadingOptions">
         @if (isSubmitting) {
           Enviando...
         } @else {
