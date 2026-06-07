@@ -1,0 +1,230 @@
+<section class="bg-white border rounded-0 p-3">
+  <h5 class="fw-semibold mb-3">Detalle de solicitud</h5>
+
+  <p class="small mb-1">
+    Tipo: {{ archiveRequest?.target_type }}
+  </p>
+
+  <p class="small mb-1">
+    Acción: {{ archiveRequest?.action }}
+  </p>
+
+  <p class="small mb-1">
+    Estado: {{ archiveRequest?.status }}
+  </p>
+
+  @if (archiveRequest?.admin_reason) {
+    <div class="alert alert-light border rounded-0 mt-3 small">
+      <strong>Respuesta del administrador:</strong>
+      {{ archiveRequest?.admin_reason }}
+    </div>
+  }
+</section>
+
+@if (isAdmin) {
+  @if (archiveRequest) {
+  <section class="bg-white border rounded-0 p-3 mt-3">
+    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+      <div>
+        <h6 class="fw-semibold mb-1">Detalles de la solicitud</h6>
+        <p class="text-muted small mb-0">
+          Revisa los datos enviados por el usuario antes de aprobar o rechazar.
+        </p>
+      </div>
+
+      <span class="badge rounded-0 text-bg-light border text-uppercase">
+        {{ archiveRequest.action }}
+      </span>
+    </div>
+
+    @if (isPasodobleRequest) {
+      <div>
+        <h6 class="small text-uppercase text-muted fw-semibold mb-3">
+          Datos del pasodoble
+        </h6>
+
+        @if (isCreateRequest) {
+          <div class="row g-2 small">
+            <div class="col-md-6">
+              <strong>Título:</strong>
+              <p class="mb-2">{{ getPayloadValue('title') }}</p>
+            </div>
+
+            <div class="col-md-3">
+              <strong>Año:</strong>
+              <p class="mb-2">{{ getPayloadValue('year') }}</p>
+            </div>
+
+            <div class="col-md-3">
+              <strong>ID categoría:</strong>
+              <p class="mb-2">{{ getPayloadValue('category_id') }}</p>
+            </div>
+
+            <div class="col-md-6">
+              <strong>ID autor:</strong>
+              <p class="mb-2">{{ getPayloadValue('author_id') }}</p>
+            </div>
+
+            <div class="col-md-6">
+              <strong>PDF:</strong>
+              <p class="mb-2 text-break">{{ getPayloadValue('pdf_url') }}</p>
+            </div>
+
+            <div class="col-12">
+              <strong>Descripción:</strong>
+              <p class="mb-0">{{ getPayloadValue('description') }}</p>
+            </div>
+          </div>
+        }
+
+        @if (isEditRequest) {
+          <div class="small">
+            <p class="text-muted mb-3">
+              El usuario quiere modificar el pasodoble con ID:
+              <strong>{{ archiveRequest.target_id }}</strong>
+            </p>
+
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th class="small">Campo solicitado</th>
+                    <th class="small">Nuevo valor propuesto</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (entry of payload | keyvalue; track entry.key) {
+                    <tr>
+                      <td class="fw-semibold">{{ entry.key }}</td>
+                      <td>{{ entry.value || 'No especificado' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+
+        @if (isDeleteRequest) {
+          <div class="alert alert-warning rounded-0 small mb-0">
+            <strong>Solicitud de borrado.</strong>
+            El usuario solicita eliminar el pasodoble con ID:
+            <strong>{{ archiveRequest.target_id }}</strong>.
+
+            @if (payload['reason']) {
+              <hr>
+              <strong>Motivo del usuario:</strong>
+              <p class="mb-0">{{ payload['reason'] }}</p>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @if (isAuthorRequest) {
+      <div>
+        <h6 class="small text-uppercase text-muted fw-semibold mb-3">
+          Datos del compositor
+        </h6>
+
+        @if (isCreateRequest) {
+          <div class="row g-2 small">
+            <div class="col-md-6">
+              <strong>Nombre:</strong>
+              <p class="mb-2">{{ getPayloadValue('name') }}</p>
+            </div>
+
+            <div class="col-md-3">
+              <strong>Año nacimiento:</strong>
+              <p class="mb-2">{{ getPayloadValue('birth_year') }}</p>
+            </div>
+
+            <div class="col-md-3">
+              <strong>Imagen:</strong>
+              <p class="mb-2 text-break">{{ getPayloadValue('image_url') }}</p>
+            </div>
+
+            <div class="col-12">
+              <strong>Biografía:</strong>
+              <p class="mb-0">{{ getPayloadValue('biography') }}</p>
+            </div>
+          </div>
+        }
+
+        @if (isEditRequest) {
+          <div class="small">
+            <p class="text-muted mb-3">
+              El usuario quiere modificar el compositor con ID:
+              <strong>{{ archiveRequest.target_id }}</strong>
+            </p>
+
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th class="small">Campo solicitado</th>
+                    <th class="small">Nuevo valor propuesto</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (entry of payload | keyvalue; track entry.key) {
+                    <tr>
+                      <td class="fw-semibold">{{ entry.key }}</td>
+                      <td>{{ entry.value || 'No especificado' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+
+        @if (isDeleteRequest) {
+          <div class="alert alert-warning rounded-0 small mb-0">
+            <strong>Solicitud de borrado.</strong>
+            El usuario solicita eliminar el compositor con ID:
+            <strong>{{ archiveRequest.target_id }}</strong>.
+
+            @if (payload['reason']) {
+              <hr>
+              <strong>Motivo del usuario:</strong>
+              <p class="mb-0">{{ payload['reason'] }}</p>
+            }
+          </div>
+        }
+      </div>
+    }
+  </section>
+}
+  <section class="bg-white border rounded-0 p-3 mt-3">
+    <h6 class="fw-semibold mb-3">Revisión administrativa</h6>
+
+    <textarea
+      class="form-control rounded-0 mb-3"
+      rows="0"
+      placeholder="Motivo opcional..."></textarea>
+
+    @if(isNotManaged){
+      <div class="d-flex gap-2">
+      <button class="btn btn-primary rounded-0 btn-sm" (click)="approveRequest()">
+        Aprobar
+      </button>
+
+      <button class="btn btn-outline-danger rounded-0 btn-sm" (click)="rejectRequest()">
+        Rechazar
+      </button>
+    </div>
+    }
+    @else if(!isNotManaged) {
+      @if(status === 'approved'){
+        <h6 class="alert alert-success mb-1 ">Esta solicitud ha sido aprobada por {{archiveRequest?.reviewer?.name}}</h6>
+      }
+      @else if(status === 'rejected')
+      {
+        <h6 class="alert alert-danger mb-1 ">Esta solicitud ha sido rechazada por {{archiveRequest?.reviewer?.name}}</h6>
+      }
+    }
+  </section>
+}

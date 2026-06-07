@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Pasodoble;
+use App\Models\Rehearsal;
+use App\Models\RehearsalAttendance;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
 
     use HasFactory, Notifiable, HasApiTokens;
@@ -55,5 +56,25 @@ class User extends Authenticatable
             Pasodoble::class,
             'pasodoble_user_favorites'
         )->withTimestamps();
+    }
+
+    public function archiveChangeRequests()
+    {
+        return $this->hasMany(ArchiveChangeRequest::class);
+    }
+
+    public function reviewedArchiveChangeRequests()
+    {
+        return $this->hasMany(ArchiveChangeRequest::class, 'reviewed_by');
+    }
+
+    public function createdRehearsals()
+    {
+        return $this->hasMany(Rehearsal::class, 'created_by');
+    }
+
+    public function rehearsalAttendances()
+    {
+        return $this->hasMany(RehearsalAttendance::class);
     }
 }

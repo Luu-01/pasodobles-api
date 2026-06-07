@@ -1,0 +1,142 @@
+<nav class="navbar navbar-dark-custom py-2 mb-4 sticky-top" data-bs-theme="dark">
+  <div class="container-fluid navbar-shell">
+
+    <!-- Marca + botón de navegación -->
+<div class="navbar-brand-area">
+
+  <button
+    type="button"
+    class="navbar-menu-button rounded-0"
+    aria-label="Abrir navegación"
+    [attr.aria-expanded]="isNavbarOpen"
+    (click)="toggleNavbar()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="brand-text-area">
+    <a
+      class="navbar-brand fw-semibold fs-5 letter-spacing-tight m-0"
+      routerLink="/pasodobles"
+      (click)="closeNavbar()">
+      <a>Pasodobles.mb</a>
+    </a>
+
+    @if(authService.currentUser$ | async; as user){
+      @if(user.role == 'admin'){
+        <a
+          class="admin-navbar-link"
+          routerLink="/admin/pasodobles"
+          (click)="closeNavbar()">
+          Admin
+        </a>
+      }
+    }
+  </div>
+</div>
+
+    <!-- Menú -->
+    <div
+      class="navbar-menu-area"
+      [class.navbar-menu-open]="isNavbarOpen">
+
+      <ul class="navbar-nav navbar-links-area mb-0">
+        <li class="nav-item">
+          <a
+            class="nav-link nav-link-custom"
+            routerLink="/pasodobles"
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{exact: true}"
+            (click)="closeNavbar()">
+            Archivo Musical
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a
+            class="nav-link nav-link-custom"
+            routerLink="/authors"
+            routerLinkActive="active-link"
+            (click)="closeNavbar()">
+            Compositores
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a
+            class="nav-link nav-link-custom"
+            routerLink="/external-search"
+            routerLinkActive="active-link"
+            (click)="closeNavbar()">
+            Búsqueda externa
+          </a>
+        </li>
+
+        @if(authService.isAuthenticated()){
+          <li class="nav-item">
+            <a
+              class="nav-link nav-link-custom"
+              routerLink="/rehearsals"
+              routerLinkActive="active-link"
+              (click)="closeNavbar()">
+              Ensayos
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link nav-link-custom"
+              routerLink="/archive-requests"
+              routerLinkActive="active-link"
+              (click)="closeNavbar()">
+              Mis solicitudes
+            </a>
+          </li>
+        }
+      </ul>
+
+      <div class="navbar-actions-area">
+        @if(authService.currentUser$ | async; as user){
+          <button
+            type="button"
+            routerLink="/auth/user"
+            class="btn-auth btn rounded-0 px-3 py-1 d-flex align-items-center justify-content-center"
+            (click)="closeNavbar()">
+            <i class="bi bi-person-circle"></i>
+            <span class="ms-2">{{user.name}}</span>
+        </button>
+
+          <button
+            type="button"
+            (click)="logout(); closeNavbar()"
+            class="btn-auth-2 btn rounded-0 px-3 py-1 d-flex align-items-center justify-content-center"
+            title="Cerrar sesión">
+            <i class="bi bi-box-arrow-right"></i>
+            <span class="ms-2">Cerrar Sesión</span>
+          </button>
+        }
+        @else {
+          <a
+            routerLink="/auth/login"
+            class="btn-auth btn rounded-0 px-3 py-1 d-flex align-items-center justify-content-center"
+            (click)="closeNavbar()">
+            <i class="bi bi-box-arrow-in-right me-2"></i>
+            Iniciar Sesión
+          </a>
+
+          <a
+            routerLink="/auth/register"
+            class="btn-auth-2 btn rounded-0 px-3 py-1 d-flex align-items-center justify-content-center"
+            (click)="closeNavbar()">
+            <i class="bi bi-person-plus me-2"></i>
+            Registrarse
+          </a>
+        }
+      </div>
+
+    </div>
+  </div>
+</nav>
+
+<main class="container px-4 pb-5">
+  <router-outlet></router-outlet>
+</main>

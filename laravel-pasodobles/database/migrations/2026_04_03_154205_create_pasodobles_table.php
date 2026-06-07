@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('year');
             $table->string('pdf_url')->nullable();
+            $table->string('video_url')->nullable();            
             $table->foreignId('author_id');
             $table->foreignId('category_id');
             $table->timestamps();

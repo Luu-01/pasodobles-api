@@ -1,0 +1,191 @@
+<section class="container-fluid px-0">
+  <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+    <div>
+      <h4 class="fw-semibold mb-1">Nueva solicitud</h4>
+      <p class="text-muted small mb-0">
+        Envía una propuesta para crear, editar o eliminar un pasodoble o autor.
+      </p>
+    </div>
+
+    <a routerLink="/archive-requests" class="btn btn-outline-secondary btn-sm rounded-0">
+      Volver
+    </a>
+  </div>
+
+  @if (errorMessage) {
+    <div class="alert alert-danger rounded-0 small">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (isLoadingOptions) {
+    <div class="alert alert-light border rounded-0 small">
+      Cargando datos del formulario...
+    </div>
+  }
+
+  <form [formGroup]="requestForm" (ngSubmit)="submitRequest()" class="bg-white border rounded-0 p-3">
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="form-label small text-muted fw-semibold">Tipo</label>
+        <select class="form-select rounded-0" formControlName="target_type">
+          <option value="pasodoble">Pasodoble</option>
+          <option value="author">Autor</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label small text-muted fw-semibold">Acción</label>
+        <select class="form-select rounded-0" formControlName="action">
+          <option value="create">Crear</option>
+          <option value="edit">Editar</option>
+          <option value="delete">Eliminar</option>
+        </select>
+      </div>
+    </div>
+
+    @if (isEdit || isDelete) {
+      <div class="mb-3">
+        <label class="form-label small text-muted fw-semibold">Registro</label>
+
+        @if (isPasodoble) {
+          <select class="form-select rounded-0" formControlName="target_id">
+            <option [ngValue]="null">Selecciona un pasodoble</option>
+
+            @for (pasodoble of pasodobles; track pasodoble.id) {
+              <option [ngValue]="pasodoble.id">
+                {{ pasodoble.title }}
+              </option>
+            }
+          </select>
+        }
+
+        @if (isAuthor) {
+          <select class="form-select rounded-0" formControlName="target_id">
+            <option [ngValue]="null">Selecciona un autor</option>
+
+            @for (author of authors; track author.id) {
+              <option [ngValue]="author.id">
+                {{ author.name }}
+              </option>
+            }
+          </select>
+        }
+
+        @if (isEdit) {
+          <div class="form-text small">
+            Al seleccionar un registro, el formulario se rellenará con sus datos actuales.
+          </div>
+        }
+      </div>
+    }
+
+    @if (isPasodoble && !isDelete) {
+      <div class="border-top pt-3 mt-3">
+        <h6 class="fw-semibold mb-3">Datos del pasodoble</h6>
+
+        <div class="row g-3">
+          <div class="col-md-8">
+            <label class="form-label small text-muted fw-semibold">Título</label>
+            <input type="text" class="form-control rounded-0" formControlName="title">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label small text-muted fw-semibold">Año</label>
+            <input type="number" class="form-control rounded-0" formControlName="year">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label small text-muted fw-semibold">Autor</label>
+            <select class="form-select rounded-0" formControlName="author_id">
+              <option [ngValue]="null">Selecciona un autor</option>
+
+              @for (author of authors; track author.id) {
+                <option [ngValue]="author.id">
+                  {{ author.name }}
+                </option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label small text-muted fw-semibold">Categoría</label>
+            <select class="form-select rounded-0" formControlName="category_id">
+              <option [ngValue]="null">Selecciona una categoría</option>
+
+              @for (category of categories; track category.id) {
+                <option [ngValue]="category.id">
+                  {{ category.name }}
+                </option>
+              }
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label small text-muted fw-semibold">URL PDF</label>
+            <input type="url" class="form-control rounded-0" formControlName="pdf_url">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label small text-muted fw-semibold">Descripción</label>
+            <textarea class="form-control rounded-0" rows="4" formControlName="description"></textarea>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (isAuthor && !isDelete) {
+      <div class="border-top pt-3 mt-3">
+        <h6 class="fw-semibold mb-3">Datos del autor</h6>
+
+        <div class="row g-3">
+          <div class="col-md-8">
+            <label class="form-label small text-muted fw-semibold">Nombre</label>
+            <input type="text" class="form-control rounded-0" formControlName="name">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label small text-muted fw-semibold">Año nacimiento</label>
+            <input type="number" class="form-control rounded-0" formControlName="birth_year">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label small text-muted fw-semibold">URL imagen</label>
+            <input type="url" class="form-control rounded-0" formControlName="image_url">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label small text-muted fw-semibold">Biografía</label>
+            <textarea class="form-control rounded-0" rows="4" formControlName="biography"></textarea>
+          </div>
+        </div>
+      </div>
+    }
+
+    <div class="border-top pt-3 mt-3">
+      <label class="form-label small text-muted fw-semibold">Motivo de la solicitud</label>
+      <textarea
+        class="form-control rounded-0"
+        rows="3"
+        formControlName="reason"
+        placeholder="Explica brevemente por qué solicitas este cambio..."></textarea>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <a routerLink="/archive-requests" class="btn btn-outline-secondary rounded-0">
+        Cancelar
+      </a>
+
+      <button
+        type="submit"
+        class="btn btn-primary rounded-0"
+        [disabled]="isSubmitting || isLoadingOptions">
+        @if (isSubmitting) {
+          Enviando...
+        } @else {
+          Enviar solicitud
+        }
+      </button>
+    </div>
+  </form>
+</section>

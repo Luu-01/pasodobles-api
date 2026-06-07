@@ -1,10 +1,11 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Pasodoble, FavoriteToggleResponse, FavoritesResponse } from '../../models/pasodoble.interface';
+import { Pasodoble } from '../../models/pasodoble.interface';
 import { PasodobleService } from '../../services/pasodoble.service';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../../../core/auth/auth.service';
+import { AuthService } from '../../../../auth/auth.service';
 import { AsyncPipe, NgClass } from '@angular/common';
+import { PaginationMeta } from '../../../../shared/models/pagination.interface';
 
 @Component({
   imports: [RouterLink, FormsModule, AsyncPipe, NgClass, FormsModule],
@@ -14,6 +15,8 @@ import { AsyncPipe, NgClass } from '@angular/common';
 })
 export class PasodoblesListComponent implements OnInit {
   pasodobles: Pasodoble[] = [];
+  paginationMeta: PaginationMeta | null = null;
+  currentPage = 1;
   
   // Filtering
   searchTerm: string = '';
@@ -33,18 +36,55 @@ export class PasodoblesListComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    this.pasodobleService.getPasodobles().subscribe({
-      next: (response: any) => {
+    this.loadPasodobles();
+  }
+
+  loadPasodobles(page = 1): void {
+    this.loading = true;
+    this.currentPage = page;
+
+    this.pasodobleService.getPasodobles(page, {
+      search: this.searchTerm,
+      category: this.selectedCategory,
+      author: this.selectedAuthor,
+    }).subscribe({
+      next: (response) => {
         this.pasodobles = response.data;
+        this.paginationMeta = response.meta;
         this.extractFilterOptions();
-        this.cdr.detectChanges();
-        this.loadFavorites();
+        this.loading = false;
+
+        if (this.authService.isAuthenticated()) {
+          this.loadFavorites();
+        }
+
+        this.cdr.markForCheck();
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+        this.cdr.markForCheck();
+      }
     });
   }
 
- 
+  onFiltersChange(): void {
+    this.loadPasodobles(1);
+  }
+
+  goToPage(page: number): void {
+    if (!this.paginationMeta || page < 1 || page > this.paginationMeta.last_page || page === this.currentPage) {
+      return;
+    }
+
+    this.loadPasodobles(page);
+  }
+
+  get pageNumbers(): number[] {
+    const lastPage = this.paginationMeta?.last_page ?? 1;
+    return Array.from({ length: lastPage }, (_, index) => index + 1);
+  }
+
   loadFavorites(): void {
     this.favoritesLoading = true;
 
@@ -127,17 +167,6 @@ export class PasodoblesListComponent implements OnInit {
 
     const autoresSet = new Set(this.pasodobles.map(p => p.author?.name).filter(Boolean));
     this.authors = Array.from(autoresSet) as string[];
-  }
-
-  get filteredPasodobles(): Pasodoble[] {
-    return this.pasodobles.filter(p => {
-      const term = this.searchTerm.toLowerCase();
-      const matchSearch = p.title.toLowerCase().includes(term) || (p.description && p.description.toLowerCase().includes(term));
-      const matchCategory = this.selectedCategory ? p.category?.name === this.selectedCategory : true;
-      const matchAuthor = this.selectedAuthor ? p.author?.name === this.selectedAuthor : true;
-
-      return matchSearch && matchCategory && matchAuthor;
-    });
   }
 
 }

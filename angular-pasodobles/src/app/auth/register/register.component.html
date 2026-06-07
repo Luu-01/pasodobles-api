@@ -13,7 +13,7 @@
         </div>
       }
 
-      <form (ngSubmit)="onSubmit()">
+      <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
         
         <div class="mb-4">
           <label for="nameInput" class="form-label text-muted small fw-bold text-uppercase letter-spacing-tight">Nombre Completo</label>
@@ -21,8 +21,11 @@
             <span class="input-group-text bg-white border-end-0 text-muted ps-3 rounded-start-4" style="border-color: rgba(0,0,0,0.08);">
               <i class="bi bi-person"></i>
             </span>
-            <input type="text" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" id="nameInput" placeholder="Ej: Pascual Marquina" name="name" [(ngModel)]="userData.name" required>
+            <input #nameInput="ngModel" type="text" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" id="nameInput" placeholder="Ej: Pascual Marquina" name="name" [(ngModel)]="userData.name" required>
           </div>
+          @if (nameInput.invalid && (nameInput.touched || registerForm.submitted)) {
+            <div class="text-danger small mt-2">El nombre es obligatorio.</div>
+          }
         </div>
 
         <div class="mb-4">
@@ -31,8 +34,18 @@
             <span class="input-group-text bg-white border-end-0 text-muted ps-3 rounded-start-4" style="border-color: rgba(0,0,0,0.08);">
               <i class="bi bi-envelope"></i>
             </span>
-            <input type="email" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" id="emailInput" placeholder="admin@pasodobles.com" name="email" [(ngModel)]="userData.email" required>
+            <input #emailInput="ngModel" type="email" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" id="emailInput" placeholder="admin@pasodobles.com" name="email" [(ngModel)]="userData.email" required email>
           </div>
+          @if (emailInput.invalid && (emailInput.touched || registerForm.submitted)) {
+            <div class="text-danger small mt-2">
+              @if (emailInput.errors?.['required']) {
+                <span>El correo electrónico es obligatorio.</span>
+              }
+              @if (emailInput.errors?.['email']) {
+                <span>Introduce un correo electrónico válido.</span>
+              }
+            </div>
+          }
         </div>
 
         <div class="mb-5">
@@ -41,8 +54,18 @@
             <span class="input-group-text bg-white border-end-0 text-muted ps-3 rounded-start-4" style="border-color: rgba(0,0,0,0.08);">
               <i class="bi bi-shield-lock"></i>
             </span>
-            <input type="password" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" id="passwordInput" placeholder="Mínimo 8 caracteres" name="password" [(ngModel)]="userData.password" required minlength="8">
+            <input #passwordInput="ngModel" type="password" class="form-control form-control-minimal border-start-0 rounded-end-4 ps-1" id="passwordInput" placeholder="Mínimo 8 caracteres" name="password" [(ngModel)]="userData.password" required minlength="8">
           </div>
+          @if (passwordInput.invalid && (passwordInput.touched || registerForm.submitted)) {
+            <div class="text-danger small mt-2">
+              @if (passwordInput.errors?.['required']) {
+                <span>La contraseña es obligatoria.</span>
+              }
+              @if (passwordInput.errors?.['minlength']) {
+                <span>La contraseña debe tener al menos 8 caracteres.</span>
+              }
+            </div>
+          }
           <div class="form-text small mt-2 opacity-75">
             <i class="bi bi-info-circle me-1"></i> Usa una contraseña segura y única.
           </div>

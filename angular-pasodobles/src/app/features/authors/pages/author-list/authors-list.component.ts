@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { AuthorService } from '../../services/author.service';
 import { Author } from '../../models/author.interface';
 import { FormsModule } from '@angular/forms';
+import { PaginationMeta } from '../../../../shared/models/pagination.interface';
 
 @Component({
   selector: 'app-authors-list',
@@ -12,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 })
 export class AuthorsListComponent implements OnInit {
   authors: Author[] = [];
+  paginationMeta: PaginationMeta | null = null;
+  currentPage = 1;
   
   searchTerm: string = '';
 
@@ -19,9 +22,18 @@ export class AuthorsListComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   
   ngOnInit(): void {
-    this.authorService.getAuthors().subscribe({
-      next: (respuesta: any) => {
-        this.authors = respuesta;
+    this.loadAuthors();
+  }
+
+  loadAuthors(page = 1): void {
+    this.currentPage = page;
+
+    this.authorService.getAuthors(page, {
+      search: this.searchTerm,
+    }).subscribe({
+      next: (response) => {
+        this.authors = response.data;
+        this.paginationMeta = response.meta;
         this.cdr.detectChanges();
       },
       error: (error) => {
@@ -30,15 +42,21 @@ export class AuthorsListComponent implements OnInit {
     });
   }
 
-  //~ Filtering
-
-  get filteredAuthors(): Author[] {
-    if (!this.searchTerm) {
-      return this.authors;
-    }
-    
-    return this.authors.filter(a => 
-      a.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
+  onFiltersChange(): void {
+    this.loadAuthors(1);
   }
+
+  goToPage(page: number): void {
+    if (!this.paginationMeta || page < 1 || page > this.paginationMeta.last_page || page === this.currentPage) {
+      return;
+    }
+
+    this.loadAuthors(page);
+  }
+
+  get pageNumbers(): number[] {
+    const lastPage = this.paginationMeta?.last_page ?? 1;
+    return Array.from({ length: lastPage }, (_, index) => index + 1);
+  }
+
 }

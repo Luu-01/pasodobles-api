@@ -1,0 +1,9 @@
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.invalid-feedback {
+  font-size: 0.75rem;
+  margin-top: 0.35rem;
+}

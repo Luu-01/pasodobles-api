@@ -1,10 +1,14 @@
-import { Pasodoble } from "../../pasodobles/models/pasodoble.interface";
+import { PaginatedResponse } from '../../../shared/models/pagination.interface';
+import { Pasodoble } from '../../pasodobles/models/pasodoble.interface';
 
 export interface Author {
-  id: number;
-  name: string;
-  biography: Text;
-  birth_year: Date;
-  image_url: string;
-  pasodobles?: Pasodoble[]; // pasodobles vienen solo a veces
+    id: number;
+    name: string;
+    biography?: string | null;
+    birth_year?: number | null;
+    death_year?: number | null;
+    image_url?: string | null;
+    pasodobles?: [Pasodoble];
 }
+
+export type AuthorsResponse = PaginatedResponse<Author>;

@@ -3,8 +3,10 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.interface';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
-import { AuthService } from '../../../../core/auth/auth.service';
-import { FavoritesResponse, Pasodoble } from '../../../pasodobles/models/pasodoble.interface';
+import { AuthService } from '../../../../auth/auth.service';
+import { Pasodoble } from '../../../pasodobles/models/pasodoble.interface';
+import { ArchiveRequestsService } from '../../../archive-requests/services/archive-requests.service';
+import { ArchiveRequests } from '../../../archive-requests/model/archive-requests.interface';
 
 @Component({
   selector: 'app-current-user',
@@ -16,19 +18,36 @@ export class CurrentUserComponent implements OnInit{
   private userService = inject(UserService);
   public authService = inject(AuthService);
   private cdr= inject(ChangeDetectorRef);
+  private archiveRequestService = inject(ArchiveRequestsService);
 
   user?: User;
   favorites: Pasodoble[] = [];
-  favoritesLoading: Boolean = false;
+  favoritesLoading: boolean = false;
+  archiveRequests: ArchiveRequests[] = [];
+  archiveRequestsLoading: boolean = false;
+
+  actionLabels: Record<string, string> = {
+    create: 'Crear',
+    edit: 'Editar',
+    delete: 'Eliminar',
+  };
+
+  targetTypeLabels: Record<string, string> = {
+    pasodoble: 'Pasodoble',
+    author: 'Autor',
+  };
+
+  statusLabels: Record<string, string> = {
+    pending: 'Pendiente',
+    approved: 'Aprobada',
+    rejected: 'Rechazada',
+  };
 
   ngOnInit(): void {
-
-    this.userService.getUser().subscribe({
-      next: (response) => {
-        this.user = response;
-        this.loadFavorites();
-      },
-    });
+      this.user = this.userService.getUser();
+      this.loadFavorites();
+      this.loadArchiveRequests();
+      this.cdr.markForCheck();
   }
 
   loadFavorites(){
@@ -37,13 +56,44 @@ export class CurrentUserComponent implements OnInit{
       next: (response) => {
         this.favorites = response.data;
         this.favoritesLoading = false;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       },
       error: () =>{
         this.favoritesLoading = false;
-        console.error("Error al cargar los pasodobles favoritos.");
+        console.error('Error al cargar los pasodobles favoritos.');
       }
     })
     
+  }
+
+  loadArchiveRequests(){
+    this.archiveRequestsLoading = true;
+    this.archiveRequestService.getArchiveRequests().subscribe({
+      next: (response) => {
+        this.archiveRequests = response.data;
+        this.archiveRequestsLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.archiveRequestsLoading = false;
+        this.cdr.markForCheck();
+        console.error('Error al cargar las solicitudes del usuario.');
+      }
+    })
+  }
+
+  getPasodobleAuthorName(pasodoble: Pasodoble): string {
+    return pasodoble.author?.name || 'Autor no asignado';
+  }
+
+  getRequestStatusClass(status: ArchiveRequests['status']): string {
+    switch (status) {
+      case 'approved':
+        return 'text-bg-success';
+      case 'rejected':
+        return 'text-bg-danger';
+      default:
+        return 'text-bg-warning';
+    }
   }
 }

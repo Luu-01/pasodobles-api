@@ -1,0 +1,204 @@
+<div class="admin-wrapper">
+
+  <!-- Overlay móvil -->
+  <div
+    class="sidebar-overlay"
+    [class.sidebar-overlay-visible]="isSidebarOpen"
+    (click)="closeSidebar()">
+  </div>
+
+  <!-- Sidebar -->
+  <aside
+    class="sidebar"
+    [class.sidebar-open]="isSidebarOpen">
+
+    <div class="sidebar-header">
+      <a
+        routerLink="/admin/pasodobles"
+        class="admin-brand"
+        (click)="closeSidebar()">
+        <span class="text-blue">Admin</span><span class="text-white">Panel</span>
+      </a>
+
+      <button
+        type="button"
+        class="sidebar-close-button"
+        aria-label="Cerrar menú"
+        (click)="closeSidebar()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        routerLink="/admin/pasodobles"
+        routerLinkActive="active-sidebar-link"
+        class="sidebar-link"
+        (click)="closeSidebar()">
+        <i class="bi bi-music-note-list"></i>
+        <span>Pasodobles</span>
+      </a>
+
+      <a
+        routerLink="/admin/compositores"
+        routerLinkActive="active-sidebar-link"
+        class="sidebar-link"
+        (click)="closeSidebar()">
+        <i class="bi bi-person-lines-fill"></i>
+        <span>Compositores</span>
+      </a>
+
+      <a
+        routerLink="/admin/rehearsals"
+        routerLinkActive="active-sidebar-link"
+        class="sidebar-link"
+        (click)="closeSidebar()">
+        <i class="bi bi-calendar-event"></i>
+        <span>Ensayos</span>
+      </a>
+
+      <a
+        routerLink="/admin/archive-requests"
+        routerLinkActive="active-sidebar-link"
+        class="sidebar-link"
+        (click)="closeSidebar()">
+        <i class="bi bi-inbox"></i>
+        <span>Solicitudes</span>
+      </a>
+
+      <a
+        routerLink="/pasodobles"
+        routerLinkActive="active-sidebar-link"
+        class="sidebar-link"
+        (click)="closeSidebar()">
+        <i class="bi bi-globe2"></i>
+        <span>Ver Web</span>
+      </a>
+    </nav>
+
+    <!-- Parte inferior del sidebar -->
+    <div class="sidebar-footer">
+
+      @if(authService.currentUser$ | async; as user){
+        <div class="sidebar-user-card">
+          <div class="sidebar-user-icon">
+            <i class="bi bi-person-fill"></i>
+          </div>
+
+          <div class="sidebar-user-data">
+            <a
+              routerLink="/auth/user"
+              class="sidebar-user-name"
+              (click)="closeSidebar()">
+              {{ user.name }}
+            </a>
+
+            <span class="sidebar-user-email">
+              {{ user.email }}
+            </span>
+
+            <span class="sidebar-user-role">
+              Administrador
+            </span>
+          </div>
+        </div>
+
+        <a
+          routerLink="/auth/user"
+          class="sidebar-footer-link"
+          (click)="closeSidebar()">
+          <i class="bi bi-person-circle"></i>
+          <span>Mi perfil</span>
+        </a>
+
+        <a
+          routerLink="/pasodobles"
+          class="sidebar-footer-link"
+          (click)="closeSidebar()">
+          <i class="bi bi-globe2"></i>
+          <span>Ver web pública</span>
+        </a>
+
+        <button
+          type="button"
+          class="sidebar-footer-link sidebar-logout-button"
+          (click)="logout(); closeSidebar()">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Cerrar sesión</span>
+        </button>
+      }
+      @else {
+        <a
+          routerLink="/auth/login"
+          class="sidebar-footer-link sidebar-login-link"
+          (click)="closeSidebar()">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Iniciar sesión</span>
+        </a>
+      }
+
+    </div>
+  </aside>
+
+  <!-- Contenido principal -->
+  <div class="main-content">
+
+    <header class="topbar">
+
+      <div class="topbar-left">
+        <button
+          type="button"
+          class="topbar-menu-button"
+          aria-label="Abrir menú"
+          [attr.aria-expanded]="isSidebarOpen"
+          (click)="toggleSidebar()">
+          <i class="bi bi-list"></i>
+        </button>
+
+        <div class="topbar-title-area">
+          <h6 class="topbar-title">Panel de Control</h6>
+        </div>
+      </div>
+
+      <nav class="topbar-links">
+        <a
+          routerLink="/pasodobles"
+          class="topbar-link">
+          <i class="bi bi-globe2"></i>
+          <span>Ver web</span>
+        </a>
+
+        @if(authService.currentUser$ | async; as user){
+          <a
+            routerLink="/auth/user"
+            class="topbar-link">
+            <i class="bi bi-person"></i>
+            <span>Mi Perfil</span>
+          </a>
+
+          <button
+            type="button"
+            class="topbar-logout-button"
+            (click)="logout()">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Cerrar sesión</span>
+          </button>
+        }
+        @else {
+          <a
+            routerLink="/auth/login"
+            class="topbar-login-button">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span>Iniciar sesión</span>
+          </a>
+        }
+      </nav>
+
+    </header>
+
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+</div>

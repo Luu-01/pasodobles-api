@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('biography');
             $table->string('birth_year');
+            $table->string('death_year');
             $table->string('image_url')->nullable();
             $table->timestamps();
         });
